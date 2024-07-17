@@ -1,12 +1,17 @@
 <template>
-    <section class="recommended">
-        <h2><ThumbsUp /> Recommended</h2>
-        <div class="recommended-novels">
-            <div v-for="i in 6" :key="i" class="novel">
-                <!-- 추천 작품 내용 -->
+    <BaseSection>
+        <template #title>
+            <ThumbsUp />
+            <span>Recommend</span>
+        </template>
+        <template #default>
+            <div class="recommended-novels">
+                <div v-for="i in 6" :key="i" class="novel">
+                    <!-- 추천 작품 내용 -->
+                </div>
             </div>
-        </div>
-    </section>
+        </template>
+    </BaseSection>
 </template>
 
 <style scoped>
@@ -18,3 +23,8 @@
 
 /* 나머지 스타일 */
 </style>
+
+<script setup>
+import { ref } from "vue";
+import { ThumbsUp } from "lucide-vue-next";
+</script>

@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 import App from './App.vue'
+import BaseSection from "./components/section/BaseSection.vue";
 
 // import HelloWorld from './components/HelloWorld.vue'
 
@@ -15,5 +16,6 @@ import App from './App.vue'
 const app = createApp(App)
 
 // app.use(router)
+app.component('BaseSection', BaseSection)
 
 app.mount('#app')

@@ -1,12 +1,17 @@
 <template>
-    <section class="recent-updated">
-        <h2><Clock /> Recent Updated</h2>
-        <ul>
-            <li v-for="i in 5" :key="i">
-                <!-- 최근 업데이트 작품 내용 -->
-            </li>
-        </ul>
-    </section>
+    <BaseSection>
+        <template #title>
+            <Clock />
+            <span>Recent Updated</span>
+        </template>
+        <template #default>
+            <ul>
+                <li v-for="i in 5" :key="i">
+                    <!-- 최근 업데이트 작품 내용 -->
+                </li>
+            </ul>
+        </template>
+    </BaseSection>
 </template>
 
 <style scoped>
@@ -19,3 +24,8 @@
 
 /* 나머지 스타일 */
 </style>
+
+<script setup>
+import { ref } from "vue";
+import { Clock } from "lucide-vue-next";
+</script>

@@ -37,7 +37,6 @@
 <script setup>
 import { ref } from "vue";
 import { TrendingUp } from "lucide-vue-next";
-import BaseSection from "./BaseSection.vue";
 
 const topNovel = ref({
     title: "인기 웹소설 1",
