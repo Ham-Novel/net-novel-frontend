@@ -19,18 +19,10 @@
                         </div>
                     </div>
                 </div>
-
-                <div v-for="rank in [2, 3]" :key="rank" class="novel-card">
-                    <div class="novel-cover"></div>
-                    <div class="novel-rank">#{{ rank }}</div>
-                    <h3 class="novel-title">인기 웹소설 {{ rank }}</h3>
-                    <p class="novel-author">작가 이름</p>
-                </div>
-
                 <div
-                    v-for="rank in [4, 5, 6]"
+                    v-for="rank in [2, 3, 4, 5, 6]"
                     :key="rank"
-                    class="novel-card small"
+                    class="novel-card middle-novel"
                 >
                     <div class="novel-cover"></div>
                     <div class="novel-rank">#{{ rank }}</div>
@@ -66,12 +58,15 @@ h2 {
 
 .novel-grid {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 1rem;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(4, minmax(100px, 1fr));
+    gap: 10px;
+    height: 500px;
 }
 
-/*
-
+.top-novel {
+    grid-column: 1 / 4;
+}
 
 .novel-card {
     background-color: white;
@@ -86,7 +81,6 @@ h2 {
 }
 
 .novel-cover {
-    aspect-ratio: 2 / 3;
     background-color: #e5e7eb;
     border-radius: 0.25rem;
     margin-bottom: 0.75rem;
@@ -99,27 +93,36 @@ h2 {
     margin-bottom: 0.25rem;
 }
 
-.novel-title {
-    font-weight: 500;
-    margin-bottom: 0.25rem;
-}
-
 .novel-author {
     font-size: 0.875rem;
     color: #4b5563;
 }
 
+.novel-title {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
 .novel-description {
     font-size: 0.875rem;
     color: #6b7280;
+    overflow: hidden; /* 넘치는 텍스트 숨기기 */
+    text-overflow: ellipsis; /* 넘치는 텍스트에 '...' 표시 */
 }
 
-.top-novel {
-    grid-column: span 12;
-}
-
-.top-novel .novel-content {
+.novel-content {
     display: flex;
+    width: 100%;
+    height: 100%;
+}
+.novel-info {
+    width: 100%;
+    height: 100%;
+}
+
+.middle-novel .novel-cover {
+    width: 100%;
+    height: 50%;
 }
 
 .top-novel .novel-cover {
@@ -138,36 +141,4 @@ h2 {
 .top-novel .novel-title {
     font-size: 1.25rem;
 }
-
-.novel-card.small .novel-rank {
-    font-size: 1.25rem;
-}
-
-.novel-card.small .novel-author {
-    font-size: 0.75rem;
-}
-
-@media (min-width: 768px) {
-    .top-novel {
-        grid-column: span 6;
-    }
-
-    .novel-card:not(.top-novel):not(.small) {
-        grid-column: span 3;
-    }
-
-    .novel-card.small {
-        grid-column: span 2;
-    }
-}
-
-@media (max-width: 767px) {
-    .novel-card:not(.top-novel) {
-        grid-column: span 6;
-    }
-
-    .novel-card.small {
-        grid-column: span 4;
-    }
-} */
 </style>
