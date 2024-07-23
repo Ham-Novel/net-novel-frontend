@@ -2,9 +2,10 @@
     <Header></Header>
     <Nav></Nav>
     <main id="main_container">
-        <TodayTop></TodayTop>
+        <!-- <TodayTop></TodayTop>
         <Recommend></Recommend>
-        <RecentUpdated></RecentUpdated>
+        <RecentUpdated></RecentUpdated> -->
+        <NovelSpecific></NovelSpecific>
     </main>
     <Footer></Footer>
 </template>
@@ -16,6 +17,7 @@ import TodayTop from "./components/section/TodayTop.vue";
 import Recommend from "./components/section/Recommend.vue";
 import RecentUpdated from "./components/section/RecentUpdated.vue";
 import Footer from "./components/footer/Footer.vue";
+import NovelSpecific from "./components/NovelSpecific.vue";
 
 export default {
     components: {
@@ -25,6 +27,7 @@ export default {
         Recommend,
         RecentUpdated,
         Footer,
+        NovelSpecific,
     },
 };
 </script>
