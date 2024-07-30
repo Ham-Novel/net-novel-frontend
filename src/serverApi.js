@@ -1,6 +1,31 @@
 const API_URL = 'http://localhost:8081';
 
 export default {
+
+    async getCommentsByNovel(novelId) {
+        const reqUrl = `${API_URL}/api/comments/novel`
+        const response = await fetch(reqUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ novelId: novelId }),
+        });
+        if (!response.ok) {
+            throw new Error('getEpisodesByNovel: Network response was not ok');
+        }
+        return response.json();
+    },
+
+    async getEpisodesByNovel(novelId) {
+        const reqUrl = `${API_URL}/api/episode?novelId=${novelId}`
+        const response = await fetch(reqUrl);
+        if (!response.ok) {
+            throw new Error('getEpisodesByNovel: Network response was not ok');
+        }
+        return response.json();
+    },
+
     async getNovel(novelId) {
         const reqUrl = `${API_URL}/api/novel/${novelId}`
         const response = await fetch(reqUrl);
