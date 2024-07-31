@@ -9,8 +9,6 @@
 import Header from "./components/header/Header.vue";
 import Nav from "./components/header/Nav.vue";
 import Footer from "./components/footer/Footer.vue";
-import NovelMain from "./components/novel/NovelMain.vue";
-import myPage from "./components/mypage/MyPage.vue";
 </script>
 
 <style>
@@ -22,5 +20,9 @@ import myPage from "./components/mypage/MyPage.vue";
 
 html {
     font-family: sans-serif;
+}
+
+span {
+    display: inline-block;
 }
 </style>
