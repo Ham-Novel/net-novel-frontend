@@ -2,8 +2,22 @@ const API_URL = 'http://localhost:8081';
 
 export default {
 
-    async getCommentsByNovel(novelId) {
-        const reqUrl = `${API_URL}/api/comments/novel`
+    async getMyPageData() {
+        const reqUrl = `${API_URL}/api/member/mypage`
+        const response = await fetch(reqUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) {
+            throw new Error('getMyPageData: Network response was not ok');
+        }
+        return response.json();
+    },
+
+    async getCommentsByNovel(novelId, sortBy) {
+        const reqUrl = `${API_URL}/api/comments/novel/${sortBy}`
         const response = await fetch(reqUrl, {
             method: 'POST',
             headers: {

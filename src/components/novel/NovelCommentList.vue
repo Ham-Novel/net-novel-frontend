@@ -3,22 +3,22 @@
         <div class="sort-options">
             <button
                 class="sort-button"
-                :class="{ active: sortBy === 'latest' }"
-                @click="sortBy = 'latest'"
+                :class="{ active: sortBy === 'recent' }"
+                @click="sortBy = 'recent'"
             >
                 최신순
             </button>
-            <button
+            <!-- <button
                 class="sort-button"
-                :class="{ active: sortBy === 'popular' }"
+                :class="{ active: sortBy === '' }"
                 @click="sortBy = 'popular'"
             >
                 등록순
-            </button>
+            </button> -->
             <button
                 class="sort-button"
-                :class="{ active: sortBy === 'recommended' }"
-                @click="sortBy = 'recommended'"
+                :class="{ active: sortBy === 'likes' }"
+                @click="sortBy = 'likes'"
             >
                 추천순
             </button>
@@ -35,7 +35,7 @@
             <div class="comment-detail">
                 <div class="user-info">
                     <span class="nickName">{{ comment.nickName }}</span>
-                    <!-- <span class="timestamp">{{ comment.timestamp }}</span> -->
+                    <span class="timestamp">1시간 전</span>
                 </div>
                 <div class="comment-content">{{ comment.content }}</div>
                 <div class="comment-actions">
@@ -57,45 +57,15 @@ import { ref, onMounted, computed } from "vue";
 import novelAPI from "@/serverApi";
 import { ThumbsUp, ThumbsDown } from "lucide-vue-next";
 
-const totalComments = ref(19846);
-
-const sortBy = ref("latest");
-
-const comments = ref([
-    // {
-    //     commentId: 1,
-    //     nickName: "파랑월아",
-    //     timestamp: "1시간전 작성됨",
-    //     content:
-    //         "혹시 이번 에피소드 끝나면 드디어 고향집 한 번 들리는거겠죠?? 진짜 고향 가는거 애타게 기다리고 있어요 제발",
-    //     likes: 0,
-    //     dislikes: 0,
-    // },
-    // {
-    //     commentId: 2,
-    //     nickName: "네레이드_782",
-    //     timestamp: "2시간전 작성됨",
-    //     content: "아니 5행시는 어떻게 끝내는지는 들어봐야 되는거 아닌가",
-    //     likes: 0,
-    //     dislikes: 0,
-    // },
-    // {
-    //     commentId: 2,
-    //     content: "흠 이건 쫌.....",
-    //     nickName: "제라든",
-    //     createdAt: "2024-07-30T10:24:33.682055",
-    //     updatedAt: "2024-07-30T10:24:33.682055",
-    //     likes: 0,
-    //     disLikes: 0,
-    //     reCommentList: [],
-    // },
-]);
-
 const props = defineProps(["novelId"]);
 
-async function loadComments(novelId) {
+const comments = ref([]);
+
+const sortBy = ref("recent");
+
+async function loadComments(novelId, sortBy) {
     try {
-        const resp = await novelAPI.getCommentsByNovel(novelId);
+        const resp = await novelAPI.getCommentsByNovel(novelId, sortBy);
         comments.value.push(...resp);
     } catch (error) {
         console.error("Error in Loading Comments By Novel: ", error);
@@ -103,7 +73,7 @@ async function loadComments(novelId) {
 }
 
 onMounted(() => {
-    loadComments(props.novelId).then(() => {
+    loadComments(props.novelId, sortBy.value).then(() => {
         console.log(comments.value);
     });
 });

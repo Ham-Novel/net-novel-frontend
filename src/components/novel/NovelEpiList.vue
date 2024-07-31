@@ -11,12 +11,7 @@ import { reactive, onMounted } from "vue";
 import novelAPI from "@/serverApi";
 import EpiListElement from "./EpiListElement.vue";
 
-const props = defineProps({
-    novelId: {
-        type: Number,
-        required: true,
-    },
-});
+const props = defineProps(["novelId"]);
 
 const episodes = reactive([]);
 
