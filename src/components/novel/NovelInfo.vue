@@ -145,10 +145,6 @@ section {
     font-weight: bold;
 }
 
-.novel-tags {
-    /* margin-bottom: 40px; */
-}
-
 .tag {
     background-color: #4f46e5;
     color: white;

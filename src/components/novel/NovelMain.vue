@@ -1,13 +1,9 @@
 <template>
     <main>
         <NovelInfo :novel-id="id"></NovelInfo>
-        <section>
-            <ul id="tab-list">
-                <li @click="activeTab = EpiList">에피소드</li>
-                <li @click="activeTab = CommentList">댓글</li>
-            </ul>
-            <component :is="activeTab" :novel-id="id"></component>
-        </section>
+        <TabList :tabs="tabs" v-slot:default="slotProps">
+            <component :is="slotProps.activeTab" :novel-id="id"></component>
+        </TabList>
     </main>
 </template>
 
@@ -15,34 +11,20 @@
 import NovelInfo from "./NovelInfo.vue";
 import NovelEpiList from "./NovelEpiList.vue";
 import NovelCommentList from "./NovelCommentList.vue";
+import TabList from "./TabList.vue";
 
-import { ref, onMounted, markRaw } from "vue";
+import { ref, markRaw } from "vue";
 import { useRoute } from "vue-router";
 
+// tab 요소들 TabList에 전달
 const EpiList = markRaw(NovelEpiList);
 const CommentList = markRaw(NovelCommentList);
-const activeTab = ref(EpiList);
+const tabs = [
+    { name: "에피소드", component: EpiList },
+    { name: "댓글", component: CommentList },
+];
 
+// '/novel?id=1' 같은 query string 처리
 const route = useRoute();
 const id = ref(route.query.id);
 </script>
-
-<style scoped>
-#tab-list {
-    display: flex;
-    list-style-type: none;
-    margin-left: 20px;
-    margin-bottom: 10px;
-}
-
-#tab-list li {
-    padding: 5px 30px;
-    cursor: pointer;
-    border-right: 2px solid #ccc;
-    font-size: 20px;
-}
-
-#tab-list li.active {
-    border-bottom: 3px solid blue;
-}
-</style>
