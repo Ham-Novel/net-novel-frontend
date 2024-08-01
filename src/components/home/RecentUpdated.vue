@@ -26,6 +26,8 @@
 </style>
 
 <script setup>
+import BaseSection from "./BaseSection.vue";
+
 import { ref } from "vue";
 import { Clock } from "lucide-vue-next";
 </script>

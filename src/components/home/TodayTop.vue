@@ -35,6 +35,8 @@
 </template>
 
 <script setup>
+import BaseSection from "./BaseSection.vue";
+
 import { ref } from "vue";
 import { TrendingUp } from "lucide-vue-next";
 
