@@ -4,14 +4,14 @@
             <span>화수: {{ episodes.length }}화</span>
             <span>최신 업데이트 날짜: 24/07/24</span>
         </div>
-        <div class="episode-list-loading" v-if="episodes.length == 0">
-            <p>Episode Loading...</p>
-        </div>
-        <div class="episode-list" v-else>
+        <div class="episode-list" v-if="episodes.length != 0">
             <EpiListElement
                 v-for="episode in episodes"
                 :episode="episode"
             ></EpiListElement>
+        </div>
+        <div class="episode-list-loading" v-else>
+            <p>Episode Loading...</p>
         </div>
     </figure>
 </template>

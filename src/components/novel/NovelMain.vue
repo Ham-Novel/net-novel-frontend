@@ -11,6 +11,7 @@
 import NovelInfo from "./NovelInfo.vue";
 import NovelEpiList from "./NovelEpiList.vue";
 import NovelCommentList from "./NovelCommentList.vue";
+import InfiniteScroll from "../etc/InfiniteScroll.vue";
 import TabList from "./TabList.vue";
 
 import { ref, markRaw } from "vue";
@@ -19,9 +20,11 @@ import { useRoute } from "vue-router";
 // tab 요소들 TabList에 전달
 const EpiList = markRaw(NovelEpiList);
 const CommentList = markRaw(NovelCommentList);
+const Scroll = markRaw(InfiniteScroll);
 const tabs = [
     { name: "에피소드", component: EpiList },
     { name: "댓글", component: CommentList },
+    { name: "스크롤", component: Scroll },
 ];
 
 // '/novel?id=1' 같은 query string 처리

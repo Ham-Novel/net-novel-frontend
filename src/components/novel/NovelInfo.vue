@@ -1,9 +1,11 @@
 <template>
     <section class="base-distance">
         <div class="novel-division base-wrapper">
-            <figcaption class="novel-cover">
-                <img :src="novel.coverImage" :alt="novel.title" />
-            </figcaption>
+            <img
+                class="novel-cover"
+                :src="novel.coverImage"
+                :alt="novel.title"
+            />
             <div class="novel-info">
                 <figure class="novel-detail novel-info-section">
                     <h1 class="novel-title">{{ novel.title }}</h1>
