@@ -1,9 +1,15 @@
 <template>
     <section>
-        <ul id="tab-list">
-            <li v-for="tab in props.tabs" @click="toggleTab(tab.component)">
-                {{ tab.name }}
-            </li>
+        <ul class="tab-list base-wrapper base-distance">
+            <template v-for="(tab, index) in props.tabs">
+                <li class="tab-item" @click="toggleTab(tab.component)">
+                    {{ tab.name }}
+                </li>
+                <li
+                    class="tab-divider"
+                    v-if="index < props.tabs.length - 1"
+                ></li>
+            </template>
         </ul>
         <slot :activeTab="activeTab"></slot>
     </section>
@@ -16,28 +22,28 @@ import { ref, onMounted, markRaw } from "vue";
 const props = defineProps(["tabs"]);
 
 //활성화된 tab 결정하는 코드
-const activeTab = ref(EpiList);
+const activeTab = ref(props.tabs[0].component);
 function toggleTab(component) {
     activeTab.value = component;
 }
 </script>
 
-<style scoped>
-#tab-list {
-    display: flex;
-    list-style-type: none;
-    margin-left: 20px;
-    margin-bottom: 10px;
-}
+<style lang="sass" scoped>
+@use '@/assets/base.sass'
 
-#tab-list li {
-    padding: 5px 30px;
-    cursor: pointer;
-    border-right: 2px solid #ccc;
-    font-size: 20px;
-}
+.tab-list
+    display: flex
+    align-items: center
+    list-style-type: none
+    font-size: 30px
 
-#tab-list li.active {
-    border-bottom: 3px solid blue;
-}
+    li.tab-item
+        padding: 10px
+        cursor: pointer
+        font-weight: bold
+
+    li.tab-divider
+        height: 0.8em
+        margin: 0 .6em
+        border-left: 2px solid #b7b7b7
 </style>

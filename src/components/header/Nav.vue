@@ -26,7 +26,7 @@ nav {
     justify-content: space-between;
     background-color: #4f46e5;
     padding: 0 10px;
-    height: 50px;
+    height: 70px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     align-items: center;
 }

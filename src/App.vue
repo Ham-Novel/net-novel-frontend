@@ -1,5 +1,5 @@
 <template>
-    <Header></Header>
+    <!-- <Header></Header> -->
     <Nav></Nav>
     <router-view></router-view>
     <Footer></Footer>

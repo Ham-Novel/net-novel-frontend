@@ -9,7 +9,7 @@
                     <h1 class="novel-title">{{ novel.title }}</h1>
                     <h2 class="novel-author">
                         <span>작가</span>
-                        <a href="#">{{ novel.author }}</a>
+                        <a href="#">{{ novel.authorName }}</a>
                     </h2>
                     <p class="novel-stats">
                         <span> <View size="18" /> {{ novel.view }} </span>
@@ -40,11 +40,11 @@ import { ref, onMounted } from "vue";
 import novelAPI from "@/serverApi";
 import { View, Star, MessageCircleHeart } from "lucide-vue-next";
 
-const props = defineProps(["novelclass"]);
+const props = defineProps(["novelId"]);
 
 const novel = ref({
     title: "웹소설 제목",
-    author: "유저 이름",
+    authorName: "유저 이름",
     description: `
     Laborum aute Lorem occaecat et anim ad consequat magna reprehenderit non eu enim. Minim duis nulla eu elit ut tempor magna tempor occaecat excepteur. Fugiat magna aute sunt nulla do cillum pariatur. Ad deserunt commodo ex non culpa magna eiusmod. Nostrud veniam et consectetur sunt deserunt nulla laboris nisi consectetur aliquip proclassent excepteur consectetur cillum. Incclassclassunt irure deserunt velit commodo dolor dolore amet aute.
     `,
@@ -60,7 +60,7 @@ const novelRating = ref(6);
 
 async function loadNovel() {
     try {
-        let resp = await novelAPI.getNovel(props.novelclass);
+        let resp = await novelAPI.getNovel(props.novelId);
         console.log(resp);
         novel.value = resp;
     } catch (error) {
@@ -78,7 +78,7 @@ onMounted(() => {
 
 section {
     background-color: #f5f6fc;
-    padding-top: 20px;
+    padding-top: 30px;
 }
 
 .novel-division {
@@ -102,6 +102,7 @@ section {
 .novel-info {
     position: relative;
     box-sizing: border-box;
+    flex-grow: 1;
 }
 
 .novel-info-section {
@@ -109,7 +110,7 @@ section {
 }
 
 .novel-info-section > * {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .novel-title {

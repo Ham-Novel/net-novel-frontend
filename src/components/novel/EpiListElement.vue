@@ -1,5 +1,5 @@
 <template>
-    <article>
+    <article class="episode-item">
         <div class="episode-episodeNumber">EP.{{ episode.episodeNumber }}</div>
         <div class="episode-title">{{ episode.title }}</div>
         <div class="episode-stats">
@@ -24,15 +24,16 @@
 import { ref, onMounted, computed } from "vue";
 import { FileText, Eye, MessageCircleMore } from "lucide-vue-next";
 
+//애피소드 정보 episode 변수로 받아오기
 const props = defineProps({
     episode: {
         type: Object,
         required: true,
     },
 });
-
 const episode = props.episode;
 
+//에피소드 생성 날짜 보기좋게 변환
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear().toString().slice(-2);
@@ -45,23 +46,19 @@ const createdDate = computed(() => {
     return formatDate(episode.createdAt);
 });
 
+//요소 클릭 시 해당 에피소드 페이지로 이동 (미구현)
 function openEpisode(episodeId) {
     // console.log(`Opening episode with ID: ${episodeId}`);
     // Here you would typically navigate to the episode page
     // router.push(`/episode/${episodeId}`);
 }
-
-onMounted(() => {
-    // console.log(episode);
-});
 </script>
 
 <style scoped>
-article {
+.episode-item {
     display: flex;
     align-items: center;
-    padding: 10px;
-    padding-top: 20px;
+    padding: 15px;
     border-bottom: 1px solid #eee;
     cursor: pointer;
 }
@@ -103,7 +100,6 @@ article {
 }
 
 .upload-date {
-    width: 80px;
     text-align: right;
     color: #666;
     font-size: 1em;
