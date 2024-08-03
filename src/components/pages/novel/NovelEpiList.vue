@@ -1,5 +1,5 @@
 <template>
-    <figure class="episode-list-figure base-wrapper base-distance">
+    <section class="episode-list-figure base-wrapper base-distance">
         <div class="episode-list-info">
             <span>화수: {{ episodes.length }}화</span>
             <span>최신 업데이트 날짜: 24/07/24</span>
@@ -13,7 +13,7 @@
         <div class="episode-list-loading" v-else>
             <p>Episode Loading...</p>
         </div>
-    </figure>
+    </section>
 </template>
 
 <script setup>

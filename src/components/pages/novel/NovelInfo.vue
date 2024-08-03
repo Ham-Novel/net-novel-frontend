@@ -1,6 +1,6 @@
 <template>
-    <section>
-        <div class="novel-division">
+    <section class="base-distance novel-info-background">
+        <div class="novel-division base-wrapper">
             <img
                 class="novel-cover"
                 :src="novel.coverImage"
@@ -84,6 +84,11 @@ onMounted(() => {
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 30px;
+}
+
+.novel-info-background {
+    background-color: #f5f6fc;
+    padding-top: 30px;
 }
 
 .novel-cover {

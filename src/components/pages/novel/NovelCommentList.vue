@@ -1,5 +1,5 @@
 <template>
-    <figure class="comment-list-figure base-wrapper base-distance">
+    <section class="comment-list-figure base-wrapper base-distance">
         <div class="comment-list-info">
             <div>
                 <p>전체 댓글: {{ comments.length }}</p>
@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-    </figure>
+    </section>
 </template>
 
 <script setup>

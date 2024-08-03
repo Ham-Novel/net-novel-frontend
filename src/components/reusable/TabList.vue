@@ -1,6 +1,6 @@
 <template>
-    <section>
-        <ul class="tab-list">
+    <figure>
+        <ul class="tab-menu base-wrapper">
             <template v-for="(tab, index) in props.tabs">
                 <li class="tab-item" @click="toggleTab(tab.component)">
                     {{ tab.name }}
@@ -12,14 +12,14 @@
             </template>
         </ul>
         <slot :activeTab="activeTab"></slot>
-    </section>
+    </figure>
 </template>
 
 <script setup>
 import { ref, onMounted, markRaw } from "vue";
 
 // 상위 컴포넌트에서 받은 tab 요소 data 받기
-const props = defineProps(["tabs"]);
+const props = defineProps(["tabs", "tabMenuStyle"]);
 
 //활성화된 tab 결정하는 코드
 const activeTab = ref(props.tabs[0].component);
@@ -29,12 +29,13 @@ function toggleTab(component) {
 </script>
 
 <style lang="sass" scoped>
+@use "@/assets/base.sass"
 
-.tab-list
+.tab-menu
     display: flex
     align-items: center
     list-style-type: none
-    font-size: 30px
+    font-size: 25px
 
     li.tab-item
         padding: 10px

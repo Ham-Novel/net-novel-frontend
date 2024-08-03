@@ -1,16 +1,9 @@
 <template>
     <main>
-        <div class="novel-info-background">
-            <NovelInfo
-                class="novel-info base-wrapper base-distance"
-                :novel-id="id"
-            ></NovelInfo>
+        <div>
+            <NovelInfo class="novel-info" :novel-id="id"></NovelInfo>
         </div>
-        <TabList
-            class="base-wrapper base-distance"
-            :tabs="tabs"
-            v-slot:default="slotProps"
-        >
+        <TabList :tabs="tabs" v-slot:default="slotProps">
             <component :is="slotProps.activeTab" :novel-id="id"></component>
         </TabList>
     </main>
@@ -20,11 +13,12 @@
 import NovelInfo from "./NovelInfo.vue";
 import NovelEpiList from "./NovelEpiList.vue";
 import NovelCommentList from "./NovelCommentList.vue";
-import InfiniteScroll from "../../reusable/InfiniteScroll.vue";
-import TabList from "./TabList.vue";
+import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
+import TabList from "../../reusable/TabList.vue";
 
-import { ref, markRaw } from "vue";
+import { ref, markRaw, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { CornerLeftDown } from "lucide-vue-next";
 
 // tab 요소들 TabList에 전달
 const EpiList = markRaw(NovelEpiList);
@@ -40,11 +34,3 @@ const tabs = [
 const route = useRoute();
 const id = ref(route.query.id);
 </script>
-
-<style lang="sass" scoped>
-@use "@/assets/base.sass"
-
-.novel-info-background
-    background-color: #f5f6fc
-    padding-top: 30px
-</style>
