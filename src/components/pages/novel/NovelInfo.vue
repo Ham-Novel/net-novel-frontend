@@ -1,6 +1,6 @@
 <template>
-    <section class="base-distance">
-        <div class="novel-division base-wrapper">
+    <section>
+        <div class="novel-division">
             <img
                 class="novel-cover"
                 :src="novel.coverImage"
@@ -77,11 +77,6 @@ onMounted(() => {
 
 <style scoped>
 @import "@/assets/section.css";
-
-section {
-    background-color: #f5f6fc;
-    padding-top: 30px;
-}
 
 .novel-division {
     display: flex;

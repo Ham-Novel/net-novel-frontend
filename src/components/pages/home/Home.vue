@@ -1,6 +1,5 @@
 <template>
     <TodayTop></TodayTop>
-    <Recommend></Recommend>
     <RecentUpdated></RecentUpdated>
 </template>
 

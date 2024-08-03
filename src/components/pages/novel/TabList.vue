@@ -1,6 +1,6 @@
 <template>
     <section>
-        <ul class="tab-list base-wrapper base-distance">
+        <ul class="tab-list">
             <template v-for="(tab, index) in props.tabs">
                 <li class="tab-item" @click="toggleTab(tab.component)">
                     {{ tab.name }}
@@ -29,7 +29,6 @@ function toggleTab(component) {
 </script>
 
 <style lang="sass" scoped>
-@use '@/assets/base.sass'
 
 .tab-list
     display: flex

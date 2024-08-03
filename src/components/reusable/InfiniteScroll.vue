@@ -13,7 +13,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
-import EpiListElement from "../novel/EpiListElement.vue";
+import EpiListElement from "../pages/novel/EpiListElement.vue";
 
 const props = defineProps(["loadingMessage"]);
 
@@ -33,12 +33,13 @@ const loadItems = async () => {
     const generateItems = (page, perPage = 10) => {
         return Array.from({ length: perPage }, (_, index) => ({
             episodeId: (page - 1) * perPage + index + 1,
-            episodeNumber: (page - 1) * perPage + index + 1,
+            chapter: (page - 1) * perPage + index + 1,
             title: `title 입니다`,
             content: `This is the content in page ${page}.`,
-            view: 1000,
-            commentAmount: 10,
-            createDate: "2024-05-05T16:03:32",
+            views: 1000,
+            letterCount: 3000,
+            commentCount: 10,
+            uploadDate: "2024-05-05T16:03:32",
         }));
     };
 
@@ -62,7 +63,7 @@ const handleScroll = () => {
         document.documentElement.scrollHeight;
 
     if (bottomOfWindow) {
-        loadItems();
+        loadItems(); //이벤트 발동 시 실행하는 메서드
     }
 };
 

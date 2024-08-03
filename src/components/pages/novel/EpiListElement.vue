@@ -1,21 +1,21 @@
 <template>
     <article class="episode-item">
-        <div class="episode-episodeNumber">EP.{{ episode.episodeNumber }}</div>
+        <div class="episode-chapter">EP.{{ episode.chapter }}</div>
         <div class="episode-title">{{ episode.title }}</div>
         <div class="episode-stats">
             <div>
                 <FileText :size="15" />
-                <span class="word-count">{{ episode.content.length }}</span>
+                <span class="word-count">{{ episode.letterCount }}</span>
             </div>
             <div>
                 <Eye :size="15" />
-                <span class="view-count">{{ episode.view }}</span>
+                <span class="view-count">{{ episode.views }}</span>
             </div>
             <div>
                 <MessageCircleMore :size="15" />
-                <span class="comment-count">{{ episode.commentAmount }}</span>
+                <span class="comment-count">{{ episode.commentCount }}</span>
             </div>
-            <div class="upload-date">{{ createdDate }}</div>
+            <div class="upload-date">{{ uploadDateFommatted }}</div>
         </div>
     </article>
 </template>
@@ -25,12 +25,7 @@ import { ref, onMounted, computed } from "vue";
 import { FileText, Eye, MessageCircleMore } from "lucide-vue-next";
 
 //애피소드 정보 episode 변수로 받아오기
-const props = defineProps({
-    episode: {
-        type: Object,
-        required: true,
-    },
-});
+const props = defineProps(["episode"]);
 const episode = props.episode;
 
 //에피소드 생성 날짜 보기좋게 변환
@@ -42,8 +37,10 @@ const formatDate = (dateString) => {
 
     return `${year}.${month}.${day}`;
 };
-const createdDate = computed(() => {
-    return formatDate(episode.createdAt);
+
+//에피소드 업로드 날짜, 자동으로 formatting하는 computed 변수
+const uploadDateFommatted = computed(() => {
+    return formatDate(episode.uploadDate);
 });
 
 //요소 클릭 시 해당 에피소드 페이지로 이동 (미구현)
@@ -67,7 +64,7 @@ function openEpisode(episodeId) {
     background-color: #f5f5f5;
 }
 
-.episode-episodeNumber {
+.episode-chapter {
     width: 50px;
     font-weight: bold;
 }
