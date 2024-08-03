@@ -24,7 +24,7 @@ const menuItems = ref(["Browse", "Ranking", "New"]);
 nav {
     display: flex;
     justify-content: space-between;
-    background-color: #4f46e5;
+    background-color: #6159f7;
     padding: 0 10px;
     height: 70px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

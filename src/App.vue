@@ -25,4 +25,10 @@ html {
 span {
     display: inline-block;
 }
+
+/* 
+primary: #4f46e5;
+sub: #212121, #f5f6fc;
+background: #f5f8fa;
+ */
 </style>
