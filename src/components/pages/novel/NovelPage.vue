@@ -18,7 +18,6 @@ import TabList from "../../reusable/TabList.vue";
 
 import { ref, markRaw, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { CornerLeftDown } from "lucide-vue-next";
 
 // tab 요소들 TabList에 전달
 const EpiList = markRaw(NovelEpiList);

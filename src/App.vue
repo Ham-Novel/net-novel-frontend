@@ -26,6 +26,10 @@ span {
     display: inline-block;
 }
 
+main {
+    margin-top: 70px;
+}
+
 /* 
 primary: #4f46e5;
 sub: #212121, #f5f6fc;

@@ -2,16 +2,38 @@
     <article class="novel-box-item">
         <img class="novel-cover" src="" />
         <div class="novel-info">
-            <h1 class="title">소설 이름</h1>
-            <p class="progress">진행 회차 5/100</p>
+            <slot></slot>
         </div>
     </article>
 </template>
 
+<script setup>
+import { computed, onMounted, ref } from "vue";
+
+const props = defineProps({
+    itemSize: {
+        type: Object,
+        default: {
+            width: 160,
+            height: 260,
+            unit: "px",
+        },
+    },
+});
+
+const styleWidth = computed(() => {
+    return `${props.itemSize?.width ?? 160}${props.itemSize?.unit ?? "px"}`;
+});
+
+const styleHeight = computed(() => {
+    return `${props.itemSize?.height ?? 260}${props.itemSize?.unit ?? "px"}`;
+});
+</script>
+
 <style scoped lang="sass">
 .novel-box-item
-    width: 160px
-    height: 260px
+    width: v-bind(styleWidth)
+    height: v-bind(styleHeight)
     display: flex
     flex-direction: column
     align-items: stretch
@@ -28,12 +50,4 @@
     flex-direction: column
     justify-content: flex-start
     gap: 5px
-
-    .title
-        font-size: 18px
-        font-weight: bold
-
-    .progress
-        font-size: 14px
-        color: gray
 </style>
