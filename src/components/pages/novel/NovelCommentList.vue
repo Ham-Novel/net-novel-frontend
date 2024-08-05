@@ -2,44 +2,27 @@
     <section class="comment-list-figure base-wrapper base-distance">
         <div class="comment-list-info">
             <div>
-                <p>전체 댓글: 0화</p>
+                <p>전체 댓글: 0개</p>
             </div>
-            <form
-                class="comment-list-sort"
-                @submit.prevent="resortComments"
-                ref="formRef"
-            >
-                <div class="sort-radio">
+            <form class="comment-list-sort" @submit.prevent="resortComments">
+                <div class="sort-radio" v-for="sortItem in sortByList">
                     <input
                         type="radio"
-                        id="recent-button"
-                        value="recent"
+                        :id="sortItem.name + '-button'"
+                        :value="sortItem.name"
                         name="sortComments"
                         v-model="sortBy"
-                        @change="resortComments"
+                        @click="resortScroll"
                     />
-                    <label for="recent-button">최신순</label>
-                </div>
-                <div class="sort-radio">
-                    <input
-                        type="radio"
-                        id="likes-button"
-                        value="likes"
-                        name="sortComments"
-                        v-model="sortBy"
-                        @change="resortComments"
-                    />
-                    <label for="likes-button">추천순</label>
+                    <label :for="sortItem.name + '-button'">{{
+                        sortItem.displayName
+                    }}</label>
                 </div>
             </form>
         </div>
-        <InfiniteScroll
-            :page-size="10"
-            :load-items-method="loadComments"
-            v-slot:default="slotProps"
-        >
-            <template v-for="item in slotProps.itemList">
-                <CommentListElement :comment="item"></CommentListElement>
+        <InfiniteScroll :load-method="loadComments" @add-items="addComments">
+            <template v-for="comment in comments">
+                <CommentListElement :comment="comment"></CommentListElement>
             </template>
         </InfiniteScroll>
     </section>
@@ -48,30 +31,44 @@
 <script setup>
 import CommentListElement from "./CommentListElement.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, reactive } from "vue";
 import novelAPI from "@/serverApi";
 
-const props = defineProps(["novelId"]);
+const props = defineProps(["novelId"]); //novel id를 외부 컴포넌트에서 받기
+const pageNubmer = ref(0);
+const pageSize = ref(30); //Scroll 이벤트를 발동할 때마다 가져올 댓글 수
 
-const comments = ref([]);
+//댓글 정렬 방식 Enum
+const sortByList = reactive({
+    recent: {
+        name: "recent",
+        displayName: "최신순",
+    },
+    likes: {
+        name: "likes",
+        displayName: "추천순",
+    },
+});
+const sortBy = ref(sortByList.recent.name); //현재 정렬 변수
 
-const sortBy = ref("recent");
+//댓글 데이터 저장소 배열
+const comments = reactive([]);
 
-//댓글 정렬 변경 Backend Api 통신
-const resortComments = () => {
-    loadComments(props.novelId, 0, 3).then((resp) => {
-        comments.value = resp;
-    });
+//댓글 배열에 새 댓글을 추가하는 메서드
+const addComments = (newItems) => {
+    console.log(newItems);
+    comments.push(...newItems);
 };
 
-//댓글 Backend Api 통신
-const loadComments = async (pageNumber, pageSize) => {
+//댓글 Backend와 Api 통신하여 댓글 데이터를 가져오는 메서드
+//InfiniteScroll 컴포넌트에서 사용하게끔 props 파라미터로 전달
+const loadComments = async () => {
     try {
         const resp = await novelAPI.getCommentsByNovel(
             props.novelId,
             sortBy.value,
-            pageNumber,
-            pageSize
+            pageNubmer.value++,
+            pageSize.value
         );
         return Array.from(resp);
     } catch (error) {
@@ -79,10 +76,13 @@ const loadComments = async (pageNumber, pageSize) => {
     }
 };
 
-onMounted(() => {
-    resortComments();
-    // console.log(sortBy.value);
-});
+//스크롤 컴포넌트 초기화 메서드
+// InfiniteScroll 컴포넌트로부터 메서드 받음
+const scrollRef = ref(null);
+const resortScroll = () => {
+    pageNubmer.value = 0;
+    comments.splice(0, comments.length);
+};
 </script>
 
 <style lang="sass" scoped>
