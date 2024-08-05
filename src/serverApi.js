@@ -16,8 +16,9 @@ export default {
         return response.json();
     },
 
-    async getCommentsByNovel(novelId, sortBy) {
-        const reqUrl = `${API_URL}/api/comments/novel/${sortBy}`
+    async getCommentsByNovel(novelId, sortBy, pageNumber, pageSize) {
+        const reqUrl = `${API_URL}/api/comments/novel/${sortBy}?page=${pageNumber}&size=${pageSize}`
+        console.log(reqUrl)
         const response = await fetch(reqUrl, {
             method: 'POST',
             headers: {

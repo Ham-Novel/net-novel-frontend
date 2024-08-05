@@ -15,6 +15,10 @@
                 <MessageCircleMore :size="15" />
                 <span class="comment-count">{{ episode.commentCount }}</span>
             </div>
+            <div>
+                <Coins :size="15" />
+                <span class="comment-count">{{ episode.coinCost }}</span>
+            </div>
             <div class="upload-date">{{ uploadDateFommatted }}</div>
         </div>
     </article>
@@ -22,7 +26,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { FileText, Eye, MessageCircleMore } from "lucide-vue-next";
+import { FileText, Eye, MessageCircleMore, Coins } from "lucide-vue-next";
 
 //애피소드 정보 episode 변수로 받아오기
 const props = defineProps(["episode"]);

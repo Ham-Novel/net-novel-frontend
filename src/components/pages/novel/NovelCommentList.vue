@@ -2,7 +2,7 @@
     <section class="comment-list-figure base-wrapper base-distance">
         <div class="comment-list-info">
             <div>
-                <p>전체 댓글: {{ comments.length }}</p>
+                <p>전체 댓글: 0화</p>
             </div>
             <form
                 class="comment-list-sort"
@@ -33,24 +33,23 @@
                 </div>
             </form>
         </div>
-
-        <p v-if="comments.length == 0" class="comment-list-loading">
-            Comments Loading
-        </p>
-        <div v-else>
-            <CommentListElement
-                v-for="comment in comments"
-                :comment="comment"
-            ></CommentListElement>
-        </div>
+        <InfiniteScroll
+            :page-size="10"
+            :load-items-method="loadComments"
+            v-slot:default="slotProps"
+        >
+            <template v-for="item in slotProps.itemList">
+                <CommentListElement :comment="item"></CommentListElement>
+            </template>
+        </InfiniteScroll>
     </section>
 </template>
 
 <script setup>
 import CommentListElement from "./CommentListElement.vue";
+import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 import { ref, onMounted, computed } from "vue";
 import novelAPI from "@/serverApi";
-import { ThumbsUp, ThumbsDown } from "lucide-vue-next";
 
 const props = defineProps(["novelId"]);
 
@@ -60,15 +59,20 @@ const sortBy = ref("recent");
 
 //댓글 정렬 변경 Backend Api 통신
 const resortComments = () => {
-    loadComments(props.novelId, sortBy.value).then((resp) => {
+    loadComments(props.novelId, 0, 3).then((resp) => {
         comments.value = resp;
     });
 };
 
 //댓글 Backend Api 통신
-const loadComments = async (novelId, sortBy) => {
+const loadComments = async (pageNumber, pageSize) => {
     try {
-        const resp = await novelAPI.getCommentsByNovel(novelId, sortBy);
+        const resp = await novelAPI.getCommentsByNovel(
+            props.novelId,
+            sortBy.value,
+            pageNumber,
+            pageSize
+        );
         return Array.from(resp);
     } catch (error) {
         console.error("Error in Loading Comments By Novel: ", error);
@@ -76,9 +80,7 @@ const loadComments = async (novelId, sortBy) => {
 };
 
 onMounted(() => {
-    loadComments(props.novelId, sortBy.value).then((resp) => {
-        comments.value.push(...resp);
-    });
+    resortComments();
     // console.log(sortBy.value);
 });
 </script>
@@ -118,54 +120,4 @@ onMounted(() => {
     justify-content: center
     align-items: center
     height: 100px
-
-    //Todo 코멘트 컴포넌트화 시키기
-.comment
-    border-bottom: 1px solid #e0e0e0
-    padding: 15px 0
-    display: flex
-    flex-direction: row
-    align-items: center
-    gap: 8px
-
-.comment-menu-icon
-    margin-left: 5px
-    width: 5px
-    align-self: stretch
-    background-color: #eee
-
-.comment-detail
-    flex: 1
-
-.user-info
-    display: flex
-    align-items: center
-    margin-bottom: 10px
-
-    .avatar
-        width: 40px
-        height: 40px
-        border-radius: 50%
-        margin-right: 10px
-
-    .nickName
-        font-weight: bold
-        margin-right: 10px
-
-    .timestamp
-        color: #757575
-        font-size: 0.8em
-
-.comment-content
-    margin-bottom: 10px
-
-.comment-actions
-    display: flex
-
-    .action-button
-        background: none
-        border: none
-        color: #757575
-        cursor: pointer
-        margin-right: 15px
 </style>
