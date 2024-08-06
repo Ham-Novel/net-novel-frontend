@@ -13,7 +13,7 @@
 import NovelInfo from "./NovelInfo.vue";
 import NovelEpiList from "./NovelEpiList.vue";
 import NovelCommentList from "./NovelCommentList.vue";
-import TabList from "../../reusable/TabList.vue";
+import TabList from "@/components/reusable/TabList.vue";
 
 import { ref, markRaw, onMounted } from "vue";
 import { useRoute } from "vue-router";

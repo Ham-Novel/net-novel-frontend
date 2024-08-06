@@ -39,11 +39,12 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import novelAPI from "@/serverApi";
 import { View, Star, MessageCircleHeart } from "lucide-vue-next";
+import { novelApi } from "@/backendApi";
 
 const props = defineProps(["novelId"]);
 
+//default novel 데이터
 const novel = ref({
     title: "웹소설 제목",
     authorName: "유저 이름",
@@ -58,20 +59,17 @@ const novel = ref({
     coverImage: "path_to_cover_image.jpg",
 });
 
-const novelRating = ref(6);
+const novelRating = ref(10);
 
-async function loadNovel() {
-    try {
-        let resp = await novelAPI.getNovel(props.novelId);
-        console.log(resp);
-        novel.value = resp;
-    } catch (error) {
-        console.error("Error fetching novels:", error);
-    }
+function loadNovel() {
+    novelApi.getNovel(props.novelId).then((loadData) => {
+        console.log(loadData);
+        novel.value = loadData;
+    });
 }
 
 onMounted(() => {
-    loadNovel().then();
+    loadNovel();
 });
 </script>
 
