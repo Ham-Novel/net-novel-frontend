@@ -7,7 +7,6 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
-import novelAPI from "@/serverApi";
 
 const props = defineProps(["loadMethod", "loadingMessage"]);
 const emits = defineEmits(["addItems"]);

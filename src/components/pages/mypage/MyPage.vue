@@ -39,7 +39,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import novelAPI from "@/serverApi";
+import { memberApi } from "@/backendApi";
 
 const userData = ref({
     nickName: "nickName",
@@ -47,14 +47,10 @@ const userData = ref({
     email: "idValue@email.com",
 });
 
-async function loadUserData() {
-    try {
-        let resp = await novelAPI.getMyPageData();
-        console.log(resp);
-        userData.value = resp;
-    } catch (error) {
-        console.error("Error In Loading MyPage Data:", error);
-    }
+function loadUserData() {
+    memberApi.getMyPageData().then((loadData) => {
+        userData.value = loadData;
+    })
 }
 
 onMounted(() => {
