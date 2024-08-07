@@ -23,8 +23,8 @@ import { SignalZero } from "lucide-vue-next";
 import { ref } from "vue";
 
 const itemSize = ref({
-    width: 160,
-    height: 260,
+    width: 140,
+    height: 240,
     unit: "px",
 });
 
@@ -38,29 +38,29 @@ const infoList = ref(
 <style scoped lang="sass">
 @use '@/assets/base.sass'
 
+.top300
+    margin-top:100px
+
 .ranking-wrapper
-    margin-top: 30px
 
-.ranking-title
-    margin-bottom: 10px
-    font-size: 25px
+    .ranking-title
+        margin-bottom: 10px
+        font-size: 25px
 
-.ranking-list
-    position: relative
-    display: flex
-    flex-flow: row wrap
-    gap: 10px
-    width: 840px
-    margin: auto
+    .ranking-list
+        position: relative
+        display: flex
+        flex-flow: row wrap
+        gap: 10px
 
-    .rank
-        font-size: 14px
+        .rank
+            font-size: 14px
 
-    .title
-        font-size: 18px
-        overflow: hidden
-        text-overflow: ellipsis
-        display: -webkit-box
-        -webkit-line-clamp: 1
-        -webkit-box-orient: vertical
+        .title
+            font-size: 18px
+            overflow: hidden
+            text-overflow: ellipsis
+            display: -webkit-box
+            -webkit-line-clamp: 1
+            -webkit-box-orient: vertical
 </style>

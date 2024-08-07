@@ -1,5 +1,5 @@
 <template>
-    <div class="comment">
+    <article class="comment">
         <div class="comment-menu-icon"></div>
         <div class="comment-detail">
             <div class="user-info">
@@ -9,15 +9,15 @@
             <div class="comment-content">{{ comment.content }}</div>
             <div class="comment-actions">
                 <button class="action-button">
-                    <ThumbsUp :size="15" /> {{ comment.likes }}
+                    <ThumbsUp :size="13" /> {{ comment.likes }}
                 </button>
                 <button class="action-button">
-                    <ThumbsDown :size="15" /> {{ comment.dislikes }}
+                    <ThumbsDown :size="13" /> {{ comment.disLikes }}
                 </button>
                 <button class="action-button">신고</button>
             </div>
         </div>
-    </div>
+    </article>
 </template>
 
 <script setup>
@@ -85,4 +85,5 @@ const comment = props.comment ?? {
         color: #757575
         cursor: pointer
         margin-right: 15px
+        font-size: 13px
 </style>

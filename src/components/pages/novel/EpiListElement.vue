@@ -26,25 +26,16 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { util } from "@/format";
 import { FileText, Eye, MessageCircleMore, Coins } from "lucide-vue-next";
 
 //애피소드 정보 episode 변수로 받아오기
 const props = defineProps(["episode"]);
 const episode = props.episode;
 
-//에피소드 생성 날짜 보기좋게 변환
-const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear().toString().slice(-2);
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-
-    return `${year}.${month}.${day}`;
-};
-
 //에피소드 업로드 날짜, 자동으로 formatting하는 computed 변수
 const uploadDateFommatted = computed(() => {
-    return formatDate(episode.uploadDate);
+    return util.formatDate(episode.uploadDate);
 });
 
 //요소 클릭 시 해당 에피소드 페이지로 이동 (미구현)

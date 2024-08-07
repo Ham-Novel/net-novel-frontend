@@ -26,6 +26,21 @@ export const novelApi = {
     },
 }
 
+export const tagApi = {
+    async getTagsByNovel(id) {
+        try {
+            const reqUrl = `${API_URL}/novels/${id}/tags`
+            const resp = await fetch(reqUrl);
+            if (!resp.ok) {
+                throw new Error(BAD_REQUEST_MSG);
+            }
+            return resp.json();
+        } catch (error) {
+            console.error("Error fetching getTagsByNovel()", error);
+        }
+    }
+}
+
 
 export const episodeApi = {
     async getEpisodesByNovel(id, sort, page, size) {
@@ -38,6 +53,18 @@ export const episodeApi = {
             return resp.json();
         } catch (error) {
             console.error("Error fetching getEpisodesByNovel()", error);
+        }
+    },
+    async getEpisodesInfoByNovel(id) {
+        try {
+            const reqUrl = `${API_URL}/novels/${id}/episodes/info`;
+            const resp = await fetch(reqUrl);
+            if (!resp.ok) {
+                throw new Error(BAD_REQUEST_MSG);
+            }
+            return resp.json();
+        } catch (error) {
+            console.error("Error fetching getEpisodesCountByNovel()", error);
         }
     }
 }
@@ -71,5 +98,4 @@ export const memberApi = {
             console.error("Error fetching getMyPageData:", error);
         }
     },
-
 }

@@ -1,8 +1,11 @@
 <template>
     <section class="episode-list-section base-wrapper base-distance">
         <div class="list-info">
-            <span>화수: {{ episodes.length }}화</span>
-            <span>최신 업데이트 날짜: 24/07/24</span>
+            <span>화수: {{ episodesInfo.chapterCount }}화</span>
+            <span
+                >최신 업데이트 날짜:
+                {{ util.formatDate(episodesInfo.lastUpdatedAt) }}</span
+            >
         </div>
         <InfiniteScroll
             class="list-view"
@@ -23,12 +26,17 @@ import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { ref, reactive, onMounted } from "vue";
 import { episodeApi } from "@/backendApi";
+import { util } from "@/format";
 
 const props = defineProps(["novelId"]);
 
 const pageNumber = ref(0);
 const pageSize = ref(30);
 const episodes = reactive([]);
+const episodesInfo = ref({
+    chapterCount: 0,
+    lastUpdatedAt: "",
+});
 
 const resetEpisodes = () => {
     pageNumber.value = 0;
@@ -40,17 +48,26 @@ const addEpisodes = async (newItems) => {
 };
 
 const loadEpisodes = async () => {
-    const loaditems = await episodeApi
-        .getEpisodesByNovel(
-            props.novelId,
-            "initial",
-            pageNumber.value,
-            pageSize.value
-        )
-        .then();
+    const loaditems = await episodeApi.getEpisodesByNovel(
+        props.novelId,
+        "initial",
+        pageNumber.value,
+        pageSize.value
+    );
     pageNumber.value++;
     return loaditems;
 };
+
+const loadEpisodesInfo = () => {
+    episodeApi.getEpisodesInfoByNovel(props.novelId).then((info) => {
+        console.log(info);
+        episodesInfo.value = info;
+    });
+};
+
+onMounted(() => {
+    loadEpisodesInfo();
+});
 </script>
 
 <style lang="sass" scoped>
