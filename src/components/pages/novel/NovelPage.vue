@@ -28,5 +28,5 @@ const tabs = [
 
 // '/novel?id=1' 같은 query string 처리
 const route = useRoute();
-const id = ref(route.query.id);
+const id = route.params.id;
 </script>

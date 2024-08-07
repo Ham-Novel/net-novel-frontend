@@ -17,7 +17,8 @@ const routes = [
     { path: '/search', component: SearchPage },
     { path: '/mypage', component: MyPage },
     { path: '/library', component: LibraryPage },
-    { path: '/novel', component: NovelPage },
+    { path: '/novels/:id', name: 'novel', component: NovelPage },
+
 ];
 
 const router = createRouter({
