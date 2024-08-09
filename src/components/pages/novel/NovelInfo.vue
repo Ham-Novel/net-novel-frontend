@@ -21,8 +21,8 @@
                     </p>
                 </figure>
                 <figure class="novel-tags novel-info-figure">
-                    <span v-for="tag in tags" :key="tag.tagId" class="tag"
-                        >#{{ tag.tagName }}</span
+                    <span v-for="tag in novel.tags" :key="tag.id" class="tag"
+                        >#{{ tag.name }}</span
                     >
                 </figure>
                 <figure class="novel-description novel-info-figure">
@@ -52,11 +52,12 @@ const novel = ref({
     averageRating: 10,
     favoriteCount: 15,
     episodeCount: 0,
+    tags: [],
     status: "ONGOING",
     // coverImage: "path_to_cover_image.jpg",
 });
 
-const tags = reactive([]);
+// const tags = reactive([]);
 
 function loadNovel() {
     novelApi.getNovel(props.novelId).then((loadData) => {
@@ -65,16 +66,16 @@ function loadNovel() {
     });
 }
 
-function loadTags() {
-    tagApi.getTagsByNovel(props.novelId).then((items) => {
-        console.log(items);
-        tags.push(...items);
-    });
-}
+// function loadTags() {
+//     tagApi.getTagsByNovel(props.novelId).then((items) => {
+//         console.log(items);
+//         tags.push(...items);
+//     });
+// }
 
 onMounted(() => {
     loadNovel();
-    loadTags();
+    // loadTags();
 });
 </script>
 

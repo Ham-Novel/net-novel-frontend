@@ -1,6 +1,6 @@
 <template>
     <NovelItem
-        :width="props.size.width"
+        width="100%"
         :height="props.size.height"
         :img-url="props.brief.coverImg"
         :novel-id="props.brief.id"
@@ -18,7 +18,6 @@ const props = defineProps({
     size: {
         type: Object,
         default: {
-            width: "100%",
             height: "180px",
         },
     },
@@ -40,4 +39,14 @@ const props = defineProps({
 
     :deep(.novel-cover)
         width: 140px
+
+// .desc
+//     max-height: 80px
+//     font-size: 16px
+//     overflow: hidden
+//     overflow-wrap: break-word
+//     text-overflow: ellipsis
+//     display: -webkit-box
+//     -webkit-line-clamp: 3 /* 표시할 줄 수 */
+//     -webkit-box-orient: vertical
 </style>

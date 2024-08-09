@@ -31,7 +31,7 @@ const props = defineProps({
     },
     imgUrl: {
         type: String,
-        default: "/public/test_cover.jpeg",
+        default: "/public/cover/fantasy_cover.jpeg",
     },
     novelId: {
         type: Number,

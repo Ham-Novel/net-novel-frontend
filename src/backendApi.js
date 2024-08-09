@@ -88,7 +88,7 @@ export const commentApi = {
 export const memberApi = {
     async getMyPageData() {
         try {
-            const reqUrl = `${API_URL}/members/mypage`
+            const reqUrl = `${API_URL}/members/me/mypage`
             const resp = await fetch(reqUrl);
             if (!resp.ok) {
                 throw new Error(BAD_REQUEST_MSG);
@@ -96,6 +96,32 @@ export const memberApi = {
             return resp.json();
         } catch (error) {
             console.error("Error fetching getMyPageData:", error);
+        }
+    },
+    async getRecentReadNovels() {
+        const page = 0;
+        const size = 10;
+        try {
+            const reqUrl = `${API_URL}/members/me/recent-read?pageNumber=${page}&pageSize=${size}`
+            const resp = await fetch(reqUrl);
+            if (!resp.ok) {
+                throw new Error(BAD_REQUEST_MSG);
+            }
+            return resp.json();
+        } catch (error) {
+            console.error("Error fetching getRecentReadNovels() ", error);
+        }
+    },
+    async getFavoriteNovels() {
+        try {
+            const reqUrl = `${API_URL}/members/me/novels`
+            const resp = await fetch(reqUrl);
+            if (!resp.ok) {
+                throw new Error(BAD_REQUEST_MSG);
+            }
+            return resp.json();
+        } catch (error) {
+            console.error("Error fetching getFavoriteNovels() ", error);
         }
     },
 }

@@ -2,27 +2,28 @@
     <section>
         <div class="base-wrapper base-distance">
             <div class="histories">
-                <NovelListItem v-for="itemInfo in itemInfoList">
-                    <template v-slot:default>
-                        <div class="novel-info">
-                            <p class="desc">
-                                {{ itemInfo.desc }}
-                            </p>
-                        </div>
-                    </template>
-                    <template v-slot:feature>
-                        <div class="item-feature">
-                            <button class="continue-reading">
-                                {{ itemInfo.progress }}
-                                /{{ itemInfo.episodeCount }}
-                                이어 읽기 >>
-                            </button>
-                            <button class="add-library">
-                                {{ isFavoriteMsg(itemInfo) }}
-                            </button>
-                        </div>
-                    </template>
-                </NovelListItem>
+                <template v-for="novelInfo in recentReadNovels">
+                    <NovelListItem
+                        :size="itemSize"
+                        :brief="getItemBrief(novelInfo)"
+                        class="history-item"
+                    >
+                        <template v-slot:default>
+                            <p>{{ novelInfo.authorName }}</p>
+                            <p>{{ novelInfo.novelType }}</p>
+                            <p>{{ novelInfo.updatedAt }}</p>
+                            <p></p>
+                        </template>
+                        <template v-slot:feature>
+                            <div class="item-feature">
+                                <button class="continue-reading">
+                                    {{ novelInfo.episodeTitle }} >>
+                                </button>
+                                <button class="add-library">+선호작</button>
+                            </div>
+                        </template>
+                    </NovelListItem>
+                </template>
             </div>
         </div>
     </section>
@@ -30,36 +31,45 @@
 
 <script setup>
 import NovelListItem from "@/components/reusable/novel/NovelListItem.vue";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { memberApi } from "@/backendApi";
 
-const itemInfoList = ref(
-    Array.from({ length: 10 }, (_, i) => {
-        return {
-            title: `소설 이름${i}`,
-            desc: `Incididunt cillum cillum deserunt cillum. Aliqua nulla non
-                aliquip ut mollit nostrud ea et minim occaecat. Proident irure
-                deserunt Lorem laboris quis ex do officia. Reprehenderit
-                exercitation occaecat veniam ad officia. Cupidatat mollit
-                adipisicing labore laboris. Eu quis ex sint mollit sunt amet do
-                eu in sunt. Dolore exercitation do id con;sequat amet dolore
-                proident. Minim aliquip adipisicing commodo deserunt. Labore
-                excepteur anim sunt sunt magna adipisicing Lorem consectetur.
-                Ipsum in cillum incididunt nulla nulla id irure excepteur eu
-                nisi amet ipsum.`,
-            episodeCount: 100,
-            progress: i,
-            isFavorite: false,
-        };
-    })
-);
+//데이터 데이터 저장 변수
+const recentReadNovels = ref([]);
 
-const isFavoriteMsg = (itemInfo) => {
-    if (itemInfo.isFavorite) {
-        return "-선호작";
-    } else {
-        return "+선호작";
-    }
-};
+//데이터 로드하는 메서드
+function loadReadNovels() {
+    memberApi.getRecentReadNovels().then((novels) => {
+        recentReadNovels.value.push(...novels);
+        console.log(recentReadNovels.value);
+    });
+}
+
+//NovelListItem 크기
+const itemSize = ref({ height: "150px" });
+
+//NovelListItem에 보낼 데이터
+function getItemBrief(itemInfo) {
+    return {
+        id: itemInfo.novelId,
+        title: itemInfo.novelTitle,
+        coverImg: "public/cover/modern_cover.jpeg",
+    };
+}
+
+//컴포넌트 생성 시 데이터 로드 실행
+onMounted(() => {
+    loadReadNovels();
+});
+
+//선호작 버튼
+// const isFavoriteMsg = (itemInfo) => {
+//     if (itemInfo.isFavorite) {
+//         return "-선호작";
+//     } else {
+//         return "+선호작";
+//     }
+// };
 </script>
 
 <style scoped lang="sass">
@@ -70,38 +80,23 @@ const isFavoriteMsg = (itemInfo) => {
     display: flex
     justify-content: flex-start
     flex-flow: column wrap
-    gap: 30px
+    gap: 10px
 
 
-    .novel-info
-        position: relative
-
-        .title
-            height: 30px
-            margin-bottom: 5px
-            font-size: 24px
-            font-weight: bold
-
-        .desc
-            max-height: 80px
-            font-size: 16px
-            overflow: hidden
-            overflow-wrap: break-word
-            text-overflow: ellipsis
-            display: -webkit-box
-            -webkit-line-clamp: 3 /* 표시할 줄 수 */
-            -webkit-box-orient: vertical
+    .history-item
+        p
+            font-size: 14px
+            color: gray
 
         .progress
             position: absolute
             bottom: 10px
             height: 30px
-            font-size: 16px
-            color: gray
+
 
 .item-feature
     position: absolute
-    bottom: 10px
+    bottom: 0px
     right: 10px
     display: flex
     flex-flow: row wrap
@@ -115,8 +110,8 @@ const isFavoriteMsg = (itemInfo) => {
     .add-library
         background: none
         border: none
-        height: 40px
-        padding: 0 30px
+        height: 35px
+        padding: 0 25px
         border-radius: 20px
         background-color: #e6e6fa
         cursor: pointer

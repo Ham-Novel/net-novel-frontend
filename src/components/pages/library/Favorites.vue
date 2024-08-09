@@ -2,14 +2,12 @@
     <section>
         <div class="base-wrapper base-distance">
             <div class="favorites">
-                <template v-for="info in novelInfo">
+                <template v-for="novel in favorites">
                     <NovelCardItem
                         :size="itemSize"
-                        :brief="{ id: info.id, title: info.title }"
+                        :brief="getItemBrief(novel)"
                     >
-                        <p class="progress">
-                            진행 회차 {{ info.progress }}/100
-                        </p>
+                        <p class="author">작가명</p>
                     </NovelCardItem>
                 </template>
             </div>
@@ -19,25 +17,38 @@
 
 <script setup>
 import NovelCardItem from "@/components/reusable/novel/NovelCardItem.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { memberApi } from "@/backendApi";
 
-//NovelCardItem 크기 제작
+//NovelCardItem 크기
 const itemSize = ref({
     width: "160px",
     height: "260px",
 });
 
-//선호작 작품들 더미 데이터 생성
-const novelInfo = ref(
-    Array.from({ length: 13 }, (_, i) => {
-        return {
-            id: i + 1,
-            title: `소설 이름${i + 1}`,
-            progress: i + 1,
-            id: i + 1,
-        };
-    })
-);
+//NovelCardItem에 보낼 데이터
+function getItemBrief(novel) {
+    return {
+        id: novel.novelId,
+        title: novel.title,
+        coverImg: "public/cover/wuxia_cover.jpeg",
+    };
+}
+
+//선호작 데이터 저장 변수
+const favorites = ref([]);
+
+//데이터 로드 메서드
+function loadFavorites() {
+    memberApi.getFavoriteNovels().then((novels) => {
+        favorites.value.push(...novels);
+    });
+}
+
+//페이지 로드 시 실행
+onMounted(() => {
+    loadFavorites();
+});
 </script>
 
 <style scoped lang="sass">
@@ -49,7 +60,7 @@ const novelInfo = ref(
     flex-flow: row wrap
     gap: 20px
 
-    .progress
+    .author
         font-size: 14px
         color: gray
 </style>
