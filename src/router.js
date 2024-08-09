@@ -7,6 +7,7 @@ import SearchPage from './components/pages/search/SearchPage.vue';
 import MyPage from './components/pages/mypage/MyPage.vue';
 import LibraryPage from './components/pages/library/LibraryPage.vue';
 import NovelPage from './components/pages/novel/NovelPage.vue';
+import Test from './components/Test.vue';
 
 
 const routes = [
@@ -18,7 +19,7 @@ const routes = [
     { path: '/mypage', component: MyPage },
     { path: '/library', component: LibraryPage },
     { path: '/novels/:id', name: 'novel', component: NovelPage },
-
+    { path: '/test', component: Test },
 ];
 
 const router = createRouter({

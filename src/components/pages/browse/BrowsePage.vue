@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import NovelListItem from "@/components/reusable/NovelListItem.vue";
+import NovelListItem from "@/components/reusable/novel/NovelListItem.vue";
 import BrowseFilter from "./BrowseFilter.vue";
 import BrowseSort from "./BrowseSort.vue";
 import { ref, computed } from "vue";

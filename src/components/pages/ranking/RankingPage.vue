@@ -4,13 +4,13 @@
             <div class="ranking-wrapper base-wrapper">
                 <h1 class="ranking-title">Top 300</h1>
                 <div class="ranking-list">
-                    <NovelBoxItem
+                    <NovelCardItem
                         v-for="info in infoList"
                         :item-size="itemSize"
                     >
                         <h2 class="rank">{{ info.rank }}</h2>
                         <h1 class="title">{{ info.title }}</h1>
-                    </NovelBoxItem>
+                    </NovelCardItem>
                 </div>
             </div>
         </section>
@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import NovelBoxItem from "@/components/reusable/NovelBoxItem.vue";
+import NovelCardItem from "@/components/reusable/novel/NovelCardItem.vue";
 import { SignalZero } from "lucide-vue-next";
 import { ref } from "vue";
 

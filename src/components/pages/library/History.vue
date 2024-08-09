@@ -5,7 +5,6 @@
                 <NovelListItem v-for="itemInfo in itemInfoList">
                     <template v-slot:default>
                         <div class="novel-info">
-                            <h1 class="title">{{ itemInfo.title }}</h1>
                             <p class="desc">
                                 {{ itemInfo.desc }}
                             </p>
@@ -30,7 +29,7 @@
 </template>
 
 <script setup>
-import NovelListItem from "@/components/reusable/NovelListItem.vue";
+import NovelListItem from "@/components/reusable/novel/NovelListItem.vue";
 import { ref, computed } from "vue";
 
 const itemInfoList = ref(

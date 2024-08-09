@@ -2,28 +2,40 @@
     <section>
         <div class="base-wrapper base-distance">
             <div class="favorites">
-                <NovelBoxItem v-for="info in novelInfo" :item-size="itemSize">
-                    <h1 class="title">{{ info.title }}</h1>
-                    <p class="progress">진행 회차 {{ info.progress }}/100</p>
-                </NovelBoxItem>
+                <template v-for="info in novelInfo">
+                    <NovelCardItem
+                        :size="itemSize"
+                        :brief="{ id: info.id, title: info.title }"
+                    >
+                        <p class="progress">
+                            진행 회차 {{ info.progress }}/100
+                        </p>
+                    </NovelCardItem>
+                </template>
             </div>
         </div>
     </section>
 </template>
 
 <script setup>
-import NovelBoxItem from "@/components/reusable/NovelBoxItem.vue";
+import NovelCardItem from "@/components/reusable/novel/NovelCardItem.vue";
 import { ref } from "vue";
 
+//NovelCardItem 크기 제작
 const itemSize = ref({
-    width: 160,
-    height: 260,
-    unit: "px",
+    width: "160px",
+    height: "260px",
 });
 
+//선호작 작품들 더미 데이터 생성
 const novelInfo = ref(
     Array.from({ length: 13 }, (_, i) => {
-        return { title: `소설 이름${i}`, progress: i };
+        return {
+            id: i + 1,
+            title: `소설 이름${i + 1}`,
+            progress: i + 1,
+            id: i + 1,
+        };
     })
 );
 </script>
@@ -36,10 +48,6 @@ const novelInfo = ref(
     display: flex
     flex-flow: row wrap
     gap: 20px
-
-    .title
-        font-size: 18px
-        font-weight: bold
 
     .progress
         font-size: 14px
