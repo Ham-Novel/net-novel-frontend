@@ -1,6 +1,15 @@
 const API_URL = 'http://localhost:8081/api';
 const BAD_REQUEST_MSG = 'Network response was not ok'
 
+
+async function apiConnect(reqUrl, reqMeta) {
+    const resp = await fetch(reqUrl, reqMeta);
+    if (!resp.ok) {
+        throw new Error(BAD_REQUEST_MSG);
+    }
+    return resp.json();
+}
+
 export const novelApi = {
     async getNovel(id) {
         try {
@@ -24,6 +33,19 @@ export const novelApi = {
             body: JSON.stringify(createDto),
         });
     },
+
+    async getBrowseNovels(page, size) {
+        try {
+            const reqUrl = `${API_URL}/novels?pageNumber=${page}&pageSize=${size}`
+            const resp = await fetch(reqUrl);
+            if (!resp.ok) {
+                throw new Error(BAD_REQUEST_MSG);
+            }
+            return resp.json();
+        } catch (error) {
+            console.error("Error fetching getBrowseNovels()", error);
+        }
+    }
 }
 
 export const tagApi = {
@@ -98,9 +120,7 @@ export const memberApi = {
             console.error("Error fetching getMyPageData:", error);
         }
     },
-    async getRecentReadNovels() {
-        const page = 0;
-        const size = 10;
+    async getRecentReadNovels(page, size) {
         try {
             const reqUrl = `${API_URL}/members/me/recent-read?pageNumber=${page}&pageSize=${size}`
             const resp = await fetch(reqUrl);
@@ -112,9 +132,34 @@ export const memberApi = {
             console.error("Error fetching getRecentReadNovels() ", error);
         }
     },
+
+
+    async getCheckFavorite(id) {
+        try {
+            const reqUrl = `${API_URL}/members/me/favorites/check?novelId=${id}`
+            const resp = await fetch(reqUrl);
+            if (!resp.ok) {
+                throw new Error(BAD_REQUEST_MSG);
+            }
+            return resp.json();
+        } catch (error) {
+            console.error("Error fetching getFavoriteNovels() ", error);
+        }
+    },
+    async toggleNovelFavorite(id) {
+        const reqUrl = `${API_URL}/members/me/favorites/${id}`
+        const reqMeta = {
+            method: 'POST',
+        }
+        try {
+            return apiConnect(reqUrl, reqMeta);
+        } catch (error) {
+            console.error(`Error fetching toggleNovelFavorite()`, error);
+        }
+    },
     async getFavoriteNovels() {
         try {
-            const reqUrl = `${API_URL}/members/me/novels`
+            const reqUrl = `${API_URL}/members/me/favorites`
             const resp = await fetch(reqUrl);
             if (!resp.ok) {
                 throw new Error(BAD_REQUEST_MSG);

@@ -3,9 +3,8 @@
         <div>
             <NovelInfo class="novel-info" :novel-id="id"></NovelInfo>
         </div>
-        <TabList :tabs="tabs" v-slot:default="slotProps">
-            <component :is="slotProps.activeTab" :novel-id="id"></component>
-        </TabList>
+        <TabList :tabs="tabs" v-model="currentTab"></TabList>
+        <component :is="currentTab" :novel-id="id"></component>
     </main>
 </template>
 
@@ -18,7 +17,7 @@ import TabList from "@/components/reusable/TabList.vue";
 import { ref, markRaw, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
-// tab 요소들 TabList에 전달
+// tab 요소들
 const EpiList = markRaw(NovelEpiList);
 const CommentList = markRaw(NovelCommentList);
 const tabs = [
@@ -26,7 +25,10 @@ const tabs = [
     { name: "댓글", component: CommentList },
 ];
 
-// '/novel?id=1' 같은 query string 처리
+//현재 선택한 tab
+const currentTab = ref(EpiList);
+
+// '/novels/1' 같이 url 데이터 처리
 const route = useRoute();
 const id = route.params.id;
 </script>

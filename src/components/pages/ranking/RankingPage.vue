@@ -4,13 +4,13 @@
             <div class="ranking-wrapper base-wrapper">
                 <h1 class="ranking-title">Top 300</h1>
                 <div class="ranking-list">
-                    <NovelCardItem
-                        v-for="info in infoList"
-                        :item-size="itemSize"
-                    >
-                        <h2 class="rank">{{ info.rank }}</h2>
-                        <h1 class="title">{{ info.title }}</h1>
-                    </NovelCardItem>
+                    <template v-for="novel in novels">
+                        <div>
+                            <h1 class="rank">{{ novel.rank }}</h1>
+                            <NovelCardItem :item-size="itemSize" :brief="novel">
+                            </NovelCardItem>
+                        </div>
+                    </template>
                 </div>
             </div>
         </section>
@@ -28,9 +28,9 @@ const itemSize = ref({
     unit: "px",
 });
 
-const infoList = ref(
+const novels = ref(
     Array.from({ length: 13 }, (_, i) => {
-        return { title: `소설 이름${i}`, rank: i };
+        return { id: i + 1, title: `소설 이름${i}`, rank: i + 1 };
     })
 );
 </script>
@@ -54,7 +54,13 @@ const infoList = ref(
         gap: 10px
 
         .rank
-            font-size: 14px
+            display: inline-block
+            padding: 0px 12px
+            margin-bottom: 5px
+            background-color: #e0e0e0
+            font-size: 20px
+            border-radius: 15px
+            text-align: center
 
         .title
             font-size: 18px

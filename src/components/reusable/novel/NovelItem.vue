@@ -49,9 +49,7 @@ function goToNovelPage() {
     router.push(`/novels/${props.novelId}`);
 }
 
-onMounted(() => {
-    console.log();
-});
+onMounted(() => {});
 </script>
 
 <style scoped lang="sass">
@@ -61,7 +59,6 @@ onMounted(() => {
     height: v-bind(styleHeight)
     display: flex
 
-    //안으로 tab
     .novel-cover
         border-radius: 5px
         background-color: gray
@@ -84,7 +81,7 @@ onMounted(() => {
 
         .title
             display: inline-block
-            font-size: 18px
+            font-size: 22px
             font-weight: bold
             cursor: pointer
 

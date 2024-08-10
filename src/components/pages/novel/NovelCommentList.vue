@@ -5,19 +5,19 @@
                 <p>전체 댓글: 0개</p>
             </div>
             <form class="sort-interface" @submit.prevent="resortComments">
-                <div class="sort-radio" v-for="sortItem in sortByList">
-                    <input
-                        type="radio"
-                        :id="sortItem.name + '-button'"
-                        :value="sortItem.name"
-                        name="sortComments"
-                        v-model="sortBy"
-                        @click="resetComments"
-                    />
-                    <label :for="sortItem.name + '-button'">{{
-                        sortItem.displayName
-                    }}</label>
-                </div>
+                <template v-for="sortItem in sortByList">
+                    <label :for="sortItem.name + '-button'">
+                        <input
+                            type="radio"
+                            :id="sortItem.name + '-button'"
+                            :value="sortItem.name"
+                            name="sortComments"
+                            v-model="sortBy"
+                            @click="resetComments"
+                        />
+                        <span>{{ sortItem.displayName }}</span>
+                    </label>
+                </template>
             </form>
         </div>
         <InfiniteScroll
@@ -111,15 +111,13 @@ const resetComments = () => {
         gap: 5px
 
         label
+            font-size: inherit
             cursor: pointer
 
-        .sort-radio
-            font-size: inherit
+        input
+            display: none
 
-            input
-                display: none
-
-            .active
+            &:checked + span
                 font-weight: bold
-                color: #6200ee
+                color: #7048fe
 </style>

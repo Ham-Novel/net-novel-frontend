@@ -1,52 +1,66 @@
 <template>
     <section>
         <div class="base-wrapper base-distance">
-            <div class="histories">
-                <template v-for="novelInfo in recentReadNovels">
+            <InfiniteScroll
+                class="histories"
+                :load-method="loadReadNovels"
+                @add-items="addItems"
+                loading-message="Record Loading..."
+            >
+                <template v-for="novel in novels" :key="novel.id">
                     <NovelListItem
                         :size="itemSize"
-                        :brief="getItemBrief(novelInfo)"
+                        :brief="getItemBrief(novel)"
                         class="history-item"
                     >
                         <template v-slot:default>
-                            <p>{{ novelInfo.authorName }}</p>
-                            <p>{{ novelInfo.novelType }}</p>
-                            <p>{{ novelInfo.updatedAt }}</p>
+                            <p>{{ novel.authorName }}</p>
+                            <p>{{ novel.novelType }}</p>
+                            <p>{{ novel.updatedAt }}</p>
                             <p></p>
                         </template>
                         <template v-slot:feature>
                             <div class="item-feature">
                                 <button class="continue-reading">
-                                    {{ novelInfo.episodeTitle }} >>
+                                    {{ novel.episodeTitle }} >>
                                 </button>
                                 <button class="add-library">+선호작</button>
                             </div>
                         </template>
                     </NovelListItem>
                 </template>
-            </div>
+            </InfiniteScroll>
         </div>
     </section>
 </template>
 
 <script setup>
 import NovelListItem from "@/components/reusable/novel/NovelListItem.vue";
-import { ref, computed, onMounted } from "vue";
+import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
+
+import { ref, onMounted, reactive } from "vue";
 import { memberApi } from "@/backendApi";
 
 //데이터 데이터 저장 변수
-const recentReadNovels = ref([]);
+const novels = reactive([]);
+
+const addItems = (newItems) => {
+    novels.push(...newItems);
+};
 
 //데이터 로드하는 메서드
-function loadReadNovels() {
-    memberApi.getRecentReadNovels().then((novels) => {
-        recentReadNovels.value.push(...novels);
-        console.log(recentReadNovels.value);
-    });
-}
+const loadReadNovels = async () => {
+    const novels = memberApi.getRecentReadNovels(page.value, size.value);
+    page.value++;
+    return novels;
+};
+
+//페이지 관련 변수
+const page = ref(0);
+const size = ref(5);
 
 //NovelListItem 크기
-const itemSize = ref({ height: "150px" });
+const itemSize = ref({ width: "100%", height: "150px" });
 
 //NovelListItem에 보낼 데이터
 function getItemBrief(itemInfo) {
@@ -56,11 +70,6 @@ function getItemBrief(itemInfo) {
         coverImg: "public/cover/modern_cover.jpeg",
     };
 }
-
-//컴포넌트 생성 시 데이터 로드 실행
-onMounted(() => {
-    loadReadNovels();
-});
 
 //선호작 버튼
 // const isFavoriteMsg = (itemInfo) => {

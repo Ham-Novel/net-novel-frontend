@@ -7,17 +7,31 @@
             </div>
         </div>
         <section class="browse-result">
-            <div class="browse-novel-list base-wrapper base-distance">
-                <NovelListItem>
-                    <template v-slot:default>
-                        <div class="novel-info">
-                            <h1 class="title">{{ itemInfo.title }}</h1>
+            <div class="browse-content base-wrapper base-distance">
+                <InfiniteScroll
+                    class="browse-novel-list"
+                    :load-method="loadNovels"
+                    @add-items="addNovels"
+                    loading-message="Browse Loading...."
+                >
+                    <template v-for="novel in novels">
+                        <NovelListItem
+                            class="browse-novel-item"
+                            :brief="novel"
+                            :size="itemSize"
+                        >
+                            <!-- <h1 class="title">{{ novel.title }}</h1> -->
+                            <div class="tag">
+                                <span v-for="tag in novel.tags" :key="tag.id"
+                                    >#{{ tag.name }}</span
+                                >
+                            </div>
                             <p class="desc">
-                                {{ itemInfo.desc }}
+                                {{ novel.desc }}
                             </p>
-                        </div>
+                        </NovelListItem>
                     </template>
-                </NovelListItem>
+                </InfiniteScroll>
             </div>
         </section>
     </main>
@@ -27,24 +41,35 @@
 import NovelListItem from "@/components/reusable/novel/NovelListItem.vue";
 import BrowseFilter from "./BrowseFilter.vue";
 import BrowseSort from "./BrowseSort.vue";
-import { ref, computed } from "vue";
+import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
-const itemInfo = ref({
-    title: `소설 이름`,
-    desc: `Incididunt cillum cillum deserunt cillum. Aliqua nulla non
-                aliquip ut mollit nostrud ea et minim occaecat. Proident irure
-                deserunt Lorem laboris quis ex do officia. Reprehenderit
-                exercitation occaecat veniam ad officia. Cupidatat mollit
-                adipisicing labore laboris. Eu quis ex sint mollit sunt amet do
-                eu in sunt. Dolore exercitation do id consequat amet dolore
-                proident. Minim aliquip adipisicing commodo deserunt. Labore
-                excepteur anim sunt sunt magna adipisicing Lorem consectetur.
-                Ipsum in cillum incididunt nulla nulla id irure excepteur eu
-                nisi amet ipsum.`,
-    episodeCount: 100,
-    progress: 5,
-    isFavorite: false,
-});
+import { ref, computed, onMounted, reactive } from "vue";
+import { novelApi } from "@/backendApi";
+
+//NovelListItem 크기
+const itemSize = {
+    width: "450px",
+    height: "150px",
+};
+
+//작품 데이터 저장 공간
+const novels = reactive([]);
+
+//작품 데이터 추가
+const addNovels = (newItems) => {
+    novels.push(...newItems);
+};
+
+//작품 데이터 로드
+const loadNovels = async () => {
+    const loadData = await novelApi.getBrowseNovels(page.value, size.value);
+    page.value++;
+    return loadData;
+};
+
+//InfiniteScroll 관련 변수
+const page = ref(0);
+const size = ref(5);
 </script>
 
 <style lang="sass" scoped>
@@ -66,32 +91,39 @@ const itemInfo = ref({
         flex: 1
         padding: 30px
 
+.browse-content
+    padding-top: 30px
+
 
 .browse-novel-list
-    padding-top: 30px
     display: flex
     justify-content: flex-start
-    flex-flow: column wrap
+    flex-flow: row wrap
     gap: 30px
 
-    .novel-info
-            position: relative
+    .browse-novel-item
+        .tag
+            margin-bottom: 5px
 
-            .title
-                height: 30px
-                margin-bottom: 5px
-                font-size: 24px
+            span
+                margin-right: 8px
+                font-size: 13px
                 font-weight: bold
+                color: blue
+                cursor: pointer
 
-            .desc
-                max-height: 80px
-                font-size: 16px
-                overflow: hidden
-                overflow-wrap: break-word
-                text-overflow: ellipsis
-                display: -webkit-box
-                -webkit-line-clamp: 3 /* 표시할 줄 수 */
-                -webkit-box-orient: vertical
+                &:hover
+                    text-decoration: underline
+
+        .desc
+            max-height: 80px
+            font-size: 15px
+            overflow: hidden
+            overflow-wrap: break-word
+            text-overflow: ellipsis
+            display: -webkit-box
+            -webkit-line-clamp: 3 /* 표시할 줄 수 */
+            -webkit-box-orient: vertical
 
 .line
   border-top: 1px solid #444444

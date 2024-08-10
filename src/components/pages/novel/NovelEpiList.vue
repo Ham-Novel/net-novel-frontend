@@ -28,25 +28,20 @@ import { ref, reactive, onMounted } from "vue";
 import { episodeApi } from "@/backendApi";
 import { util } from "@/format";
 
+//작품 id 외부 컴포넌트에서 받기
 const props = defineProps(["novelId"]);
 
+//무한스크롤 관련 변수
 const pageNumber = ref(0);
 const pageSize = ref(30);
-const episodes = reactive([]);
-const episodesInfo = ref({
-    chapterCount: 0,
-    lastUpdatedAt: "",
-});
+const episodes = reactive([]); //데이터 저장 공간
 
-const resetEpisodes = () => {
-    pageNumber.value = 0;
-    episodes.splice(0, episodes.length);
-};
-
-const addEpisodes = async (newItems) => {
+//데이터 저장 메서드
+const addEpisodes = (newItems) => {
     episodes.push(...newItems);
 };
 
+//데이터 로드 메서드
 const loadEpisodes = async () => {
     const loaditems = await episodeApi.getEpisodesByNovel(
         props.novelId,
@@ -57,6 +52,18 @@ const loadEpisodes = async () => {
     pageNumber.value++;
     return loaditems;
 };
+
+//데이터 리셋
+const resetEpisodes = () => {
+    pageNumber.value = 0;
+    episodes.splice(0, episodes.length);
+};
+
+//에피소드 리스트 메타 데이터 로드
+const episodesInfo = ref({
+    chapterCount: 0,
+    lastUpdatedAt: "",
+});
 
 const loadEpisodesInfo = () => {
     episodeApi.getEpisodesInfoByNovel(props.novelId).then((info) => {

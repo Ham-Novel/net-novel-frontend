@@ -1,7 +1,12 @@
 <template>
     <section class="novel-info-section base-distance">
         <div class="novel-division base-wrapper">
-            <img class="novel-cover" src="" :alt="novel.title" />
+            <div class="novel-cover">
+                <img
+                    src="/public/cover/lightnovel_cover.jpeg"
+                    :alt="novel.title"
+                />
+            </div>
             <div class="novel-info">
                 <figure class="novel-detail novel-info-figure">
                     <h1 class="novel-title">{{ novel.title }}</h1>
@@ -9,16 +14,22 @@
                         <span>작가</span>
                         <a href="#">{{ novel.authorName }}</a>
                     </h2>
-                    <p class="novel-stats">
-                        <span> <View size="18" /> {{ novel.views }} </span>
-                        <span>
-                            <Star size="18" /> {{ novel.favoriteCount }}
-                        </span>
-                        <span>
-                            <MessageCircleHeart size="18" />
-                            {{ novel.averageRating }}
-                        </span>
-                    </p>
+                </figure>
+                <figure class="novel-stats novel-info-figure">
+                    <span> <View /> {{ novel.views }} </span>
+                    <span>
+                        <Heart
+                            class="favorite-button"
+                            :fill="favoriteButtonStyle.fill"
+                            :color="favoriteButtonStyle.color"
+                            @click="toggleFavorite"
+                        />
+                        {{ novel.favoriteCount }}
+                    </span>
+                    <span>
+                        <MessageCircleHeart />
+                        {{ novel.averageRating }}
+                    </span>
                 </figure>
                 <figure class="novel-tags novel-info-figure">
                     <span v-for="tag in novel.tags" :key="tag.id" class="tag"
@@ -27,7 +38,7 @@
                 </figure>
                 <figure class="novel-description novel-info-figure">
                     <h3>작품 소개</h3>
-                    <p>{{ novel.description }}</p>
+                    <p>{{ novel.desc }}</p>
                 </figure>
             </div>
         </div>
@@ -35,47 +46,67 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from "vue";
-import { View, Star, MessageCircleHeart } from "lucide-vue-next";
-import { novelApi, tagApi } from "@/backendApi";
+import { ref, onMounted, reactive, computed, readonly } from "vue";
+import { View, Heart, MessageCircleHeart } from "lucide-vue-next";
+import { novelApi, memberApi } from "@/backendApi";
 
 const props = defineProps(["novelId"]);
 
 //default novel 데이터
 const novel = ref({
-    title: "웹소설 제목",
-    authorName: "유저 이름",
-    description: `
-    Laborum aute Lorem occaecat et anim ad consequat magna reprehenderit non eu enim. Minim duis nulla eu elit ut tempor magna tempor occaecat excepteur. Fugiat magna aute sunt nulla do cillum pariatur. Ad deserunt commodo ex non culpa magna eiusmod. Nostrud veniam et consectetur sunt deserunt nulla laboris nisi consectetur aliquip proclassent excepteur consectetur cillum. Incclassclassunt irure deserunt velit commodo dolor dolore amet aute.
-    `,
-    views: 100,
-    averageRating: 10,
-    favoriteCount: 15,
+    id: 0,
+    title: "",
+    authorName: "",
+    desc: ``,
+    views: 0,
+    averageRating: 0,
+    favoriteCount: 0,
     episodeCount: 0,
     tags: [],
-    status: "ONGOING",
+    status: "",
     // coverImage: "path_to_cover_image.jpg",
 });
 
-// const tags = reactive([]);
+//선호작 여부
+const isFavorite = ref(false);
 
-function loadNovel() {
-    novelApi.getNovel(props.novelId).then((loadData) => {
-        console.log(loadData);
-        novel.value = loadData;
+const favoriteButtonStyle = computed(() => {
+    if (isFavorite.value) {
+        return {
+            color: "red",
+            fill: "red",
+        };
+    } else {
+        return {
+            color: "black",
+            fill: "transparent",
+        };
+    }
+});
+
+//선호작 설정 메서드
+function toggleFavorite() {
+    memberApi.toggleNovelFavorite(props.novelId).then((check) => {
+        console.log(check);
+        isFavorite.value = check;
+        if (check) {
+            novel.value.favoriteCount++;
+        } else {
+            novel.value.favoriteCount--;
+        }
     });
 }
 
-// function loadTags() {
-//     tagApi.getTagsByNovel(props.novelId).then((items) => {
-//         console.log(items);
-//         tags.push(...items);
-//     });
-// }
-
+//api 적용
 onMounted(() => {
-    loadNovel();
-    // loadTags();
+    novelApi.getNovel(props.novelId).then((loadData) => {
+        // console.log(loadData);
+        novel.value = loadData;
+    });
+    memberApi.getCheckFavorite(props.novelId).then((check) => {
+        // console.log(check);
+        isFavorite.value = check;
+    });
 });
 </script>
 
@@ -94,15 +125,25 @@ onMounted(() => {
     background-color: #f5f6fc
     padding-top: 30px
 
-
     .novel-cover
         width: 300px
         height: 400px
         flex-shrink: 0
         flex-grow: 0
-        object-fit: cover
         border-radius: 5px
-        background-color: #e0e0e0
+        background-color: gray
+        overflow: hidden
+        cursor: pointer
+
+        img
+            width: 100%
+            height: 100%
+            object-fit: cover
+            object-position: center
+            transition: transform 0.6s ease // 부드러운 확대 효과를 위한 전환
+
+            &:hover
+                transform: scale(1.1) // 마우스 오버 시 이미지 확대
 
 
 .novel-info
@@ -111,7 +152,7 @@ onMounted(() => {
     flex-grow: 1
 
     .novel-info-figure
-        margin-bottom: 30px
+        margin-bottom: 20px
 
         > *
             margin-bottom: 10px
@@ -134,17 +175,29 @@ onMounted(() => {
                 font-weight: bold
 
 
-        .novel-stats
-            font-size: 15px
-            display: flex
-            flex-direction: row
-            gap: 15px
+    .novel-stats
+        font-size: 17px
+        display: flex
+        flex-direction: row
+        gap: 15px
 
-            > span
-                color: black
-                display: flex
-                align-items: center
-                gap: 3px
+        *
+            height: 25px
+
+        > span
+            color: black
+            display: flex
+            align-items: center
+            gap: 3px
+
+        .favorite-button
+            cursor: pointer
+            transition: all 0.3s ease
+            &:hover
+                transform: scale(1.2)
+            &:active
+                transform: scale(0.8)
+                box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1)
 
     .novel-tags
         .tag
@@ -153,6 +206,7 @@ onMounted(() => {
             border-radius: 5px
             margin-right: 6px
             font-size: 12px
+            cursor: pointer
 
     .novel-description
         width: 80%
@@ -163,9 +217,19 @@ onMounted(() => {
             overflow-wrap: break-word
             max-width: 100%
 
+    .features
+        position: absolute
+        right: 30px
+        top: 30px
+        display: flex
+        flex-flow: row nowrap
+        gap: 30px
+
+        *
+            height: 30px
+
 .read-button
-    width: 200px
-    height: 40px
+    width: 100px
     background-color: #4f46e5
     color: white
     border-radius: 5px
