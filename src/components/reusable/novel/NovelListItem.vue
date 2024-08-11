@@ -28,9 +28,9 @@ const props = defineProps({
     brief: {
         type: Object,
         default: {
-            id: undefined,
+            id: 0,
             title: "NovelListItem",
-            coverImg: undefined,
+            coverImg: "/public/cover/fantasy_cover.jpeg",
         },
     },
 });
@@ -45,7 +45,9 @@ function goToNovelPage() {
     router.push(`/novels/${props.brief.id}`);
 }
 
-onMounted(() => {});
+onMounted(() => {
+    console.log(props.brief.coverImg);
+});
 </script>
 
 <style scoped lang="sass">

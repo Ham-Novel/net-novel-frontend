@@ -17,10 +17,13 @@
                     <template v-for="novel in novels">
                         <NovelListItem
                             class="browse-novel-item"
-                            :brief="novel"
+                            :brief="{
+                                id: novel.id,
+                                title: novel.title,
+                                coverImg: 'public/cover/fantasy_cover.jpeg',
+                            }"
                             :size="itemSize"
                         >
-                            <!-- <h1 class="title">{{ novel.title }}</h1> -->
                             <div class="tag">
                                 <span v-for="tag in novel.tags" :key="tag.id"
                                     >#{{ tag.name }}</span

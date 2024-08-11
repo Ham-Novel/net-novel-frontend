@@ -7,6 +7,7 @@ import SearchPage from './components/pages/search/SearchPage.vue';
 import MyPage from './components/pages/mypage/MyPage.vue';
 import LibraryPage from './components/pages/library/LibraryPage.vue';
 import NovelPage from './components/pages/novel/NovelPage.vue';
+import EpisodePage from './components/pages/episode/EpisodePage.vue';
 import Test from './components/Test.vue';
 
 
@@ -18,7 +19,8 @@ const routes = [
     { path: '/search', component: SearchPage },
     { path: '/mypage', component: MyPage },
     { path: '/library', component: LibraryPage },
-    { path: '/novels/:id', name: 'novel', component: NovelPage },
+    { path: '/novels/:id', component: NovelPage },
+    { path: '/episodes/:id', component: EpisodePage },
     { path: '/test', component: Test },
 ];
 

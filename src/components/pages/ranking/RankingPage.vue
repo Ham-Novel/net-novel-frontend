@@ -7,7 +7,14 @@
                     <template v-for="novel in novels">
                         <div>
                             <h1 class="rank">{{ novel.rank }}</h1>
-                            <NovelCardItem :item-size="itemSize" :brief="novel">
+                            <NovelCardItem
+                                :item-size="itemSize"
+                                :brief="{
+                                    id: novel.id,
+                                    title: novel.title,
+                                    coverImg: 'public/cover/fantasy_cover.jpeg',
+                                }"
+                            >
                             </NovelCardItem>
                         </div>
                     </template>
