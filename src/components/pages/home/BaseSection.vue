@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section class="base-wrapper base-distance">
         <h2>
             <slot name="title"></slot>
         </h2>
@@ -11,22 +11,21 @@
 import { ref } from "vue";
 </script>
 
-<style scoped>
-section {
-    margin: 1rem 2.5rem;
-}
+<style scoped lang="sass">
+@use "@/assets/base.sass"
 
-h2 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
+section
+    margin: 1rem 2.5rem
 
-.icon {
-    margin-right: 0.5rem;
-    color: #4f46e5;
-}
+h2
+    display: flex
+    align-items: center
+    gap: 10px
+    font-size: 1.5rem
+    font-weight: 600
+    margin-bottom: 1rem
+
+.icon
+    margin-right: 0.5rem
+    color: #4f46e5
 </style>

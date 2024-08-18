@@ -4,7 +4,7 @@
             <span>화수: {{ episodesInfo.chapterCount }}화</span>
             <span
                 >최신 업데이트 날짜:
-                {{ util.formatDate(episodesInfo.lastUpdatedAt) }}</span
+                {{ formatUtil.formatDate(episodesInfo.lastUpdatedAt) }}</span
             >
         </div>
         <InfiniteScroll
@@ -26,7 +26,7 @@ import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { ref, reactive, onMounted } from "vue";
 import { episodeApi } from "@/backendApi";
-import { util } from "@/format";
+import { formatUtil } from "@/format";
 
 //작품 id 외부 컴포넌트에서 받기
 const props = defineProps(["novelId"]);

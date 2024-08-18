@@ -4,7 +4,7 @@
         <div class="comment-detail">
             <div class="user-info">
                 <span class="nickName">{{ comment.nickName }}</span>
-                <span class="timestamp">1시간 전</span>
+                <span class="timestamp">{{ updatedDate }}</span>
             </div>
             <div class="comment-content">{{ comment.content }}</div>
             <div class="comment-actions">
@@ -22,6 +22,8 @@
 
 <script setup>
 import { ThumbsUp, ThumbsDown } from "lucide-vue-next";
+import { formatUtil } from "@/format";
+import { computed } from "vue";
 
 const props = defineProps(["comment"]);
 const comment = props.comment ?? {
@@ -29,11 +31,15 @@ const comment = props.comment ?? {
     content: "댓글 내용입니다",
     nickName: "닉네임",
     episodeTitle: "에피소드 제목",
-    createAt: "1010-01-01T11:01:11",
+    createdAt: "1010-01-01T11:01:11",
     likes: 10,
     disLikes: 3,
     // recomment
 };
+
+const updatedDate = computed(() => {
+    return formatUtil.formatRealTime(comment.createdAt);
+});
 </script>
 
 <style scoped lang="sass">

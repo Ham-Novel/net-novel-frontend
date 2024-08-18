@@ -4,11 +4,11 @@
             <div class="ranking-wrapper base-wrapper">
                 <h1 class="ranking-title">Top 300</h1>
                 <div class="ranking-list">
-                    <template v-for="novel in novels">
+                    <template v-for="(novel, index) in novels">
                         <div>
-                            <h1 class="rank">{{ novel.rank }}</h1>
+                            <h1 class="rank">{{ index + 1 }}</h1>
                             <NovelCardItem
-                                :item-size="itemSize"
+                                :size="itemSize"
                                 :brief="{
                                     id: novel.id,
                                     title: novel.title,
@@ -29,15 +29,15 @@ import NovelCardItem from "@/components/reusable/novel/NovelCardItem.vue";
 import { SignalZero } from "lucide-vue-next";
 import { ref } from "vue";
 
-const itemSize = ref({
-    width: 140,
-    height: 240,
-    unit: "px",
-});
+//NovelCardItem 크기
+const itemSize = {
+    width: "180px",
+    height: "320px",
+};
 
 const novels = ref(
     Array.from({ length: 13 }, (_, i) => {
-        return { id: i + 1, title: `소설 이름${i}`, rank: i + 1 };
+        return { id: i + 1, title: `소설 이름${i}` };
     })
 );
 </script>
@@ -58,7 +58,7 @@ const novels = ref(
         position: relative
         display: flex
         flex-flow: row wrap
-        gap: 10px
+        gap: 15px
 
         .rank
             display: inline-block
