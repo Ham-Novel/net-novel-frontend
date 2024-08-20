@@ -1,43 +1,48 @@
 <template>
     <main>
-        <section class="content-wrapper">
-            <p>{{ content }}</p>
-        </section>
+        <component :is="currentTab" novel-id="1"></component>
+        <TabList
+            class="episode-nav"
+            :tabs="tabs"
+            v-model="currentTab"
+        ></TabList>
     </main>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import EpisodeNav from "./EpisodeNav.vue";
+import EpisodeContent from "./EpisodeContent.vue";
+import TabList from "@/components/reusable/TabList.vue";
 
-const content = ref(`
-Mollit aliquip amet consequat ipsum fugiat magna. Ex nulla deserunt eu dolore elit aute irure eiusmod tempor. Nulla dolore veniam consequat veniam. Tempor amet elit culpa occaecat. Tempor qui excepteur dolor anim esse fugiat irure irure duis proident voluptate dolore enim. Amet est exercitation exercitation ullamco est nulla ad est dolor ut eiusmod fugiat mollit. Dolore ea sit sint duis amet id minim tempor officia ad nulla.
+import { markRaw, onMounted, ref } from "vue";
+import { useStore } from "vuex";
+import NovelCommentList from "../novel/NovelCommentList.vue";
 
-Voluptate voluptate aliquip ipsum magna aliquip consectetur excepteur et voluptate laboris. Laboris pariatur duis velit amet amet. Elit voluptate adipisicing pariatur sit deserunt elit pariatur voluptate ex fugiat laborum consectetur do tempor. Voluptate aliqua magna officia et magna voluptate ipsum id eiusmod fugiat consequat exercitation. Magna ut quis voluptate ullamco sint dolor eu cupidatat Lorem qui exercitation nisi. Laboris dolor sint culpa ea reprehenderit commodo eiusmod et ex incididunt deserunt nisi eiusmod. Ullamco dolor consectetur commodo sint dolore incididunt in cillum reprehenderit.
+const store = useStore();
 
-Ea irure sit ullamco consequat tempor cupidatat laborum nisi dolor duis esse sit. Quis tempor non aute laborum consequat amet enim occaecat enim esse fugiat ea eiusmod. Enim quis nostrud pariatur ad. Ex non irure reprehenderit exercitation tempor tempor consectetur deserunt ad. Consequat in nulla elit incididunt aliqua dolor aliqua consectetur aliquip.
+//에피소드 페이지에서는 네비게이션 비활성화
+onMounted(() => {
+    store.commit("navi/off");
+});
 
-Voluptate labore irure minim duis laboris pariatur amet velit ea est ipsum aliqua enim esse. Adipisicing ex ad exercitation adipisicing amet adipisicing consequat reprehenderit pariatur adipisicing minim. Velit incididunt sunt ad ad voluptate nulla deserunt cupidatat voluptate. Officia id sit in sunt minim.
-
-Sunt ea cupidatat incididunt ex. Sint sit et nostrud aliquip velit ad nulla aliqua aliqua. Enim do ipsum adipisicing aliqua aliqua in dolore nisi cillum sunt sint velit eu ut.
-
-
-
-
-`);
+const EpiContent = markRaw(EpisodeContent);
+const CommentList = markRaw(NovelCommentList);
+const tabs = [
+    { name: "콘텐츠", component: EpiContent },
+    { name: "댓글", component: CommentList },
+];
+const currentTab = ref(EpiContent);
 </script>
 
 <style scoped lang="sass">
-main
-    background-color: #e0e0e0
+@use "@/assets/base.sass"
 
-.content-wrapper
-    margin-left: auto
-    margin-right: auto
-    width: 980px
+.episode-nav
+    position: fixed
+    bottom: 0
+    left: 0
+    width: 100%
+    z-index: 1000
     background-color: white
-    padding: 10px 50px
-
-
-.base-distance
-    margin-bottom: 40px
+    border-top: 3px solid black
 </style>

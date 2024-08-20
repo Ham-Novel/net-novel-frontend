@@ -3,39 +3,23 @@
         <section class="library-header">
             <div class="header-info base-wrapper">
                 <h1 class="title">Library</h1>
+                <TabRouter :tabs="tabs"></TabRouter>
             </div>
-            <TabList :tabs="tabs" v-model="currentTab"></TabList>
         </section>
-        <component :is="currentTab"></component>
+        <router-view></router-view>
     </main>
 </template>
 
 <script setup>
 import TabList from "@/components/reusable/TabList.vue";
-import { markRaw, onMounted, ref } from "vue";
-import Favorites from "./Favorites.vue";
-import History from "./History.vue";
-import { useRoute } from "vue-router";
+import TabRouter from "@/components/reusable/TabRouter.vue";
+import { ref } from "vue";
 
 //선택 가능한 탭 메뉴
 const tabs = ref({
-    favorites: { name: "선호작", component: markRaw(Favorites) },
-    history: { name: "최근기록", component: markRaw(History) },
+    favorites: { name: "선호작", path: "/library/favorites" },
+    history: { name: "최근 기록", path: "/library/history" },
 });
-
-//현재 선택한 탭
-const currentTab = ref(Favorites);
-
-const route = useRoute();
-
-const tab = route.query.tab ?? false;
-
-// onMounted(() => {
-//     console.log(tab);
-//     if (tab) {
-//         currentTab.value = tabs.value[tab].component;
-//     }
-// });
 </script>
 
 <style lang="sass" scoped>

@@ -45,6 +45,18 @@ export const novelApi = {
         } catch (error) {
             console.error("Error fetching getBrowseNovels()", error);
         }
+    },
+
+    async getRanking(page, size, period) {
+        const reqUrl = `${API_URL}/novels/ranking?pageNumber=${page}&pageSize=${size}&period=${period}`
+        const reqMeta = {
+            method: 'GET',
+        }
+        try {
+            return apiConnect(reqUrl, reqMeta);
+        } catch (error) {
+            console.error(`Error fetching toggleNovelFavorite()`, error);
+        }
     }
 }
 
@@ -150,6 +162,9 @@ export const memberApi = {
         const reqUrl = `${API_URL}/members/me/favorites/${id}`
         const reqMeta = {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
         }
         try {
             return apiConnect(reqUrl, reqMeta);

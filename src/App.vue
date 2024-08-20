@@ -1,14 +1,21 @@
 <template>
-    <!-- <Header></Header> -->
-    <Nav></Nav>
+    <Nav v-if="navActivate"></Nav>
     <router-view></router-view>
     <Footer></Footer>
 </template>
 
 <script setup>
-import Header from "./components/header/Header.vue";
 import Nav from "./components/header/Nav.vue";
 import Footer from "./components/footer/Footer.vue";
+import { useStore } from "vuex";
+import { computed, onMounted } from "vue";
+
+const store = useStore();
+
+const navActivate = computed(() => {
+    console.log(store.state.navi.naviState);
+    return store.state.navi.naviState;
+});
 </script>
 
 <style>
@@ -26,9 +33,9 @@ span {
     display: inline-block;
 }
 
-main {
+/* main {
     margin-top: 70px;
-}
+} */
 
 /* 
 primary: #4f46e5;

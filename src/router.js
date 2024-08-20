@@ -5,7 +5,11 @@ import RankingPage from './components/pages/ranking/RankingPage.vue';
 import NewReleasedPage from './components/pages/new-released/NewReleasedPage.vue';
 import SearchPage from './components/pages/search/SearchPage.vue';
 import MyPage from './components/pages/mypage/MyPage.vue';
+
 import LibraryPage from './components/pages/library/LibraryPage.vue';
+import Favorites from './components/pages/library/Favorites.vue';
+import History from './components/pages/library/History.vue';
+
 import NovelPage from './components/pages/novel/NovelPage.vue';
 import EpisodePage from './components/pages/episode/EpisodePage.vue';
 import Test from './components/Test.vue';
@@ -18,7 +22,12 @@ const routes = [
     { path: '/ranking', component: RankingPage },
     { path: '/search', component: SearchPage },
     { path: '/mypage', component: MyPage },
-    { path: '/library', component: LibraryPage },
+    {
+        path: '/library', component: LibraryPage, children: [
+            { path: 'favorites', component: Favorites },
+            { path: 'history', component: History },
+        ]
+    },
     { path: '/novels/:id', component: NovelPage },
     { path: '/episodes/:id', component: EpisodePage },
     { path: '/test', component: Test },

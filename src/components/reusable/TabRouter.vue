@@ -1,0 +1,60 @@
+<template>
+    <figure>
+        <form class="tab-menu">
+            <template v-for="(tab, index) in props.tabs" :key="index">
+                <router-link class="tab-item" :to="tab.path">{{
+                    tab.name
+                }}</router-link>
+                <div
+                    class="tab-divider"
+                    v-if="index < props.tabs.length - 1"
+                ></div>
+            </template>
+        </form>
+    </figure>
+</template>
+
+<script setup>
+import { ref, onMounted, markRaw } from "vue";
+
+// 상위 컴포넌트에서 받은 tab 요소 data 받기
+const props = defineProps({
+    tabs: {
+        type: Object,
+        default: {
+            tab1: { name: "탭1", path: "/tab/tab1" },
+            tab2: { name: "탭2", path: "/tab/tab2" },
+        },
+    },
+});
+
+//활성화된 tab 결정하는 코드
+function toggleTab(component) {}
+</script>
+
+<style lang="sass" scoped>
+@use "@/assets/base.sass"
+
+.tab-menu
+    display: flex
+    align-items: center
+    list-style-type: none
+    font-size: 25px
+
+    .tab-item
+        text-decoration: none
+        padding: 10px
+        cursor: pointer
+        font-weight: bold
+        transition: all 0.2s ease
+        &:hover
+            transform: translate(0, -5px)
+
+    .router-rink-active
+        color: white
+
+    .tab-divider
+        height: 0.8em
+        margin: 0 .6em
+        border-left: 2px solid #b7b7b7
+</style>

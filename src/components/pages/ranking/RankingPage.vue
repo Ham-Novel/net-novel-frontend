@@ -3,22 +3,22 @@
         <section class="top300 base-distance">
             <div class="ranking-wrapper base-wrapper">
                 <h1 class="ranking-title">Top 300</h1>
-                <div class="ranking-list">
-                    <template v-for="(novel, index) in novels">
+                <InfiniteScroll
+                    class="ranking-list"
+                    :load-method="loadRankings"
+                    @add-items="addRankings"
+                >
+                    <template v-for="(novel, index) in rankings">
                         <div>
                             <h1 class="rank">{{ index + 1 }}</h1>
                             <NovelCardItem
                                 :size="itemSize"
-                                :brief="{
-                                    id: novel.id,
-                                    title: novel.title,
-                                    coverImg: 'public/cover/fantasy_cover.jpeg',
-                                }"
+                                :brief="convertBrief(novel)"
                             >
                             </NovelCardItem>
                         </div>
                     </template>
-                </div>
+                </InfiniteScroll>
             </div>
         </section>
     </main>
@@ -26,8 +26,11 @@
 
 <script setup>
 import NovelCardItem from "@/components/reusable/novel/NovelCardItem.vue";
+import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
+
 import { SignalZero } from "lucide-vue-next";
-import { ref } from "vue";
+import { reactive, ref } from "vue";
+import { novelApi } from "@/backendApi";
 
 //NovelCardItem 크기
 const itemSize = {
@@ -35,18 +38,41 @@ const itemSize = {
     height: "320px",
 };
 
-const novels = ref(
-    Array.from({ length: 13 }, (_, i) => {
-        return { id: i + 1, title: `소설 이름${i}` };
-    })
-);
+//NovelCardItem brief 데이터 전달
+const convertBrief = (novel) => {
+    return {
+        id: novel.id,
+        title: novel.title,
+        coverImg: "public/cover/fantasy_cover.jpeg", //이미지 url 변수 전달하면 됨
+    };
+};
+
+//무한 스크롤 적용 변수, 메서드
+const pageNum = ref(0);
+const pageSize = ref(30);
+const rankings = reactive([]);
+
+const addRankings = (newItems) => {
+    rankings.push(...newItems);
+};
+
+const loadRankings = async () => {
+    //테스트 데이터
+    // const loadItems = Array.from({ length: 30 }, (_, i) => {
+    //     return { id: i, title: `소설 이름${i}` };
+    // });
+    //실제 api 불러오기
+    const loadItems = await novelApi.getRanking(pageNum, pageSize, "daily");
+    pageNum.value++;
+    return loadItems;
+};
 </script>
 
 <style scoped lang="sass">
 @use '@/assets/base.sass'
 
 .top300
-    margin-top:100px
+    margin-top:50px
 
 .ranking-wrapper
 

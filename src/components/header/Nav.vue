@@ -16,6 +16,7 @@
             <User :size="30" color="white" @click="navTo('mypage')" />
         </ul>
     </nav>
+    <div class="nav-margin"></div>
 </template>
 
 <script setup>
@@ -35,6 +36,10 @@ const navTo = (name) => {
 </script>
 
 <style scoped>
+.nav-margin {
+    height: 70px;
+}
+
 nav {
     display: flex;
     justify-content: space-between;

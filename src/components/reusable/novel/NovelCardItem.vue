@@ -29,7 +29,7 @@ const props = defineProps({
         default: {
             id: undefined,
             title: "NovelListItem",
-            coverImg: "/public/cover/fantasy_cover.jpeg",
+            coverImg: "/cover/fantasy_cover.jpeg",
         },
     },
 });
