@@ -1,37 +1,40 @@
 <template>
     <main>
-        <component :is="currentTab" novel-id="1"></component>
-        <TabList
-            class="episode-nav"
-            :tabs="tabs"
-            v-model="currentTab"
-        ></TabList>
+        <EpisodeContent></EpisodeContent>
+        <PayCheckDialog></PayCheckDialog>
     </main>
 </template>
 
 <script setup>
-import EpisodeNav from "./EpisodeNav.vue";
 import EpisodeContent from "./EpisodeContent.vue";
-import TabList from "@/components/reusable/TabList.vue";
+import PayCheckDialog from "./PayCheckDialog.vue";
 
-import { markRaw, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import NovelCommentList from "../novel/NovelCommentList.vue";
-
-const store = useStore();
+import { episodeApi } from "@/backendApi";
 
 //에피소드 페이지에서는 네비게이션 비활성화
+const store = useStore();
 onMounted(() => {
     store.commit("navi/off");
 });
 
-const EpiContent = markRaw(EpisodeContent);
-const CommentList = markRaw(NovelCommentList);
-const tabs = [
-    { name: "콘텐츠", component: EpiContent },
-    { name: "댓글", component: CommentList },
-];
-const currentTab = ref(EpiContent);
+//에피소드 로딩
+const route = useRoute();
+const episodeId = route.params.id;
+
+const episode = ref("");
+function loadEpisode() {
+    episodeApi.getEpisode(episodeId).then((data) => {
+        console.log(data);
+        episode.value = data.content;
+    });
+}
+
+onMounted(() => {
+    loadEpisode();
+});
 </script>
 
 <style scoped lang="sass">

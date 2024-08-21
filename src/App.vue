@@ -29,13 +29,13 @@ html {
     font-family: sans-serif;
 }
 
+body {
+    overflow-y: scroll;
+}
+
 span {
     display: inline-block;
 }
-
-/* main {
-    margin-top: 70px;
-} */
 
 /* 
 primary: #4f46e5;

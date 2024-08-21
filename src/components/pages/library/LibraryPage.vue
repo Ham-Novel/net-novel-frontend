@@ -11,15 +11,14 @@
 </template>
 
 <script setup>
-import TabList from "@/components/reusable/TabList.vue";
 import TabRouter from "@/components/reusable/TabRouter.vue";
 import { ref } from "vue";
 
 //선택 가능한 탭 메뉴
-const tabs = ref({
-    favorites: { name: "선호작", path: "/library/favorites" },
-    history: { name: "최근 기록", path: "/library/history" },
-});
+const tabs = ref([
+    { name: "선호작", path: "/library/favorites" },
+    { name: "최근 기록", path: "/library/history" },
+]);
 </script>
 
 <style lang="sass" scoped>

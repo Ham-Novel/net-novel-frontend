@@ -62,7 +62,11 @@ const loadRankings = async () => {
     //     return { id: i, title: `소설 이름${i}` };
     // });
     //실제 api 불러오기
-    const loadItems = await novelApi.getRanking(pageNum, pageSize, "daily");
+    const loadItems = await novelApi.getRanking(
+        pageNum.value,
+        pageSize.value,
+        "daily"
+    );
     pageNum.value++;
     return loadItems;
 };

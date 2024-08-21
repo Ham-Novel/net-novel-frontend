@@ -1,10 +1,10 @@
 <template>
     <main>
         <div>
-            <NovelInfo class="novel-info" :novel-id="id"></NovelInfo>
+            <NovelInfo class="novel-info" :novel-id="novelId"></NovelInfo>
         </div>
         <TabList :tabs="tabs" v-model="currentTab"></TabList>
-        <component :is="currentTab" :novel-id="id"></component>
+        <component :is="currentTab" :novel-id="novelId"></component>
     </main>
 </template>
 
@@ -14,7 +14,7 @@ import NovelEpiList from "./NovelEpiList.vue";
 import NovelCommentList from "./NovelCommentList.vue";
 import TabList from "@/components/reusable/TabList.vue";
 
-import { ref, markRaw, onMounted } from "vue";
+import { ref, markRaw } from "vue";
 import { useRoute } from "vue-router";
 
 // tab 요소들
@@ -30,5 +30,5 @@ const currentTab = ref(EpiList);
 
 // '/novels/1' 같이 url 데이터 처리
 const route = useRoute();
-const id = route.params.id;
+const novelId = route.params.id;
 </script>

@@ -1,3 +1,5 @@
+import { ErrorCodes } from "vue";
+
 const API_URL = 'http://localhost:8081/api';
 const BAD_REQUEST_MSG = 'Network response was not ok'
 
@@ -5,7 +7,7 @@ const BAD_REQUEST_MSG = 'Network response was not ok'
 async function apiConnect(reqUrl, reqMeta) {
     const resp = await fetch(reqUrl, reqMeta);
     if (!resp.ok) {
-        throw new Error(BAD_REQUEST_MSG);
+        throw new Error(`HTTP error! status: ${resp.status}`);
     }
     return resp.json();
 }
@@ -75,8 +77,24 @@ export const tagApi = {
     }
 }
 
-
 export const episodeApi = {
+    async getEpisode(id) {
+        try {
+            const resp = await fetch(`${API_URL}/episodes/${id}`, { method: 'GET' });
+            if (resp.status === 402) {
+                return {
+                    episodeId: id,
+                    payCheck: false
+                }
+            }
+            else if (!resp.ok) {
+                throw new Error(`HTTP error! status: ${resp.status}`);
+            }
+            return resp.json();
+        } catch (error) {
+            console.error("Error fetching getEpisode()", error);
+        }
+    },
     async getEpisodesByNovel(id, sort, page, size) {
         try {
             const reqUrl = `${API_URL}/novels/${id}/episodes?&sortBy=${sort}&pageNumber=${page}&pageSize=${size}`

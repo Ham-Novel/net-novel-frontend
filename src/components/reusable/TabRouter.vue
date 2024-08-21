@@ -20,11 +20,11 @@ import { ref, onMounted, markRaw } from "vue";
 // 상위 컴포넌트에서 받은 tab 요소 data 받기
 const props = defineProps({
     tabs: {
-        type: Object,
-        default: {
-            tab1: { name: "탭1", path: "/tab/tab1" },
-            tab2: { name: "탭2", path: "/tab/tab2" },
-        },
+        type: Array,
+        default: [
+            { name: "탭1", path: "/tab/tab1" },
+            { name: "탭2", path: "/tab/tab2" },
+        ],
     },
 });
 
@@ -43,6 +43,7 @@ function toggleTab(component) {}
 
     .tab-item
         text-decoration: none
+        color: black
         padding: 10px
         cursor: pointer
         font-weight: bold
@@ -50,8 +51,8 @@ function toggleTab(component) {}
         &:hover
             transform: translate(0, -5px)
 
-    .router-rink-active
-        color: white
+    .router-link-active
+        color: #6159f7
 
     .tab-divider
         height: 0.8em

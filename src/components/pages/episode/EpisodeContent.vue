@@ -9,6 +9,10 @@
 <script setup>
 import { onMounted, ref } from "vue";
 
+const props = defineProps(["episodeId"]);
+
+const contents = [];
+
 const content = ref(`
 Mollit aliquip amet consequat ipsum fugiat magna. Ex nulla deserunt eu dolore elit aute irure eiusmod tempor. Nulla dolore veniam consequat veniam. Tempor amet elit culpa occaecat. Tempor qui excepteur dolor anim esse fugiat irure irure duis proident voluptate dolore enim. Amet est exercitation exercitation ullamco est nulla ad est dolor ut eiusmod fugiat mollit. Dolore ea sit sint duis amet id minim tempor officia ad nulla.
 
