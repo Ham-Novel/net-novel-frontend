@@ -4,12 +4,23 @@ const API_URL = 'http://localhost:8081/api';
 const BAD_REQUEST_MSG = 'Network response was not ok'
 
 
+
+class PaymentRequiredError extends Error {
+    constructor(message, paymentPolicy) {
+        super(message);
+        this.name = 'PaymentRequiredError';
+        this.paymentPolicy = paymentPolicy;
+    }
+}
+
+
+
 async function apiConnect(reqUrl, reqMeta) {
     const resp = await fetch(reqUrl, reqMeta);
     if (!resp.ok) {
         throw new Error(`HTTP error! status: ${resp.status}`);
     }
-    return resp.json();
+    return resp;
 }
 
 export const novelApi = {
@@ -55,7 +66,7 @@ export const novelApi = {
             method: 'GET',
         }
         try {
-            return apiConnect(reqUrl, reqMeta);
+            return apiConnect(reqUrl, reqMeta).json();
         } catch (error) {
             console.error(`Error fetching toggleNovelFavorite()`, error);
         }
@@ -81,17 +92,23 @@ export const episodeApi = {
     async getEpisode(id) {
         try {
             const resp = await fetch(`${API_URL}/episodes/${id}`, { method: 'GET' });
+            const data = await resp.json();
             if (resp.status === 402) {
-                return {
-                    episodeId: id,
-                    payCheck: false
-                }
+                data.payCheck = false;
+                throw new PaymentRequiredError("에피소드 미결제 접근", data);
             }
             else if (!resp.ok) {
                 throw new Error(`HTTP error! status: ${resp.status}`);
             }
-            return resp.json();
+            else {
+                data.payCheck = true;
+                return data;
+            }
         } catch (error) {
+            if (error instanceof PaymentRequiredError) {
+                console.info(error.message);
+                return error.paymentPolicy;
+            }
             console.error("Error fetching getEpisode()", error);
         }
     },
@@ -118,7 +135,24 @@ export const episodeApi = {
         } catch (error) {
             console.error("Error fetching getEpisodesCountByNovel()", error);
         }
-    }
+    },
+
+
+    async payForEpisode(paymentDto) {
+        const reqUrl = `${API_URL}/coin-use-histories`
+        const reqMeta = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(paymentDto)
+        }
+        try {
+            return (await apiConnect(reqUrl, reqMeta)).text();
+        } catch (error) {
+            console.error(`Error fetching toggleNovelFavorite()`, error);
+        }
+    },
 }
 
 export const commentApi = {
@@ -138,6 +172,7 @@ export const commentApi = {
 }
 
 export const memberApi = {
+    //마이페이지 관련 api
     async getMyPageData() {
         try {
             const reqUrl = `${API_URL}/members/me/mypage`
@@ -150,6 +185,8 @@ export const memberApi = {
             console.error("Error fetching getMyPageData:", error);
         }
     },
+
+    //읽은 기록 관련 api
     async getRecentReadNovels(page, size) {
         try {
             const reqUrl = `${API_URL}/members/me/recent-read?pageNumber=${page}&pageSize=${size}`
@@ -163,7 +200,7 @@ export const memberApi = {
         }
     },
 
-
+    //선호작 관련 api
     async getCheckFavorite(id) {
         try {
             const reqUrl = `${API_URL}/members/me/favorites/check?novelId=${id}`
@@ -185,7 +222,7 @@ export const memberApi = {
             },
         }
         try {
-            return apiConnect(reqUrl, reqMeta);
+            return apiConnect(reqUrl, reqMeta).json();
         } catch (error) {
             console.error(`Error fetching toggleNovelFavorite()`, error);
         }

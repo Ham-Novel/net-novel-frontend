@@ -1,7 +1,13 @@
 <template>
     <main>
-        <EpisodeContent></EpisodeContent>
-        <PayCheckDialog></PayCheckDialog>
+        <EpisodeContent :content="episodeContent"></EpisodeContent>
+        <PayCheckDialog
+            v-if="payRequired"
+            v-model:activate="payRequired"
+            :episode-id="episodeId"
+            :cost-policy="costPolicy"
+        >
+        </PayCheckDialog>
     </main>
 </template>
 
@@ -20,15 +26,24 @@ onMounted(() => {
     store.commit("navi/off");
 });
 
-//에피소드 로딩
+//url에서 에피소드 id 데이터 가져오기
 const route = useRoute();
 const episodeId = route.params.id;
 
-const episode = ref("");
+//에피소드 api 통신
+const episodeContent = ref(); //api 통신으로 불러올 에피소드 데이터
+const payRequired = ref(false); //결제창 띄울지 결정
+const costPolicy = ref({}); //에피소드 결제 관련 정보
+
 function loadEpisode() {
     episodeApi.getEpisode(episodeId).then((data) => {
-        console.log(data);
-        episode.value = data.content;
+        //402 미결제 응답일 때, 결제창 띄우기
+        if (data.payCheck === false) {
+            payRequired.value = true;
+            costPolicy.value = data;
+        } else {
+            episodeContent.value = data.content;
+        }
     });
 }
 
