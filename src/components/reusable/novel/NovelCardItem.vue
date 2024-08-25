@@ -41,7 +41,7 @@ const styleHeight = ref(props.size.height);
 //클릭하면 해당 id 값의 NovelPage로 이동
 const router = useRouter();
 function goToNovelPage() {
-    router.push(`/novels/${props.brief.id}`);
+    router.push({ name: "novel-episode", params: { id: props.brief.id } });
 }
 
 onMounted(() => {});

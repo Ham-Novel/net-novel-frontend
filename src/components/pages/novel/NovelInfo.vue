@@ -2,7 +2,7 @@
     <section class="novel-info-section base-distance">
         <div class="novel-division base-wrapper">
             <div class="novel-cover">
-                <img :src="novel.coverImg" :alt="novel.title" />
+                <img :src="novel.thumbnailUrl" :alt="novel.title" />
             </div>
             <div class="novel-info">
                 <figure class="novel-detail novel-info-figure">
@@ -61,7 +61,7 @@ const novel = ref({
     episodeCount: 0,
     tags: [],
     status: "",
-    coverImg: "/cover/lightnovel_cover.jpeg",
+    thumbnailUrl: "/cover/lightnovel_cover.jpeg",
 });
 
 //선호작 여부

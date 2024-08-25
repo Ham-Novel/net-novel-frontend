@@ -13,33 +13,32 @@ import { computed, onMounted } from "vue";
 const store = useStore();
 
 const navActivate = computed(() => {
-    console.log(store.state.navi.naviState);
+    // console.log(store.state.navi.naviState);
     return store.state.navi.naviState;
 });
 </script>
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+<style lang="sass">
+*
+    margin: 0
+    padding: 0
+    box-sizing: border-box
 
-html {
-    font-family: sans-serif;
-}
+html
+    font-family: sans-serif
 
-body {
-    overflow-y: scroll;
-}
 
-span {
-    display: inline-block;
-}
+body
+    overflow-y: scroll
 
-/* 
-primary: #4f46e5;
-sub: #212121, #f5f6fc;
-background: #f5f8fa;
- */
+
+main
+    min-height: 800px
+
+span
+    display: inline-block
+
+// primary: #4f46e5
+// sub: #212121, #f5f6fc
+// background: #f5f8fa
 </style>

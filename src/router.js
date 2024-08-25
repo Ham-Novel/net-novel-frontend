@@ -2,35 +2,55 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from './components/pages/home/HomePage.vue';
 import BrowsePage from './components/pages/browse/BrowsePage.vue';
 import RankingPage from './components/pages/ranking/RankingPage.vue';
-import NewReleasedPage from './components/pages/new-released/NewReleasedPage.vue';
+import NewWorkPage from './components/pages/new-work/NewWorkPage.vue';
 import SearchPage from './components/pages/search/SearchPage.vue';
 import MyPage from './components/pages/mypage/MyPage.vue';
 
 import LibraryPage from './components/pages/library/LibraryPage.vue';
 import Favorites from './components/pages/library/Favorites.vue';
-import History from './components/pages/library/History.vue';
+import Histories from './components/pages/library/Histories.vue';
 
 import NovelPage from './components/pages/novel/NovelPage.vue';
+import NovelEpiList from './components/pages/novel/NovelEpiList.vue';
+import NovelCommentList from './components/pages/novel/NovelCommentList.vue';
+
 import EpisodePage from './components/pages/episode/EpisodePage.vue';
+
+import NotFoundPage from './components/pages/etc/NotFoundPage.vue';
 import Test from './components/Test.vue';
 
 //url에 따른 로드할 컴포넌트 매핑
 const routes = [
-    { path: '/', component: HomePage },
-    { path: '/browse', component: BrowsePage },
-    { path: '/new', component: NewReleasedPage },
-    { path: '/ranking', component: RankingPage },
-    { path: '/search', component: SearchPage },
-    { path: '/mypage', component: MyPage },
+    { name: 'home', path: '/home', component: HomePage, alias: '/' },
+    { name: 'browse', path: '/browse', component: BrowsePage },
+    { name: 'newWork', path: '/new', component: NewWorkPage },
+    { name: 'ranking', path: '/ranking', component: RankingPage },
+    { name: 'search', path: '/search', component: SearchPage },
+    { name: 'mypage', path: '/mypage', component: MyPage },
     {
-        path: '/library', component: LibraryPage, children: [
-            { path: 'favorites', component: Favorites },
-            { path: 'history', component: History },
+        name: 'library',
+        path: '/library',
+        component: LibraryPage,
+        children: [
+            { name: 'favorite', path: 'favorites', component: Favorites },
+            { name: 'history', path: 'histories', component: Histories },
         ]
     },
-    { path: '/novels/:id', component: NovelPage },
-    { path: '/episodes/:id', component: EpisodePage },
-    { path: '/test', component: Test },
+    {
+        name: 'novel',
+        path: '/novels/:id',
+        component: NovelPage,
+        props: (route) => ({
+            novelId: Number(route.params.id)
+        }),
+        children: [
+            { name: 'novel-episode', path: 'episodes', component: NovelEpiList, props: true },
+            { name: 'novel-comment', path: 'comments', component: NovelCommentList, props: true },
+        ]
+    },
+    { name: 'episode', path: '/episodes/:id', component: EpisodePage },
+    { name: 'test', path: '/test', component: Test },
+    { path: '/:notFound(.*)', component: NotFoundPage }
 ];
 
 //페이지 이동 시 스크롤 설정

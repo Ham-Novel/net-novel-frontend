@@ -67,7 +67,7 @@ function getItemBrief(itemInfo) {
     return {
         id: itemInfo.novelId,
         title: itemInfo.novelTitle,
-        coverImg: "/cover/modern_cover.jpeg",
+        thumbnailUrl: itemInfo.thumbnailUrl,
     };
 }
 

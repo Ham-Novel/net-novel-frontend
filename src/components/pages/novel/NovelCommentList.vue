@@ -40,7 +40,8 @@ import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 import { ref, onMounted, computed, reactive } from "vue";
 import { commentApi } from "@/backendApi";
 
-const props = defineProps(["novelId"]); //novel id를 외부 컴포넌트에서 받기
+const props = defineProps(["novelId"]);
+
 const pageNubmer = ref(0);
 const pageSize = ref(30); //Scroll 이벤트를 발동할 때마다 가져올 댓글 수
 
