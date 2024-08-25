@@ -12,14 +12,21 @@
                 :size="32"
                 color="white"
                 @click="navTo({ name: 'search' })"
+                class="menu"
             />
             <BookOpen
                 :size="32"
                 color="white"
                 stroke-width="1.5"
                 @click="navTo({ name: 'favorite' })"
+                class="menu"
             />
-            <User :size="30" color="white" @click="navTo({ name: 'mypage' })" />
+            <User
+                :size="30"
+                color="white"
+                @click="navTo({ name: 'mypage' })"
+                class="menu"
+            />
         </ul>
     </nav>
     <div class="nav-margin"></div>

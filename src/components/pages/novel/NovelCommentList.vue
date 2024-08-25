@@ -23,11 +23,14 @@
         <InfiniteScroll
             class="list-view"
             :load-method="loadComments"
-            @add-items="addComments"
+            :page-props="pageProps"
             loading-message="Comments Loading..."
+            ref="scrollRef"
         >
-            <template v-for="comment in comments">
-                <CommentListElement :comment="comment"></CommentListElement>
+            <template v-slot:default="slotProps">
+                <CommentListElement
+                    :comment="slotProps.item"
+                ></CommentListElement>
             </template>
         </InfiniteScroll>
     </section>
@@ -37,13 +40,14 @@
 import CommentListElement from "./CommentListElement.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
-import { ref, onMounted, computed, reactive } from "vue";
+import { ref, reactive } from "vue";
 import { commentApi } from "@/backendApi";
 
+//작품 id 외부 컴포넌트에서 받기
 const props = defineProps(["novelId"]);
 
-const pageNubmer = ref(0);
-const pageSize = ref(30); //Scroll 이벤트를 발동할 때마다 가져올 댓글 수
+//스크롤 페이지 로드 설정 변수
+const pageProps = ref({ number: 0, size: 30 });
 
 //댓글 정렬 방식 Enum
 const sortByList = reactive({
@@ -58,38 +62,21 @@ const sortByList = reactive({
 });
 const sortBy = ref(sortByList.recent.name); //현재 정렬 변수
 
-//댓글 데이터 저장소 배열
-const comments = reactive([]);
-
-//댓글 배열에 새 댓글을 추가하는 메서드
-const addComments = (newItems) => {
-    console.log(newItems);
-    comments.push(...newItems);
+//댓글 리스트 초기화 메서드 가져오기
+const scrollRef = ref(null);
+const resetComments = () => {
+    scrollRef.value.resetItem();
 };
 
 //댓글 Backend와 Api 통신하여 댓글 데이터를 가져오는 메서드
-//InfiniteScroll 컴포넌트에서 사용하게끔 props 파라미터로 전달
-const loadComments = async () => {
-    const loadItems = await commentApi
-        .getCommentsByNovel(
-            props.novelId,
-            sortBy.value,
-            pageNubmer.value,
-            pageSize.value
-        )
-        .then();
-    pageNubmer.value++;
+const loadComments = async (page, size) => {
+    const loadItems = await commentApi.getCommentsByNovel(
+        props.novelId,
+        sortBy.value,
+        page,
+        size
+    );
     return loadItems;
-};
-
-//스크롤 컴포넌트 초기화 메서드
-// InfiniteScroll 컴포넌트로부터 메서드 받음
-const resetComments = () => {
-    pageNubmer.value = 0;
-    comments.splice(0, comments.length);
-    setTimeout(() => {
-        window.dispatchEvent(new Event("scroll"));
-    }, 1);
 };
 </script>
 

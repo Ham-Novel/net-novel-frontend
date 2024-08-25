@@ -30,6 +30,7 @@ const routes = [
     {
         name: 'library',
         path: '/library',
+        redirect: '/library/favorites',
         component: LibraryPage,
         children: [
             { name: 'favorite', path: 'favorites', component: Favorites },

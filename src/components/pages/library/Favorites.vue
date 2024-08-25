@@ -31,7 +31,7 @@ function getItemBrief(novel) {
     return {
         id: novel.novelId,
         title: novel.title,
-        coverImg: "/cover/wuxia_cover.jpeg",
+        coverImg: novel.thumbnailUrl,
     };
 }
 

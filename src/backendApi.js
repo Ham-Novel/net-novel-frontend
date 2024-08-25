@@ -66,7 +66,8 @@ export const novelApi = {
             method: 'GET',
         }
         try {
-            return apiConnect(reqUrl, reqMeta).json();
+            const resp = await apiConnect(reqUrl, reqMeta)
+            return resp.json();
         } catch (error) {
             console.error(`Error fetching toggleNovelFavorite()`, error);
         }

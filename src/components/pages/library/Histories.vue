@@ -4,25 +4,25 @@
             <InfiniteScroll
                 class="histories"
                 :load-method="loadReadNovels"
-                @add-items="addItems"
+                :page-props="{ number: 0, size: 30 }"
                 loading-message="Record Loading..."
             >
-                <template v-for="novel in novels" :key="novel.id">
+                <template v-slot:default="{ item }">
                     <NovelListItem
                         :size="itemSize"
-                        :brief="getItemBrief(novel)"
+                        :brief="getItemBrief(item)"
                         class="history-item"
                     >
                         <template v-slot:default>
-                            <p>{{ novel.authorName }}</p>
-                            <p>{{ novel.novelType }}</p>
-                            <p>{{ novel.updatedAt }}</p>
+                            <p>{{ item.authorName }}</p>
+                            <p>{{ item.novelType }}</p>
+                            <p>{{ item.updatedAt }}</p>
                             <p></p>
                         </template>
                         <template v-slot:feature>
                             <div class="item-feature">
                                 <button class="continue-reading">
-                                    {{ novel.episodeTitle }} >>
+                                    {{ item.episodeTitle }} >>
                                 </button>
                                 <button class="add-library">+선호작</button>
                             </div>
@@ -41,23 +41,11 @@ import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 import { ref, onMounted, reactive } from "vue";
 import { memberApi } from "@/backendApi";
 
-//데이터 데이터 저장 변수
-const novels = reactive([]);
-
-const addItems = (newItems) => {
-    novels.push(...newItems);
-};
-
 //데이터 로드하는 메서드
-const loadReadNovels = async () => {
-    const novels = memberApi.getRecentReadNovels(page.value, size.value);
-    page.value++;
+const loadReadNovels = async (page, size) => {
+    const novels = memberApi.getRecentReadNovels(page, size);
     return novels;
 };
-
-//페이지 관련 변수
-const page = ref(0);
-const size = ref(5);
 
 //NovelListItem 크기
 const itemSize = ref({ width: "100%", height: "150px" });
@@ -67,7 +55,7 @@ function getItemBrief(itemInfo) {
     return {
         id: itemInfo.novelId,
         title: itemInfo.novelTitle,
-        thumbnailUrl: itemInfo.thumbnailUrl,
+        coverImg: itemInfo.thumbnailUrl,
     };
 }
 

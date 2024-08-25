@@ -24,8 +24,14 @@ const props = defineProps({
 
 // tab 요소들
 const tabs = ref([
-    { name: "에피소드", path: `episodes` },
-    { name: "댓글", path: `comments` },
+    {
+        name: "에피소드",
+        path: { name: "novel-episode", params: { id: props.novelId } },
+    },
+    {
+        name: "댓글",
+        path: { name: "novel-comment", params: { id: props.novelId } },
+    },
 ]);
 </script>
 

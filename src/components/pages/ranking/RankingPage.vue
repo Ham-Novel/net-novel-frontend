@@ -57,10 +57,6 @@ const addRankings = (newItems) => {
 };
 
 const loadRankings = async () => {
-    //테스트 데이터
-    // const loadItems = Array.from({ length: 30 }, (_, i) => {
-    //     return { id: i, title: `소설 이름${i}` };
-    // });
     //실제 api 불러오기
     const loadItems = await novelApi.getRanking(
         pageNum.value,

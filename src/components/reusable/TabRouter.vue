@@ -22,8 +22,8 @@ const props = defineProps({
     tabs: {
         type: Array,
         default: [
-            { name: "탭1", path: "/tab/tab1" },
-            { name: "탭2", path: "/tab/tab2" },
+            { name: "탭1", path: { name: "test" } },
+            { name: "탭2", path: { name: "test" } },
         ],
     },
 });

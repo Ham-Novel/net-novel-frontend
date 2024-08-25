@@ -11,26 +11,26 @@
                 <InfiniteScroll
                     class="browse-novel-list"
                     :load-method="loadNovels"
-                    @add-items="addNovels"
+                    :page-props="{ number: 0, size: 10 }"
                     loading-message="Browse Loading...."
                 >
-                    <template v-for="novel in novels">
+                    <template v-slot:default="{ item }">
                         <NovelListItem
                             class="browse-novel-item"
                             :brief="{
-                                id: novel.id,
-                                title: novel.title,
-                                coverImg: 'public/cover/fantasy_cover.jpeg',
+                                id: item.id,
+                                title: item.title,
+                                coverImg: item.thumbnailUrl,
                             }"
                             :size="itemSize"
                         >
                             <div class="tag">
-                                <span v-for="tag in novel.tags" :key="tag.id"
+                                <span v-for="tag in item.tags" :key="tag.id"
                                     >#{{ tag.name }}</span
                                 >
                             </div>
                             <p class="desc">
-                                {{ novel.desc }}
+                                {{ item.desc }}
                             </p>
                         </NovelListItem>
                     </template>
@@ -46,7 +46,6 @@ import BrowseFilter from "./BrowseFilter.vue";
 import BrowseSort from "./BrowseSort.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
-import { ref, computed, onMounted, reactive } from "vue";
 import { novelApi } from "@/backendApi";
 
 //NovelListItem 크기
@@ -55,24 +54,11 @@ const itemSize = {
     height: "150px",
 };
 
-//작품 데이터 저장 공간
-const novels = reactive([]);
-
-//작품 데이터 추가
-const addNovels = (newItems) => {
-    novels.push(...newItems);
-};
-
 //작품 데이터 로드
-const loadNovels = async () => {
-    const loadData = await novelApi.getBrowseNovels(page.value, size.value);
-    page.value++;
+const loadNovels = async (page, size) => {
+    const loadData = await novelApi.getBrowseNovels(page, size);
     return loadData;
 };
-
-//InfiniteScroll 관련 변수
-const page = ref(0);
-const size = ref(5);
 </script>
 
 <style lang="sass" scoped>

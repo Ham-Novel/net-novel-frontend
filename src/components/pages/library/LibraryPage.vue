@@ -16,8 +16,8 @@ import { ref } from "vue";
 
 //선택 가능한 탭 메뉴
 const tabs = ref([
-    { name: "선호작", path: "/library/favorites" },
-    { name: "최근 기록", path: "/library/history" },
+    { name: "선호작", path: { name: "favorite" } },
+    { name: "최근 기록", path: { name: "history" } },
 ]);
 </script>
 
