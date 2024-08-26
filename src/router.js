@@ -40,16 +40,24 @@ const routes = [
     {
         name: 'novel',
         path: '/novels/:id',
+        redirect: to => `novels/${to.params.id}/episodes-list`,
         component: NovelPage,
         props: (route) => ({
             novelId: Number(route.params.id)
         }),
         children: [
-            { name: 'novel-episode', path: 'episodes', component: NovelEpiList, props: true },
-            { name: 'novel-comment', path: 'comments', component: NovelCommentList, props: true },
+            { name: 'novel-episode', path: 'episodes-list', component: NovelEpiList, props: true },
+            { name: 'novel-comment', path: 'comments-list', component: NovelCommentList, props: true },
         ]
     },
-    { name: 'episode', path: '/episodes/:id', component: EpisodePage },
+    {
+        name: 'episode',
+        path: '/episodes/:episodeId',
+        component: EpisodePage,
+        props: (route) => ({
+            episodeId: Number(route.params.episodeId)
+        }),
+    },
     { name: 'test', path: '/test', component: Test },
     { path: '/:notFound(.*)', component: NotFoundPage }
 ];

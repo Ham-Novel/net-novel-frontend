@@ -113,6 +113,32 @@ export const episodeApi = {
             console.error("Error fetching getEpisode()", error);
         }
     },
+    async getEpisodeNext(id) {
+        try {
+            const resp = await fetch(`${API_URL}/episodes/${id}/next`, { method: 'GET' });
+            const data = await resp.json();
+            if (resp.status === 402) {
+                data.payCheck = false;
+                throw new PaymentRequiredError("에피소드 미결제 접근", data);
+            }
+            else if (!resp.ok) {
+                throw new Error(`HTTP error! status: ${resp.status}`);
+            }
+            else {
+                data.payCheck = true;
+                return data;
+            }
+        } catch (error) {
+            if (error instanceof PaymentRequiredError) {
+                console.info(error.message);
+                return error.paymentPolicy;
+            }
+            console.error("Error fetching getEpisode()", error);
+        }
+    },
+
+
+
     async getEpisodesByNovel(id, sort, page, size) {
         try {
             const reqUrl = `${API_URL}/novels/${id}/episodes?&sortBy=${sort}&pageNumber=${page}&pageSize=${size}`

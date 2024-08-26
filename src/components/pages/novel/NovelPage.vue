@@ -12,7 +12,7 @@
 import NovelInfo from "./NovelInfo.vue";
 import TabRouter from "@/components/reusable/TabRouter.vue";
 
-import { ref } from "vue";
+import { provide, ref } from "vue";
 
 // '/novels/1' 같이 url 데이터 처리
 const props = defineProps({
@@ -22,15 +22,17 @@ const props = defineProps({
     },
 });
 
+provide("novelId", props.novelId);
+
 // tab 요소들
 const tabs = ref([
     {
         name: "에피소드",
-        path: { name: "novel-episode", params: { id: props.novelId } },
+        path: { name: "novel-episode" },
     },
     {
         name: "댓글",
-        path: { name: "novel-comment", params: { id: props.novelId } },
+        path: { name: "novel-comment" },
     },
 ]);
 </script>

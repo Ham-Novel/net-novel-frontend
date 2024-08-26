@@ -2,7 +2,7 @@
     <figure>
         <form class="tab-menu">
             <template v-for="(tab, index) in props.tabs" :key="index">
-                <router-link class="tab-item" :to="tab.path">{{
+                <router-link class="tab-item" :to="tab.path ?? {}">{{
                     tab.name
                 }}</router-link>
                 <div

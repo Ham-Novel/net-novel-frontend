@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { computed } from "vue";
 import { formatUtil } from "@/format";
 import { FileText, Eye, MessageCircleMore, Coins } from "lucide-vue-next";
 import { useRouter } from "vue-router";
@@ -44,7 +44,10 @@ const router = useRouter();
 //요소 클릭 시 해당 에피소드 페이지로 이동
 function openEpisode() {
     console.log(episode.episodeId);
-    router.push({ name: "episode", params: { id: episode.episodeId } });
+    router.push({
+        name: "episode",
+        params: { episodeId: episode.episodeId },
+    });
 }
 </script>
 

@@ -28,7 +28,7 @@ import { ref, onMounted } from "vue";
 import { episodeApi } from "@/backendApi";
 import { formatUtil } from "@/format";
 
-//작품 id 외부 컴포넌트에서 받기
+//작품 id 외부에서 받기
 const props = defineProps(["novelId"]);
 
 //스크롤 페이지 로드 설정 변수

@@ -1,24 +1,25 @@
 <template>
     <main>
-        <EpisodeContent :content="episodeContent"></EpisodeContent>
-        <PayCheckDialog
+        <EpisodeList
+            :novelId="props.novelId"
+            :episodeId="props.episodeId"
+        ></EpisodeList>
+        <!-- <PayCheckDialog
             v-if="payRequired"
             v-model:activate="payRequired"
             :episode-id="episodeId"
             :cost-policy="costPolicy"
         >
-        </PayCheckDialog>
+        </PayCheckDialog> -->
     </main>
 </template>
 
 <script setup>
-import EpisodeContent from "./EpisodeContent.vue";
-import PayCheckDialog from "./PayCheckDialog.vue";
+// import PayCheckDialog from "./PayCheckDialog.vue";
+import EpisodeList from "./EpisodeList.vue";
 
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import { episodeApi } from "@/backendApi";
 
 //에피소드 페이지에서는 네비게이션 비활성화
 const store = useStore();
@@ -27,29 +28,20 @@ onMounted(() => {
 });
 
 //url에서 에피소드 id 데이터 가져오기
-const route = useRoute();
-const episodeId = route.params.id;
+const props = defineProps({
+    novelId: {
+        type: Number,
+        default: 0,
+    },
+    episodeId: {
+        type: Number,
+        default: 0,
+    },
+});
 
 //에피소드 api 통신
-const episodeContent = ref(); //api 통신으로 불러올 에피소드 데이터
 const payRequired = ref(false); //결제창 띄울지 결정
-const costPolicy = ref({}); //에피소드 결제 관련 정보
-
-function loadEpisode() {
-    episodeApi.getEpisode(episodeId).then((data) => {
-        //402 미결제 응답일 때, 결제창 띄우기
-        if (data.payCheck === false) {
-            payRequired.value = true;
-            costPolicy.value = data;
-        } else {
-            episodeContent.value = data.content;
-        }
-    });
-}
-
-onMounted(() => {
-    loadEpisode();
-});
+// const costPolicy = ref({}); //에피소드 결제 관련 정보
 </script>
 
 <style scoped lang="sass">
