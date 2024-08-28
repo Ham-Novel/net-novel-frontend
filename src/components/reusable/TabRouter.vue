@@ -1,5 +1,5 @@
 <template>
-    <figure>
+    <section>
         <form class="tab-menu">
             <template v-for="(tab, index) in props.tabs" :key="index">
                 <router-link class="tab-item" :to="tab.path ?? {}">{{
@@ -11,7 +11,7 @@
                 ></div>
             </template>
         </form>
-    </figure>
+    </section>
 </template>
 
 <script setup>

@@ -27,6 +27,12 @@
                 @click="navTo({ name: 'mypage' })"
                 class="menu"
             />
+            <SquarePen
+                :size="30"
+                color="white"
+                @click="navTo({ name: 'studio' })"
+                class="menu"
+            />
         </ul>
     </nav>
     <div class="nav-margin"></div>
@@ -34,7 +40,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { Search, BookOpen, User } from "lucide-vue-next";
+import { Search, BookOpen, User, SquarePen } from "lucide-vue-next";
 import { useRouter } from "vue-router";
 
 const router = useRouter();

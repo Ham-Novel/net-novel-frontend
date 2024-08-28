@@ -21,6 +21,7 @@ import WorkManageSection from './components/pages/studio/work/WorkManageSection.
 import TipManageSection from './components/pages/studio/tip/TipManageSection.vue';
 import WorkStatSection from './components/pages/studio/stat/WorkStatSection.vue';
 import SettlementSection from './components/pages/studio/settlement/SettlementSection.vue';
+import NovelCreatePage from './components/pages/studio/work/NovelCreatePage.vue';
 
 import NotFoundPage from './components/pages/etc/NotFoundPage.vue';
 import Test from './components/Test.vue';
@@ -46,7 +47,7 @@ const routes = [
     {
         name: 'novel',
         path: '/novels/:id',
-        redirect: to => `novels/${to.params.id}/episodes-list`,
+        redirect: to => `novels/${to.params.id}/episodes`,
         component: NovelPage,
         props: (route) => ({
             novelId: Number(route.params.id)
@@ -76,6 +77,7 @@ const routes = [
             { name: 'settlement', path: 'settlements', component: SettlementSection },
         ]
     },
+    { name: 'novel-create', path: '/novels/new', component: NovelCreatePage },
     { name: 'test', path: '/test', component: Test },
     { path: '/:notFound(.*)', component: NotFoundPage }
 ];
