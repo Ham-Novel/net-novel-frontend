@@ -1,43 +1,41 @@
 <template>
-    <main>
-        <div class="browse-feature">
-            <div class="feature-divider base-wrapper">
-                <BrowseFilter class="filter-by"></BrowseFilter>
-                <BrowseSort class="sort-by"></BrowseSort>
-            </div>
+    <div class="browse-feature">
+        <div class="feature-divider base-wrapper">
+            <BrowseFilter class="filter-by"></BrowseFilter>
+            <BrowseSort class="sort-by"></BrowseSort>
         </div>
-        <section class="browse-result">
-            <div class="browse-content base-wrapper base-distance">
-                <InfiniteScroll
-                    class="browse-novel-list"
-                    :load-method="loadNovels"
-                    :page-props="{ number: 0, size: 10 }"
-                    loading-message="Browse Loading...."
-                >
-                    <template v-slot:default="{ item }">
-                        <NovelListItem
-                            class="browse-novel-item"
-                            :brief="{
-                                id: item.id,
-                                title: item.title,
-                                coverImg: item.thumbnailUrl,
-                            }"
-                            :size="itemSize"
-                        >
-                            <div class="tag">
-                                <span v-for="tag in item.tags" :key="tag.id"
-                                    >#{{ tag.name }}</span
-                                >
-                            </div>
-                            <p class="desc">
-                                {{ item.desc }}
-                            </p>
-                        </NovelListItem>
-                    </template>
-                </InfiniteScroll>
-            </div>
-        </section>
-    </main>
+    </div>
+    <section class="browse-result">
+        <div class="browse-content base-wrapper base-distance">
+            <InfiniteScroll
+                class="browse-novel-list"
+                :load-method="loadNovels"
+                :page-props="{ number: 0, size: 10 }"
+                loading-message="Browse Loading...."
+            >
+                <template v-slot:default="{ item }">
+                    <NovelListItem
+                        class="browse-novel-item"
+                        :brief="{
+                            id: item.id,
+                            title: item.title,
+                            coverImg: item.thumbnailUrl,
+                        }"
+                        :size="itemSize"
+                    >
+                        <div class="tag">
+                            <span v-for="tag in item.tags" :key="tag.id"
+                                >#{{ tag.name }}</span
+                            >
+                        </div>
+                        <p class="desc">
+                            {{ item.desc }}
+                        </p>
+                    </NovelListItem>
+                </template>
+            </InfiniteScroll>
+        </div>
+    </section>
 </template>
 
 <script setup>

@@ -1,6 +1,8 @@
 <template>
     <Nav v-if="navActivate"></Nav>
-    <router-view></router-view>
+    <main>
+        <router-view></router-view>
+    </main>
     <Footer></Footer>
 </template>
 

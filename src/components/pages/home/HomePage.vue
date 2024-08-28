@@ -1,8 +1,6 @@
 <template>
-    <main>
-        <TodayTop></TodayTop>
-        <RecentUpdated></RecentUpdated>
-    </main>
+    <TodayTop></TodayTop>
+    <RecentUpdated></RecentUpdated>
 </template>
 
 <script setup>

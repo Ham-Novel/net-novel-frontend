@@ -43,11 +43,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, computed, readonly } from "vue";
+import { ref, onMounted, reactive, computed, readonly, inject } from "vue";
 import { View, Heart, MessageCircleHeart } from "lucide-vue-next";
 import { novelApi, memberApi } from "@/backendApi";
 
-const props = defineProps(["novelId"]);
+//novel id 값
+const novelId = inject("novelId");
 
 //default novel 데이터
 const novel = ref({
@@ -96,11 +97,11 @@ function toggleFavorite() {
 
 //api 적용
 onMounted(() => {
-    novelApi.getNovel(props.novelId).then((loadData) => {
+    novelApi.getNovel(novelId).then((loadData) => {
         // console.log(loadData);
         novel.value = loadData;
     });
-    memberApi.getCheckFavorite(props.novelId).then((check) => {
+    memberApi.getCheckFavorite(novelId).then((check) => {
         // console.log(check);
         isFavorite.value = check;
     });

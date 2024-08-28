@@ -40,11 +40,14 @@
 import CommentListElement from "./CommentListElement.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
-import { ref, reactive } from "vue";
+import { ref, reactive, inject } from "vue";
 import { commentApi } from "@/backendApi";
 
-//작품 id 외부 컴포넌트에서 받기
-const props = defineProps(["novelId"]);
+// //작품 id 외부 컴포넌트에서 받기
+// const props = defineProps(["novelId"]);
+
+//novel id 값
+const novelId = inject("novelId");
 
 //스크롤 페이지 로드 설정 변수
 const pageProps = ref({ number: 0, size: 30 });
@@ -65,13 +68,13 @@ const sortBy = ref(sortByList.recent.name); //현재 정렬 변수
 //댓글 리스트 초기화 메서드 가져오기
 const scrollRef = ref(null);
 const resetComments = () => {
-    scrollRef.value.resetItem();
+    scrollRef.value.resetData();
 };
 
 //댓글 Backend와 Api 통신하여 댓글 데이터를 가져오는 메서드
 const loadComments = async (page, size) => {
     const loadItems = await commentApi.getCommentsByNovel(
-        props.novelId,
+        novelId,
         sortBy.value,
         page,
         size

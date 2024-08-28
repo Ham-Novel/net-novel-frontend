@@ -1,13 +1,11 @@
 <template>
-    <main>
-        <section class="library-header">
-            <div class="header-info base-wrapper">
-                <h1 class="title">Library</h1>
-                <TabRouter :tabs="tabs"></TabRouter>
-            </div>
-        </section>
-        <router-view></router-view>
-    </main>
+    <section class="library-header">
+        <div class="header-info base-wrapper">
+            <h1 class="title">Library</h1>
+            <TabRouter :tabs="tabs"></TabRouter>
+        </div>
+    </section>
+    <router-view></router-view>
 </template>
 
 <script setup>

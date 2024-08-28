@@ -1,40 +1,38 @@
 <template>
-    <main>
-        <section class="profile base-distance">
-            <div class="profile-header base-wrapper">
-                <div class="background"></div>
-                <img class="img"></img>
-                <button class="profile-edit-button">EDIT PROFILE</button>
-            </div>
+    <section class="profile base-distance">
+        <div class="profile-header base-wrapper">
+            <div class="background"></div>
+            <img class="img" />
+            <button class="profile-edit-button">EDIT PROFILE</button>
+        </div>
 
-            <div class="profile-info base-wrapper">
-                <h1>{{ userData.nickName }}</h1>
-                <p class="id">ID: 4319251275</p>
+        <div class="profile-info base-wrapper">
+            <h1>{{ userData.nickName }}</h1>
+            <p class="id">ID: 4319251275</p>
 
-                <div class="meta">
-                    <span>2021-11-20 Joined</span>
-                    <span>Global</span>
-                </div>
+            <div class="meta">
+                <span>2021-11-20 Joined</span>
+                <span>Global</span>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="user-stats base-wrapper base-distance">
-            <div class="stat">
-                <span class="value">0.3h</span>
-                <span class="label">of Reading</span>
-            </div>
-            <div class="stat">
-                <span class="value">35</span>
-                <span class="label">Read books</span>
-            </div>
-        </section>
+    <section class="user-stats base-wrapper base-distance">
+        <div class="stat">
+            <span class="value">0.3h</span>
+            <span class="label">of Reading</span>
+        </div>
+        <div class="stat">
+            <span class="value">35</span>
+            <span class="label">Read books</span>
+        </div>
+    </section>
 
-        <section class="user-info base-wrapper base-distance">
-            <h2 class="title">User Information</h2>
-            <p class="data"><strong>Email:</strong> {{ userData.email }}</p>
-            <p class="data"><strong>Coin:</strong> {{ userData.coinCount }}</p>
-        </section>
-    </main>
+    <section class="user-info base-wrapper base-distance">
+        <h2 class="title">User Information</h2>
+        <p class="data"><strong>Email:</strong> {{ userData.email }}</p>
+        <p class="data"><strong>Coin:</strong> {{ userData.coinCount }}</p>
+    </section>
 </template>
 
 <script setup>
@@ -50,7 +48,7 @@ const userData = ref({
 function loadUserData() {
     memberApi.getMyPageData().then((loadData) => {
         userData.value = loadData;
-    })
+    });
 }
 
 onMounted(() => {
@@ -84,7 +82,7 @@ onMounted(() => {
         background-color: #3498db
         border-radius: 50%
         border: 6px solid white
-    
+
 
 .profile-edit-button
     position: absolute
@@ -109,7 +107,7 @@ onMounted(() => {
         font-size: 40px
 
     .id
-        font-size: 16px 
+        font-size: 16px
         color: #666
         margin-bottom: 16px
 
@@ -117,7 +115,7 @@ onMounted(() => {
         font-size: 16px
         color: #666
 
-    
+
 .user-stats
     display: flex
     justify-content: space-around
@@ -134,7 +132,7 @@ onMounted(() => {
         font-size: 18px
         font-weight: bold
 
-    .label 
+    .label
         font-size: 14px
         color: #666
 
@@ -142,5 +140,4 @@ onMounted(() => {
     .title
         font-size: 25px
         margin-bottom: 10px
-        
 </style>

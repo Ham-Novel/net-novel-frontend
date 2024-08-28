@@ -1,18 +1,12 @@
 <template>
     <section class="episode-list-section base-wrapper base-distance">
         <div class="list-info">
-            <span>화수: {{ episodesInfo.chapterCount }}화</span>
+            <span>화수: {{ episodesInfo.data.chapterCount }}화</span>
             <span
-                >최신 업데이트 날짜:
-                {{ formatUtil.formatDate(episodesInfo.lastUpdatedAt) }}</span
+                >최신 업데이트 날짜: {{ episodesInfo.data.lastUpdatedAt }}</span
             >
         </div>
-        <InfiniteScroll
-            class="list-view"
-            :load-method="loadEpisodes"
-            :page-props="pageProps"
-            loading-message="Episode Loading..."
-        >
+        <InfiniteScroll class="list-view" v-bind="scrollProps">
             <template v-slot:default="slotProps">
                 <EpiListElement :episode="slotProps.item"></EpiListElement>
             </template>
@@ -24,42 +18,44 @@
 import EpiListElement from "./EpiListElement.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
-import { ref, onMounted } from "vue";
+import { ref, onMounted, inject, reactive, computed } from "vue";
 import { episodeApi } from "@/backendApi";
 import { formatUtil } from "@/format";
 
-//작품 id 외부에서 받기
-const props = defineProps(["novelId"]);
+//novel id 값
+const novelId = inject("novelId");
 
-//스크롤 페이지 로드 설정 변수
-const pageProps = ref({ number: 0, size: 30 });
-
-//데이터 로드 메서드
-const loadEpisodes = async (page, size) => {
-    const loaditems = await episodeApi.getEpisodesByNovel(
-        props.novelId,
-        "initial",
-        page,
-        size
-    );
-    return loaditems;
-};
-
-//에피소드 리스트 메타 데이터 로드
-const episodesInfo = ref({
-    chapterCount: 0,
-    lastUpdatedAt: "",
+//스크롤 페이지 로드 설정
+const scrollProps = reactive({
+    pageProps: { number: 0, size: 30 },
+    loadMethod: async (page, size) => {
+        const loaditems = await episodeApi.getEpisodesByNovel(
+            novelId,
+            "initial",
+            page,
+            size
+        );
+        return loaditems;
+    },
+    loadingMessage: "Episode Loading...",
 });
 
-const loadEpisodesInfo = () => {
-    episodeApi.getEpisodesInfoByNovel(props.novelId).then((info) => {
-        console.log(info);
-        episodesInfo.value = info;
-    });
-};
+//작품 에피소드의 메타 데이터 로드
+const episodesInfo = reactive({
+    data: {
+        chapterCount: 0,
+        lastUpdatedAt: "",
+    },
+    async load() {
+        const resp = await episodeApi.getEpisodesInfoByNovel(novelId);
+        // console.log(resp);
+        this.data.chapterCount = resp.chapterCount;
+        this.data.lastUpdatedAt = formatUtil.formatDate(resp.lastUpdatedAt);
+    },
+});
 
 onMounted(() => {
-    loadEpisodesInfo();
+    episodesInfo.load();
 });
 </script>
 

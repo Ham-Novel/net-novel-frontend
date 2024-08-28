@@ -11,6 +11,10 @@
 import { onMounted, ref } from "vue";
 
 const props = defineProps({
+    title: {
+        type: String,
+        default: "Title",
+    },
     content: {
         type: String,
         default: `
@@ -34,6 +38,10 @@ Voluptate voluptate aliquip ipsum magna aliquip consectetur excepteur et volupta
         padding: 10px 60px 100px 60px
         background-color: white
         border-bottom: 5px solid #d0d0d0
+
+        .title
+            font-size: 30px
+            margin-bottom: 20px
 
         .content
             font-size: 20px

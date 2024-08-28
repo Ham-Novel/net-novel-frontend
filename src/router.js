@@ -64,12 +64,8 @@ const routes = [
 
 //페이지 이동 시 스크롤 설정
 const scrollBehavior = (to, from, savedPosition) => {
-    // 브라우저의 뒤로/앞으로 버튼을 사용한 경우
-    if (savedPosition) {
-        return savedPosition;
-    }
     // 해시가 있는 경우 (앵커 링크)
-    else if (to.hash) {
+    if (to.hash) {
         return { el: to.hash }
 
     }

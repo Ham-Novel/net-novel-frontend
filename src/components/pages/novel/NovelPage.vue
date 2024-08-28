@@ -1,11 +1,7 @@
 <template>
-    <main>
-        <div>
-            <NovelInfo class="novel-info" :novel-id="props.novelId"></NovelInfo>
-        </div>
-        <TabRouter :tabs="tabs" class="base-wrapper"> </TabRouter>
-        <router-view :novel-id="props.novelId"></router-view>
-    </main>
+    <NovelInfo class="novel-info"></NovelInfo>
+    <TabRouter :tabs="tabs" class="base-wrapper"> </TabRouter>
+    <router-view></router-view>
 </template>
 
 <script setup>
@@ -14,7 +10,7 @@ import TabRouter from "@/components/reusable/TabRouter.vue";
 
 import { provide, ref } from "vue";
 
-// '/novels/1' 같이 url 데이터 처리
+// url parameter 가져오기
 const props = defineProps({
     novelId: {
         type: Number,
@@ -22,6 +18,7 @@ const props = defineProps({
     },
 });
 
+//NovelPage 내부 컴포넌트 전체에 novel id 값 전역 공유
 provide("novelId", props.novelId);
 
 // tab 요소들

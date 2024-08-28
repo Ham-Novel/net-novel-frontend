@@ -1,17 +1,15 @@
 <template>
-    <main>
-        <EpisodeList
-            :novelId="props.novelId"
-            :episodeId="props.episodeId"
-        ></EpisodeList>
-        <!-- <PayCheckDialog
+    <EpisodeList
+        :novelId="props.novelId"
+        :episodeId="props.episodeId"
+    ></EpisodeList>
+    <!-- <PayCheckDialog
             v-if="payRequired"
             v-model:activate="payRequired"
             :episode-id="episodeId"
             :cost-policy="costPolicy"
         >
         </PayCheckDialog> -->
-    </main>
 </template>
 
 <script setup>
