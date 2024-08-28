@@ -16,6 +16,12 @@ import NovelCommentList from './components/pages/novel/NovelCommentList.vue';
 
 import EpisodePage from './components/pages/episode/EpisodePage.vue';
 
+import StudioPage from './components/pages/studio/StudioPage.vue';
+import WorkManageSection from './components/pages/studio/work/WorkManageSection.vue';
+import TipManageSection from './components/pages/studio/tip/TipManageSection.vue';
+import WorkStatSection from './components/pages/studio/stat/WorkStatSection.vue';
+import SettlementSection from './components/pages/studio/settlement/SettlementSection.vue';
+
 import NotFoundPage from './components/pages/etc/NotFoundPage.vue';
 import Test from './components/Test.vue';
 
@@ -46,8 +52,8 @@ const routes = [
             novelId: Number(route.params.id)
         }),
         children: [
-            { name: 'novel-episode', path: 'episodes-list', component: NovelEpiList, props: true },
-            { name: 'novel-comment', path: 'comments-list', component: NovelCommentList, props: true },
+            { name: 'novel-episode', path: 'episodes', component: NovelEpiList, props: true },
+            { name: 'novel-comment', path: 'comments', component: NovelCommentList, props: true },
         ]
     },
     {
@@ -57,6 +63,18 @@ const routes = [
         props: (route) => ({
             episodeId: Number(route.params.episodeId)
         }),
+    },
+    {
+        name: 'studio',
+        path: '/studios/me',
+        alias: '/studios',
+        component: StudioPage,
+        children: [
+            { name: 'work-manage', path: 'works', component: WorkManageSection },
+            { name: 'tip-manage', path: 'tips', component: TipManageSection },
+            { name: 'work-stat', path: 'stats', component: WorkStatSection },
+            { name: 'settlement', path: 'settlements', component: SettlementSection },
+        ]
     },
     { name: 'test', path: '/test', component: Test },
     { path: '/:notFound(.*)', component: NotFoundPage }

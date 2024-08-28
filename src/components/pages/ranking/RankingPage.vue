@@ -1,27 +1,25 @@
 <template>
-    <main>
-        <section class="top300 base-distance">
-            <div class="ranking-wrapper base-wrapper">
-                <h1 class="ranking-title">Top 300</h1>
-                <InfiniteScroll
-                    class="ranking-list"
-                    :load-method="loadRankings"
-                    @add-items="addRankings"
-                >
-                    <template v-for="(novel, index) in rankings">
-                        <div>
-                            <h1 class="rank">{{ index + 1 }}</h1>
-                            <NovelCardItem
-                                :size="itemSize"
-                                :brief="convertBrief(novel)"
-                            >
-                            </NovelCardItem>
-                        </div>
-                    </template>
-                </InfiniteScroll>
-            </div>
-        </section>
-    </main>
+    <section class="top300 base-distance">
+        <div class="ranking-wrapper base-wrapper">
+            <h1 class="ranking-title">Top 300</h1>
+            <InfiniteScroll
+                class="ranking-list"
+                :load-method="loadRankings"
+                @add-items="addRankings"
+            >
+                <template v-for="(novel, index) in rankings">
+                    <div>
+                        <h1 class="rank">{{ index + 1 }}</h1>
+                        <NovelCardItem
+                            :size="itemSize"
+                            :brief="convertBrief(novel)"
+                        >
+                        </NovelCardItem>
+                    </div>
+                </template>
+            </InfiniteScroll>
+        </div>
+    </section>
 </template>
 
 <script setup>

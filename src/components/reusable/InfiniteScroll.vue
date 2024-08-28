@@ -28,6 +28,7 @@ const database = reactive({
     state: { isLoading: false, allLoaded: false },
     async loadData() {
         //이미 메서드가 실행 중이거나 더이상 가져올 아이템이 없으면 중단
+        console.log(this.state.allLoaded);
         if (this.state.isLoading || this.state.allLoaded) return;
         this.state.isLoading = true; //메서드 실행 상태로 전환
 

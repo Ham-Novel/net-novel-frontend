@@ -7,12 +7,7 @@
     </div>
     <section class="browse-result">
         <div class="browse-content base-wrapper base-distance">
-            <InfiniteScroll
-                class="browse-novel-list"
-                :load-method="loadNovels"
-                :page-props="{ number: 0, size: 10 }"
-                loading-message="Browse Loading...."
-            >
+            <InfiniteScroll class="browse-novel-list" v-bind="scrollProps">
                 <template v-slot:default="{ item }">
                     <NovelListItem
                         class="browse-novel-item"
@@ -45,17 +40,22 @@ import BrowseSort from "./BrowseSort.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { novelApi } from "@/backendApi";
+import { reactive } from "vue";
+
+//스크롤 페이지 로드 설정
+const scrollProps = reactive({
+    pageProps: { number: 0, size: 10 },
+    loadMethod: async (page, size) => {
+        const loadData = await novelApi.getBrowseNovels(page, size);
+        return loadData;
+    },
+    loadingMessage: "Browse Loading....",
+});
 
 //NovelListItem 크기
 const itemSize = {
     width: "450px",
     height: "150px",
-};
-
-//작품 데이터 로드
-const loadNovels = async (page, size) => {
-    const loadData = await novelApi.getBrowseNovels(page, size);
-    return loadData;
 };
 </script>
 

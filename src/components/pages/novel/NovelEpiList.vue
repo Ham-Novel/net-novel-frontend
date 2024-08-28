@@ -7,8 +7,8 @@
             >
         </div>
         <InfiniteScroll class="list-view" v-bind="scrollProps">
-            <template v-slot:default="slotProps">
-                <EpiListElement :episode="slotProps.item"></EpiListElement>
+            <template v-slot:default="{ item }">
+                <EpiListElement :episode="item"></EpiListElement>
             </template>
         </InfiniteScroll>
     </section>

@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <article>
         <template
             v-for="(item, index) in episodeList.list"
             :key="item.episodeId"
@@ -21,7 +21,7 @@
                 Loading
             </div>
         </teleport>
-    </section>
+    </article>
 </template>
 
 <script setup>
