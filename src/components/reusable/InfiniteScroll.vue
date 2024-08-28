@@ -7,7 +7,7 @@
             <div
                 class="infinite-scroll-loader"
                 v-if="!database.state.allLoaded"
-                :ref="(el) => scrollDetect.setTarget(el)"
+                :ref="(el) => scrollDetect.loader.setTarget(el)"
             >
                 <span>{{ props.loadingMessage }}</span>
             </div>
@@ -61,20 +61,14 @@ defineExpose({ resetData: database.reset }); //부모 컴포넌트에 메서드 
 //페이지 최하단 도달시 이벤트 발생
 const scrollDetect = reactive({
     loader: useObserver({ threshold: 0 }),
-    setTarget(el) {
-        if (el) this.loader.targets.push(el);
-    },
-    handler(newValue) {
-        console.log(newValue);
-        newValue.forEach((trigger) => {
-            if (trigger) {
-                database.loadData();
-            }
-        });
+    handler(intersect) {
+        if (intersect.state) {
+            database.loadData();
+        }
     },
 });
 //이벤트 핸들러 적용
-watch(scrollDetect.loader.triggers, scrollDetect.handler);
+watch(scrollDetect.loader.intersection, scrollDetect.handler);
 </script>
 
 <style lang="sass" scoped>

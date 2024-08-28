@@ -1,17 +1,22 @@
 <template>
     <section>
-        <template v-for="item in episodeList.list" :key="item.episodeId">
+        <template
+            v-for="(item, index) in episodeList.list"
+            :key="item.episodeId"
+        >
             <EpisodeItem
                 class="item"
                 :title="item.title"
                 :content="item.content"
+                :ref="(el) => urlDetect.observer.setTarget(el, index)"
+                :data-key="item.episodeId"
             ></EpisodeItem>
         </template>
         <teleport to="main">
             <div
                 class="loader"
                 v-if="!episodeList.allLoaded"
-                :ref="(el) => scrollLoad.setTarget(el)"
+                :ref="(el) => scrollLoad.loader.setTarget(el)"
             >
                 Loading
             </div>
@@ -55,46 +60,40 @@ const episodeList = reactive({
     },
 });
 
-//페이지 로드 시 첫번째 에피소드 로드
 onMounted(() => {
+    //페이지 로드 시 첫번째 에피소드 로드
     episodeList.loadFirstEpisode();
 });
 
 //최하단 스크롤 시 에피소드 로드하는 기능
 const scrollLoad = reactive({
     loader: useObserver({ threshold: 0 }),
-    setTarget(el) {
-        if (el) this.loader.targets.push(el);
-    },
-    handler(newValue) {
-        newValue.forEach((trigger) => {
-            if (trigger && !episodeList.allLoaded) {
-                episodeList.loadNextEpisode();
-            }
-        });
+    handler(intersect) {
+        if (intersect.state) {
+            episodeList.loadNextEpisode();
+        }
     },
 });
 
-//observer 발동 시 이벤트 핸들러 실행
-watch(scrollLoad.loader.triggers, scrollLoad.handler);
+watch(scrollLoad.loader.intersection, scrollLoad.handler); //observer 발동 시 이벤트 핸들러 실행
 
-// //각 에피소드 페이지마다 URL 변경
-// const urlObversingOptions = (item) => ({
-//     key: "episode-url-changer",
-//     handler: (entries, observer, isIntersecting) => {
-//         if (isIntersecting) {
-//             updateURL(item.episodeId);
-//         }
-//     },
-//     options: {
-//         threshold: 0.8, // 요소의 80%가 보이면 새 항목을 로드합니다
-//     },
-// });
+//각 에피소드 페이지마다 URL 변경
+const urlDetect = reactive({
+    observer: useObserver({
+        threshold: 0.8, // 요소의 80%가 보이면 새 항목을 로드합니다
+    }),
+    handler: (intersect) => {
+        if (intersect.state) {
+            console.log(intersect.data);
+            urlDetect.updateURL(intersect.data.key);
+        }
+    },
+    updateURL: (episodeId) => {
+        window.history.replaceState(null, "", `/episodes/${episodeId}`);
+    },
+});
 
-//재렌더링 없이 브라우저 url 바꾸는 메서드
-const updateURL = (epiId) => {
-    window.history.replaceState(null, "", `/episodeList/${epiId}`);
-};
+watch(urlDetect.observer.intersection, urlDetect.handler);
 </script>
 
 <style scoped lang="sass"></style>
