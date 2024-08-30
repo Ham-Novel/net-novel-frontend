@@ -29,9 +29,7 @@
                     </span>
                 </figure>
                 <figure class="novel-tags novel-info-figure">
-                    <span v-for="tag in novel.tags" :key="tag.id" class="tag"
-                        >#{{ tag.name }}</span
-                    >
+                    <span v-for="tag in novel.tags" :key="tag.id" class="tag">#{{ tag.name }}</span>
                 </figure>
                 <figure class="novel-description novel-info-figure">
                     <h3>작품 소개</h3>
@@ -45,7 +43,7 @@
 <script setup>
 import { ref, onMounted, reactive, computed, readonly, inject } from "vue";
 import { View, Heart, MessageCircleHeart } from "lucide-vue-next";
-import { novelApi, memberApi } from "@/backendApi";
+import { novelApi, memberApi } from "@/hooks/backendApi";
 
 //novel id 값
 const novelId = inject("novelId");

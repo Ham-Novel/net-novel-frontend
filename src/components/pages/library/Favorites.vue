@@ -3,10 +3,7 @@
         <div class="base-wrapper base-distance">
             <div class="favorites">
                 <template v-for="novel in favorites">
-                    <NovelCardItem
-                        :size="itemSize"
-                        :brief="getItemBrief(novel)"
-                    >
+                    <NovelCardItem :size="itemSize" :brief="getItemBrief(novel)">
                         <p class="author">작가명</p>
                     </NovelCardItem>
                 </template>
@@ -18,7 +15,7 @@
 <script setup>
 import NovelCardItem from "@/components/reusable/novel/NovelCardItem.vue";
 import { onMounted, ref } from "vue";
-import { memberApi } from "@/backendApi";
+import { memberApi } from "@/hooks/backendApi";
 
 //NovelCardItem 크기
 const itemSize = ref({

@@ -37,7 +37,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { memberApi } from "@/backendApi";
+import { memberApi } from "@/hooks/backendApi";
 
 const userData = ref({
     nickName: "nickName",
@@ -45,9 +45,10 @@ const userData = ref({
     email: "idValue@email.com",
 });
 
-function loadUserData() {
-    memberApi.getMyPageData().then((loadData) => {
-        userData.value = loadData;
+async function loadUserData() {
+    memberApi.getMyPageData().then((resp) => {
+        console.log(resp);
+        userData.value = resp;
     });
 }
 

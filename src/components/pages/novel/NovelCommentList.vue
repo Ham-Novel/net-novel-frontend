@@ -4,33 +4,24 @@
             <div>
                 <p>전체 댓글: 0개</p>
             </div>
-            <form class="sort-interface" @submit.prevent="resortComments">
-                <template v-for="sortItem in sortByList">
-                    <label :for="sortItem.name + '-button'">
+            <form class="sort-interface" @submit.prevent>
+                <template v-for="option in sortBy.options">
+                    <label :for="`${option.sort}-button`">
                         <input
                             type="radio"
-                            :id="sortItem.name + '-button'"
-                            :value="sortItem.name"
-                            name="sortComments"
-                            v-model="sortBy"
-                            @click="resetComments"
+                            :id="`${option.sort}-button`"
+                            :value="option.sort"
+                            v-model="sortBy.selected"
+                            @click="scrollMethods.resetComments"
                         />
-                        <span>{{ sortItem.displayName }}</span>
+                        <span>{{ option.name }}</span>
                     </label>
                 </template>
             </form>
         </div>
-        <InfiniteScroll
-            class="list-view"
-            :load-method="loadComments"
-            :page-props="pageProps"
-            loading-message="Comments Loading..."
-            ref="scrollRef"
-        >
-            <template v-slot:default="slotProps">
-                <CommentListElement
-                    :comment="slotProps.item"
-                ></CommentListElement>
+        <InfiniteScroll class="list-view" v-bind="scrollProps" :ref="scrollMethods.setComponent">
+            <template v-slot:default="{ item }">
+                <CommentListElement :comment="item"></CommentListElement>
             </template>
         </InfiniteScroll>
     </section>
@@ -41,46 +32,46 @@ import CommentListElement from "./CommentListElement.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { ref, reactive, inject } from "vue";
-import { commentApi } from "@/backendApi";
-
-// //작품 id 외부 컴포넌트에서 받기
-// const props = defineProps(["novelId"]);
+import { commentApi } from "@/hooks/backendApi";
 
 //novel id 값
 const novelId = inject("novelId");
 
-//스크롤 페이지 로드 설정 변수
-const pageProps = ref({ number: 0, size: 30 });
-
-//댓글 정렬 방식 Enum
-const sortByList = reactive({
-    recent: {
-        name: "recent",
-        displayName: "최신순",
+//InfiniteScroll props 설정
+const scrollProps = reactive({
+    pageProps: { number: 0, size: 30 },
+    loadMethod: async (page, size) => {
+        const loadItems = await commentApi.getCommentsByNovel(novelId, sortBy.selected, page, size);
+        return loadItems;
     },
-    likes: {
-        name: "likes",
-        displayName: "추천순",
+    loadingMessage: "Episode Loading...",
+});
+
+//댓글 리스트 초기화 메서드
+const scrollMethods = reactive({
+    scrollRef: ref(null),
+    setComponent: (el) => {
+        scrollMethods.scrollRef = el;
+    },
+    resetComments() {
+        this.scrollRef.resetData();
     },
 });
-const sortBy = ref(sortByList.recent.name); //현재 정렬 변수
 
-//댓글 리스트 초기화 메서드 가져오기
-const scrollRef = ref(null);
-const resetComments = () => {
-    scrollRef.value.resetData();
-};
-
-//댓글 Backend와 Api 통신하여 댓글 데이터를 가져오는 메서드
-const loadComments = async (page, size) => {
-    const loadItems = await commentApi.getCommentsByNovel(
-        novelId,
-        sortBy.value,
-        page,
-        size
-    );
-    return loadItems;
-};
+//댓글 정렬 방식 설정
+const sortBy = reactive({
+    options: {
+        recent: {
+            name: "최신순",
+            sort: "recent",
+        },
+        likes: {
+            name: "추천순",
+            sort: "likes",
+        },
+    },
+    selected: "recent",
+});
 </script>
 
 <style lang="sass" scoped>

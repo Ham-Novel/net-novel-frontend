@@ -2,9 +2,7 @@
     <section class="episode-list-section base-wrapper base-distance">
         <div class="list-info">
             <span>화수: {{ episodesInfo.data.chapterCount }}화</span>
-            <span
-                >최신 업데이트 날짜: {{ episodesInfo.data.lastUpdatedAt }}</span
-            >
+            <span>최신 업데이트 날짜: {{ episodesInfo.data.lastUpdatedAt }}</span>
         </div>
         <InfiniteScroll class="list-view" v-bind="scrollProps">
             <template v-slot:default="{ item }">
@@ -19,7 +17,7 @@ import EpiListElement from "./EpiListElement.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { ref, onMounted, inject, reactive, computed } from "vue";
-import { episodeApi } from "@/backendApi";
+import { episodeApi } from "@/hooks/backendApi";
 import { formatUtil } from "@/format";
 
 //novel id 값
@@ -29,12 +27,7 @@ const novelId = inject("novelId");
 const scrollProps = reactive({
     pageProps: { number: 0, size: 30 },
     loadMethod: async (page, size) => {
-        const loaditems = await episodeApi.getEpisodesByNovel(
-            novelId,
-            "initial",
-            page,
-            size
-        );
+        const loaditems = await episodeApi.getEpisodesByNovel(novelId, "initial", page, size);
         return loaditems;
     },
     loadingMessage: "Episode Loading...",

@@ -25,6 +25,7 @@ import NovelCreatePage from './components/pages/studio/work/NovelCreatePage.vue'
 
 import NotFoundPage from './components/pages/etc/NotFoundPage.vue';
 import Test from './components/Test.vue';
+import { nextTick } from 'vue';
 
 //url에 따른 로드할 컴포넌트 매핑
 const routes = [
@@ -64,6 +65,13 @@ const routes = [
         props: (route) => ({
             episodeId: Number(route.params.episodeId)
         }),
+        meta: {
+            //id=contents인 태그로 이동
+            scrollTo: {
+                el: "#contents",
+                behavior: 'instant'
+            }
+        }
     },
     {
         name: 'studio',
@@ -83,11 +91,18 @@ const routes = [
 ];
 
 //페이지 이동 시 스크롤 설정
-const scrollBehavior = (to, from, savedPosition) => {
+const scrollBehavior = async (to, from, savedPosition) => {
+    await nextTick(); //DOM 요소 로드 되고 실행
+    if (to.meta.scroll ?? false) {
+        return to.meta.scroll
+    }
+    // id 태그 위치로 스크롤
+    else if (to.meta.scrollTo ?? false) {
+        return to.meta.scrollTo
+    }
     // 해시가 있는 경우 (앵커 링크)
-    if (to.hash) {
+    else if (to.hash) {
         return { el: to.hash }
-
     }
     // 그 외의 경우 맨 위로 스크롤
     else {

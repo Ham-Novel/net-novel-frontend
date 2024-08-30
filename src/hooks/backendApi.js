@@ -13,11 +13,13 @@ class PaymentRequiredError extends Error {
     }
 }
 
-
-
-async function apiConnect(reqUrl, reqMeta) {
-    const resp = await fetch(reqUrl, reqMeta);
-    if (!resp.ok) {
+async function requestServer(reqUrl, reqHeader) {
+    reqHeader.credentials = 'include'
+    const resp = await fetch(reqUrl, reqHeader);
+    if (resp.status === 401) {
+        throw new Error(`Authentication Error`);
+    }
+    else if (resp.status === 400) {
         throw new Error(`HTTP error! status: ${resp.status}`);
     }
     return resp;
@@ -66,7 +68,7 @@ export const novelApi = {
             method: 'GET',
         }
         try {
-            const resp = await apiConnect(reqUrl, reqMeta)
+            const resp = await requestServer(reqUrl, reqMeta)
             return resp.json();
         } catch (error) {
             console.error(`Error fetching toggleNovelFavorite()`, error);
@@ -92,7 +94,7 @@ export const tagApi = {
 export const episodeApi = {
     async getEpisode(id) {
         try {
-            const resp = await fetch(`${API_URL}/episodes/${id}`, { method: 'GET' });
+            const resp = await fetch(`${API_URL}/episodes/${id}`, { method: 'GET', credentials: 'include' });
             const data = await resp.json();
             if (resp.status === 402) {
                 data.payCheck = false;
@@ -113,31 +115,18 @@ export const episodeApi = {
             console.error("Error fetching getEpisode()", error);
         }
     },
-    async getEpisodeNext(id) {
+    async getEpisodeBeside(id, direction) {
         try {
-            const resp = await fetch(`${API_URL}/episodes/${id}/next`, { method: 'GET' });
-            const data = await resp.json();
-            if (resp.status === 402) {
-                data.payCheck = false;
-                throw new PaymentRequiredError("에피소드 미결제 접근", data);
-            }
-            else if (!resp.ok) {
-                throw new Error(`HTTP error! status: ${resp.status}`);
-            }
-            else {
-                data.payCheck = true;
-                return data;
-            }
+            const url = `${API_URL}/episodes/${id}/beside?direction=${direction}`;
+            const header = {
+                method: 'GET',
+            };
+            const resp = await requestServer(url, header);
+            return resp;
         } catch (error) {
-            if (error instanceof PaymentRequiredError) {
-                console.info(error.message);
-                return error.paymentPolicy;
-            }
-            console.error("Error fetching getEpisode()", error);
+            console.error("backendApi.js getEpisodeBeside() : ", error);
         }
     },
-
-
 
     async getEpisodesByNovel(id, sort, page, size) {
         try {
@@ -175,7 +164,7 @@ export const episodeApi = {
             body: JSON.stringify(paymentDto)
         }
         try {
-            return (await apiConnect(reqUrl, reqMeta)).text();
+            return (await requestServer(reqUrl, reqMeta)).text();
         } catch (error) {
             console.error(`Error fetching toggleNovelFavorite()`, error);
         }
@@ -203,11 +192,11 @@ export const memberApi = {
     async getMyPageData() {
         try {
             const reqUrl = `${API_URL}/members/me/mypage`
-            const resp = await fetch(reqUrl);
-            if (!resp.ok) {
-                throw new Error(BAD_REQUEST_MSG);
+            const reqMeta = {
+                method: 'GET',
+                credentials: 'include' //쿠키에 인증 session 추가
             }
-            return resp.json();
+            return (await requestServer(reqUrl, reqMeta)).json();
         } catch (error) {
             console.error("Error fetching getMyPageData:", error);
         }
@@ -249,7 +238,7 @@ export const memberApi = {
             },
         }
         try {
-            return apiConnect(reqUrl, reqMeta).json();
+            return requestServer(reqUrl, reqMeta).json();
         } catch (error) {
             console.error(`Error fetching toggleNovelFavorite()`, error);
         }

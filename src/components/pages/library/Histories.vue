@@ -8,11 +8,7 @@
                 loading-message="Record Loading..."
             >
                 <template v-slot:default="{ item }">
-                    <NovelListItem
-                        :size="itemSize"
-                        :brief="getItemBrief(item)"
-                        class="history-item"
-                    >
+                    <NovelListItem :size="itemSize" :brief="getItemBrief(item)" class="history-item">
                         <template v-slot:default>
                             <p>{{ item.authorName }}</p>
                             <p>{{ item.novelType }}</p>
@@ -21,9 +17,7 @@
                         </template>
                         <template v-slot:feature>
                             <div class="item-feature">
-                                <button class="continue-reading">
-                                    {{ item.episodeTitle }} >>
-                                </button>
+                                <button class="continue-reading">{{ item.episodeTitle }} >></button>
                                 <button class="add-library">+선호작</button>
                             </div>
                         </template>
@@ -39,7 +33,7 @@ import NovelListItem from "@/components/reusable/novel/NovelListItem.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { ref, onMounted, reactive } from "vue";
-import { memberApi } from "@/backendApi";
+import { memberApi } from "@/hooks/backendApi";
 
 //데이터 로드하는 메서드
 const loadReadNovels = async (page, size) => {

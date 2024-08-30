@@ -19,9 +19,7 @@
                         :size="itemSize"
                     >
                         <div class="tag">
-                            <span v-for="tag in item.tags" :key="tag.id"
-                                >#{{ tag.name }}</span
-                            >
+                            <span v-for="tag in item.tags" :key="tag.id">#{{ tag.name }}</span>
                         </div>
                         <p class="desc">
                             {{ item.desc }}
@@ -39,7 +37,7 @@ import BrowseFilter from "./BrowseFilter.vue";
 import BrowseSort from "./BrowseSort.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
-import { novelApi } from "@/backendApi";
+import { novelApi } from "@/hooks/backendApi";
 import { reactive } from "vue";
 
 //스크롤 페이지 로드 설정

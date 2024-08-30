@@ -3,6 +3,7 @@
         <div class="content-container">
             <h1 class="title">{{ props.title }}</h1>
             <p class="content">{{ props.content }}</p>
+            <slot></slot>
         </div>
     </section>
 </template>
@@ -29,21 +30,28 @@ Voluptate voluptate aliquip ipsum magna aliquip consectetur excepteur et volupta
 @use "@/assets/base.sass"
 
 .episode-section
-    background-color: #f0f0f0
 
     .content-container
+        position: relative
         width: 900px
-        min-height: 500px
+        min-height: 2000px
         margin: 0px auto
-        padding: 10px 60px 100px 60px
+        padding-top: 30px
+        padding-bottom: 100px
         background-color: white
+        border-radius: 15px
         border-bottom: 5px solid #d0d0d0
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4)
 
         .title
-            font-size: 30px
+            padding: 0 30px
+            padding-bottom: 20px
             margin-bottom: 20px
+            border-bottom: 5px solid #d0d0d0
+            font-size: 35px
 
         .content
+            padding: 0 60px
             font-size: 20px
             line-height: 30px
             white-space: pre-wrap

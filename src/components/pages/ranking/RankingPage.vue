@@ -2,19 +2,11 @@
     <section class="top300 base-distance">
         <div class="ranking-wrapper base-wrapper">
             <h1 class="ranking-title">Top 300</h1>
-            <InfiniteScroll
-                class="ranking-list"
-                :load-method="loadRankings"
-                @add-items="addRankings"
-            >
+            <InfiniteScroll class="ranking-list" :load-method="loadRankings" @add-items="addRankings">
                 <template v-for="(novel, index) in rankings">
                     <div>
                         <h1 class="rank">{{ index + 1 }}</h1>
-                        <NovelCardItem
-                            :size="itemSize"
-                            :brief="convertBrief(novel)"
-                        >
-                        </NovelCardItem>
+                        <NovelCardItem :size="itemSize" :brief="convertBrief(novel)"> </NovelCardItem>
                     </div>
                 </template>
             </InfiniteScroll>
@@ -28,7 +20,7 @@ import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { SignalZero } from "lucide-vue-next";
 import { reactive, ref } from "vue";
-import { novelApi } from "@/backendApi";
+import { novelApi } from "@/hooks/backendApi";
 
 //NovelCardItem 크기
 const itemSize = {
@@ -56,11 +48,7 @@ const addRankings = (newItems) => {
 
 const loadRankings = async () => {
     //실제 api 불러오기
-    const loadItems = await novelApi.getRanking(
-        pageNum.value,
-        pageSize.value,
-        "daily"
-    );
+    const loadItems = await novelApi.getRanking(pageNum.value, pageSize.value, "daily");
     pageNum.value++;
     return loadItems;
 };
