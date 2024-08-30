@@ -130,7 +130,7 @@ const scrollSynchro = reactive({
         // 브라우저 화면의 스크롤 높이를 contentRef 컴포넌트가 길어진 만큼 내린다.
         const newHeight = scrollSynchro.contentRef.scrollHeight;
         const scrollTo = currentPosition + (newHeight - scrollSynchro.oldHeight);
-        // console.log(scrollSynchro.oldHeight, newHeight, scrollTo);
+        console.log(scrollSynchro.oldHeight, newHeight, scrollTo);
         window.scrollTo(0, scrollTo);
     },
 });

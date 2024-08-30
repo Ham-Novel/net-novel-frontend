@@ -116,4 +116,9 @@ const router = createRouter({
     scrollBehavior
 })
 
+// 뒤로가기, 앞으로가기 이동 시, 예기치 못한 오류 방지
+router.beforeEach((to, from, next) => {
+    next() // 페이지 진입 시 강제 컴포넌트 초기화
+})
+
 export default router
