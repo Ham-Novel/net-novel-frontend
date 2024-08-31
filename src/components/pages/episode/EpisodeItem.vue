@@ -1,27 +1,29 @@
 <template>
     <section class="episode-section">
         <div class="content-container">
-            <h1 class="title">{{ props.title }}</h1>
-            <p class="content">{{ props.content }}</p>
+            <h1 class="title">{{ props.episode.title }}</h1>
+            <p class="content">{{ props.episode.content }}</p>
             <slot></slot>
         </div>
     </section>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import PayCheckDialog from "./PayCheckDialog.vue";
+
+import { onMounted, reactive, ref } from "vue";
 
 const props = defineProps({
-    title: {
-        type: String,
-        default: "Title",
-    },
-    content: {
-        type: String,
-        default: `
+    episode: {
+        type: Object,
+        default: {
+            episodeId: 0,
+            title: "Title",
+            content: `
 Mollit aliquip amet consequat ipsum fugiat magna. Ex nulla deserunt eu dolore elit aute irure eiusmod tempor. Nulla dolore veniam consequat veniam. Tempor amet elit culpa occaecat. Tempor qui excepteur dolor anim esse fugiat irure irure duis proident voluptate dolore enim. Amet est exercitation exercitation ullamco est nulla ad est dolor ut eiusmod fugiat mollit. Dolore ea sit sint duis amet id minim tempor officia ad nulla.
 
 Voluptate voluptate aliquip ipsum magna aliquip consectetur excepteur et voluptate laboris. Laboris pariatur duis velit amet amet. Elit voluptate adipisicing pariatur sit deserunt elit pariatur voluptate ex fugiat laborum consectetur do tempor. Voluptate aliqua magna officia et magna voluptate ipsum id eiusmod fugiat consequat exercitation. Magna ut quis voluptate ullamco sint dolor eu cupidatat Lorem qui exercitation nisi. Laboris dolor sint culpa ea reprehenderit commodo eiusmod et ex incididunt deserunt nisi eiusmod. Ullamco dolor consectetur commodo sint dolore incididunt in cillum reprehenderit.`,
+        },
     },
 });
 </script>
@@ -34,7 +36,7 @@ Voluptate voluptate aliquip ipsum magna aliquip consectetur excepteur et volupta
     .content-container
         position: relative
         width: 900px
-        min-height: 2000px
+        min-height: 900px
         margin: 0px auto
         padding-top: 30px
         padding-bottom: 100px

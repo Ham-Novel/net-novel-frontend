@@ -1,43 +1,26 @@
 <template>
-    <teleport to="body">
-        <div>
-            <div class="overlay"></div>
-            <dialog open>
-                <div class="pay-check-message">
-                    <h2 class="payment-warning">
-                        미결제 상태입니다. 결제하시겠습니까?
-                    </h2>
-                    <h3 class="payment-fail" v-if="paymentFail">
-                        결제 실패! 보유한 코인을 재확인 하십시오!
-                    </h3>
-                </div>
-                <div class="choice-list">
-                    <button @click="goBackPage">돌아가기</button>
-                    <button @click="executePayment">
-                        {{ costPolicy.name }} {{ costPolicy.coinCost }}코인 결제
-                    </button>
-                </div>
-            </dialog>
-        </div>
-    </teleport>
+    <div>
+        <dialog open>
+            <div class="pay-check-message">
+                <h2 class="payment-warning">미결제 상태입니다. 결제하시겠습니까?</h2>
+                <h3 class="payment-fail" v-if="paymentFail">결제 실패! 보유한 코인을 재확인 하십시오!</h3>
+            </div>
+            <div class="choice-list">
+                <!-- <button @click="goBackPage">돌아가기</button> -->
+                <button @click="executePayment">{{ props.coinCost }}코인 결제</button>
+            </div>
+        </dialog>
+    </div>
 </template>
 
 <script setup>
-import { episodeApi } from "@/backendApi";
+import { episodeApi } from "@/hooks/backendApi";
 import { onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
-const props = defineProps(["episodeId", "costPolicy", "activate"]);
+const props = defineProps(["episodeId", "costCost", "activate"]);
 const emits = defineEmits(["update:activate"]);
 const paymentFail = ref(false);
-
-//해당 컴포넌트가 활성화된 동안 스크롤 불가
-onMounted(() => {
-    document.body.style.overflow = "hidden";
-});
-onUnmounted(() => {
-    document.body.style.overflow = "";
-});
 
 //돌아가기 버튼
 const router = useRouter();
@@ -50,7 +33,7 @@ function executePayment() {
     episodeApi
         .payForEpisode({
             episodeId: props.episodeId,
-            usedCoins: props.costPolicy.coinCost,
+            usedCoins: props.coinCost,
         })
         .then((result) => {
             console.log(result);
@@ -66,7 +49,7 @@ function executePayment() {
 
 <style scoped lang="sass">
 dialog
-    position: fixed
+    position: absolute
     top: 50%
     left: 50%
     transform: translate(-50%, -50%)
@@ -105,7 +88,7 @@ dialog
             &:hover
                 background-color: #2921ca
 .overlay
-    position: fixed
+    position: absolute
     top: 0
     left: 0
     width: 100%

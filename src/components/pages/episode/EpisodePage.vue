@@ -1,15 +1,7 @@
 <template>
-    <EpisodeList
-        :novelId="props.novelId"
-        :episodeId="props.episodeId"
-    ></EpisodeList>
-    <!-- <PayCheckDialog
-            v-if="payRequired"
-            v-model:activate="payRequired"
-            :episode-id="episodeId"
-            :cost-policy="costPolicy"
-        >
-        </PayCheckDialog> -->
+    <div class="episode-page">
+        <EpisodeList :novelId="props.novelId" :episodeId="props.episodeId"></EpisodeList>
+    </div>
 </template>
 
 <script setup>
@@ -38,12 +30,13 @@ const props = defineProps({
 });
 
 //에피소드 api 통신
-const payRequired = ref(false); //결제창 띄울지 결정
-// const costPolicy = ref({}); //에피소드 결제 관련 정보
 </script>
 
 <style scoped lang="sass">
 @use "@/assets/base.sass"
+
+.episode-page
+    background-color: #f3f2f1
 
 .episode-nav
     position: fixed

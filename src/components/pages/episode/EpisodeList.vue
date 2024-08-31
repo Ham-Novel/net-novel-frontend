@@ -9,7 +9,7 @@
         </div>
         <div id="contents" :ref="(el) => (scrollSynchro.contentRef = el)">
             <template v-for="(item, index) in episodeList.list" :key="item.episodeId">
-                <EpisodeItem class="item" :title="item.title" :content="item.content">
+                <component :is="item.type" class="item" :episode="item" :payment="item" @reload="reloadEpisode">
                     <div
                         class="url-object-front"
                         :ref="(el) => urlDetect.observer.setTarget(el, `f${index}`)"
@@ -20,7 +20,7 @@
                         :ref="(el) => urlDetect.observer.setTarget(el, `b${index}`)"
                         :data-key="item.episodeId"
                     ></div>
-                </EpisodeItem>
+                </component>
             </template>
         </div>
         <div class="loader" v-if="!episodeList.nextLoad.allLoaded" :ref="(el) => nextLoader.observer.setTarget(el)">
@@ -31,8 +31,9 @@
 
 <script setup>
 import EpisodeItem from "./EpisodeItem.vue";
+import PaymentItem from "./PaymentItem.vue";
 
-import { onMounted, reactive, ref, watch, nextTick } from "vue";
+import { onMounted, reactive, ref, watch, nextTick, markRaw } from "vue";
 import { episodeApi } from "@/hooks/backendApi";
 import { useObserver } from "@/hooks/observer";
 
@@ -57,8 +58,9 @@ const episodeList = reactive({
     async loadFirstEpisode() {
         try {
             const newItem = await episodeApi.getEpisode(props.episodeId);
+            newItem.type = markRaw(EpisodeItem);
             this.list.push(newItem);
-        } catch {
+        } catch (error) {
             console.error("Error In Load First Episodes:", error);
         }
     },
@@ -68,15 +70,20 @@ const episodeList = reactive({
         //다음 에피소드 로드 성공 시
         if (resp.ok) {
             const newItem = await resp.json();
+            newItem.type = markRaw(EpisodeItem);
             this.list.push(newItem);
             this.nextLoad.id = newItem.episodeId;
-            //다음 에피소드 로드 실패 시
-        } else {
+        }
+        //다음 에피소드 로드 실패 시
+        else {
             this.nextLoad.allLoaded = true;
-            const costPolicy = resp.json();
             switch (resp.status) {
                 case 402:
                     console.log("402");
+                    const paymentItem = await resp.json();
+                    paymentItem.episodeId = 16;
+                    paymentItem.type = markRaw(PaymentItem);
+                    this.list.push(paymentItem);
                     break;
                 case 404:
                     console.log("404");
@@ -90,10 +97,12 @@ const episodeList = reactive({
         //다음 에피소드 로드 성공 시
         if (resp.ok) {
             const newItem = await resp.json();
+            newItem.type = markRaw(EpisodeItem);
             this.list.unshift(newItem);
             this.previousLoad.id = newItem.episodeId;
-            //다음 에피소드 로드 실패 시
-        } else {
+        }
+        //다음 에피소드 로드 실패 시
+        else {
             this.previousLoad.allLoaded = true;
             const costPolicy = resp.json();
             switch (resp.status) {
@@ -108,6 +117,12 @@ const episodeList = reactive({
         }
     },
 });
+
+async function reloadEpisode(episodeId) {
+    episodeList.nextLoad.allLoaded = false;
+    episodeList.list.pop();
+    episodeList.loadNextEpisode();
+}
 
 onMounted(() => {
     //페이지 로드 시 첫번째 에피소드 로드
@@ -168,7 +183,6 @@ const urlDetect = reactive({
     }),
     handler: (intersect) => {
         if (intersect.state) {
-            console.log(intersect.data);
             urlDetect.updateURL(intersect.data.key);
         }
     },
@@ -183,7 +197,7 @@ watch(urlDetect.observer.intersection, urlDetect.handler);
 
 .episode-list-article
     position: relative
-    min-height: 1000px
+    min-height: 900px
     background-color: #f3f2f1
 
     .loader
@@ -212,6 +226,7 @@ watch(urlDetect.observer.intersection, urlDetect.handler);
         top: 0
         width: 100%
         height: 80vh
+        z-index: -1
         // background-color: blue
 
     .url-object-back
@@ -219,5 +234,6 @@ watch(urlDetect.observer.intersection, urlDetect.handler);
         bottom: 0
         width: 100%
         height: 80vh
+        z-index: -1
         // background-color: blue
 </style>
