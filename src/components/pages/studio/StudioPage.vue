@@ -5,7 +5,11 @@
             <TabRouter :tabs="tabs" v class="studio-menu"></TabRouter>
         </div>
     </section>
-    <router-view></router-view>
+    <router-view v-slot="{ Component }">
+        <keep-alive>
+            <component :is="Component" />
+        </keep-alive>
+    </router-view>
 </template>
 
 <script setup>

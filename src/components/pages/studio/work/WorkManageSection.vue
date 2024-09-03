@@ -1,64 +1,71 @@
 <template>
-    <section class="work-manage-section">
-        <div v-if="workList.length === 0" class="empty-sign base-wrapper">
-            <div class="motivate-msg">
-                <Sparkle :size="35" class="deco" />
-                <h2>작가님의 작품을 기다립니다!</h2>
-                <h3>지금 유료로 연재하고 랭킹에 도전하세요!</h3>
-            </div>
-            <button class="create-work-button" @click="goToCreatePage">
-                <SquarePen /> 신규작품 등록
+    <article class="work-manage-article">
+        <NewbieGuideSection
+            v-if="works.list.length === 0"
+            @button-event="goToCreateNovelPage"
+            class="base-wrapper"
+        ></NewbieGuideSection>
+        <template v-else>
+            <button class="create-novel-button" @click="goToCreateNovelPage">
+                <SquarePen size="30" />
             </button>
-        </div>
-    </section>
+            <WorkListSection :novel-list="works.list"></WorkListSection>
+        </template>
+    </article>
 </template>
 
 <script setup>
-import { SquarePen, Sparkle } from "lucide-vue-next";
-import { reactive } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import NewbieGuideSection from "./NewbieGuideSection.vue";
+import WorkListSection from "./WorkListSection.vue";
 
-const workList = reactive([]);
+import { memberApi } from "@/hooks/backendApi";
+import { SquarePen } from "lucide-vue-next";
+import { onMounted, reactive } from "vue";
+import { useRouter } from "vue-router";
+
+const works = reactive({
+    list: [],
+    load: async () => {
+        const resp = await memberApi.getWorks();
+        const data = await resp?.json();
+        if (data ?? false) {
+            works.list.push(...data);
+        }
+    },
+});
+
+onMounted(() => {
+    works.load();
+});
 
 const router = useRouter();
-function goToCreatePage() {
+
+function goToCreateNovelPage() {
+    console.log("ddd");
     router.push({ name: "novel-create" });
 }
 </script>
 
 <style scoped lang="sass">
 @use "@/assets/base.sass"
-.empty-sign
-    display: flex
-    flex-flow: row wrap
-    justify-content: space-between
-    align-items: center
 
-    .motivate-msg
-        position: relative
+.create-novel-button
+    position: fixed
+    bottom: 50px
+    right: 100px
+    z-index: 1
 
-        h2
-            display: inline-block
-            font-size: 30px
-            margin-bottom: 10px
-        h3
-            font-size: 20px
-            color: gray
+    width: 50px
+    height: 50px
+    border-radius: 20px
+    background-color: black
+    color: white
 
-        .deco
-            position: absolute
-            top: -20px
-            left: -30px
+    cursor: pointer
+    transition: all 0.2s ease
+    &:hover
+        transform: scale(0.9)
 
-    .create-work-button
-        padding: 15px 25px
-        border-radius: 5px
-        background-color: black
-        color: white
-        font-size: 15px
-        cursor: pointer
-
-        display: flex
-        align-items: center
-        gap: 10px
+    *
+        padding: 1px
 </style>

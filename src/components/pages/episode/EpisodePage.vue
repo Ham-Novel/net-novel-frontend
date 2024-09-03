@@ -8,13 +8,17 @@
 // import PayCheckDialog from "./PayCheckDialog.vue";
 import EpisodeList from "./EpisodeList.vue";
 
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { useStore } from "vuex";
 
 //에피소드 페이지에서는 네비게이션 비활성화
 const store = useStore();
 onMounted(() => {
     store.commit("navi/off");
+});
+
+onUnmounted(() => {
+    store.commit("navi/on");
 });
 
 //url에서 에피소드 id 데이터 가져오기

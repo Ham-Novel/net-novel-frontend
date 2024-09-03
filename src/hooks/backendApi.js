@@ -13,7 +13,7 @@ class PaymentRequiredError extends Error {
     }
 }
 
-async function requestServer(reqUrl, reqHeader) {
+async function requestApi(reqUrl, reqHeader = { method: 'GET' }) {
     reqHeader.credentials = 'include'
     const resp = await fetch(reqUrl, reqHeader);
     if (resp.status === 401) {
@@ -33,20 +33,47 @@ export const novelApi = {
             if (!resp.ok) {
                 throw new Error(BAD_REQUEST_MSG);
             }
-            return resp.json();
+            return await resp.json();
         } catch (error) {
             console.error("Error fetching getNovel()", error);
         }
     },
 
     async createNovel(createDto) {
-        const resp = await fetch(`${API_URL}/novels`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(createDto),
-        });
+        try {
+            const url = `${API_URL}/novels`
+            const header = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(createDto),
+            };
+            const resp = await requestApi(url, header);
+            return resp;
+        } catch (error) {
+            console.error("backendApi.js createNovel() : ", error);
+        }
+    },
+
+    async setNovelThumbnail(id, imgFile) {
+        try {
+            //MultipartFile 변환
+            const formData = new FormData();
+            formData.append('file', imgFile);
+            console.log("form data: ", ...formData)
+
+            const url = `${API_URL}/novels/${id}/thumbnail`
+            const header = {
+                method: 'POST',
+                body: formData,
+            };
+
+            const resp = await requestApi(url, header);
+            return resp;
+        } catch (error) {
+            console.error("backendApi.js setNovelThumbnail() : ", error);
+        }
     },
 
     async getBrowseNovels(page, size) {
@@ -56,20 +83,17 @@ export const novelApi = {
             if (!resp.ok) {
                 throw new Error(BAD_REQUEST_MSG);
             }
-            return resp.json();
+            return await resp.json();
         } catch (error) {
             console.error("Error fetching getBrowseNovels()", error);
         }
     },
 
     async getRanking(page, size, period) {
-        const reqUrl = `${API_URL}/novels/ranking?pageNumber=${page}&pageSize=${size}&period=${period}`
-        const reqMeta = {
-            method: 'GET',
-        }
+        const url = `${API_URL}/novels/ranking?pageNumber=${page}&pageSize=${size}&period=${period}`
         try {
-            const resp = await requestServer(reqUrl, reqMeta)
-            return resp.json();
+            const resp = await requestApi(url)
+            return await resp.json();
         } catch (error) {
             console.error(`Error fetching toggleNovelFavorite()`, error);
         }
@@ -84,7 +108,7 @@ export const tagApi = {
             if (!resp.ok) {
                 throw new Error(BAD_REQUEST_MSG);
             }
-            return resp.json();
+            return await resp.json();
         } catch (error) {
             console.error("Error fetching getTagsByNovel()", error);
         }
@@ -115,13 +139,32 @@ export const episodeApi = {
             console.error("Error fetching getEpisode()", error);
         }
     },
+
+    async createEpisode(novelId, createDto) {
+        try {
+            const url = `${API_URL}/novels/${novelId}/episodes`
+            const header = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(createDto),
+            };
+            const resp = await requestApi(url, header);
+            return resp;
+        } catch (error) {
+            console.error("backendApi.js createEpisode() : ", error);
+        }
+    },
+
+
     async getEpisodeBeside(id, direction) {
         try {
             const url = `${API_URL}/episodes/${id}/beside?direction=${direction}`;
             const header = {
                 method: 'GET',
             };
-            const resp = await requestServer(url, header);
+            const resp = await requestApi(url, header);
             return resp;
         } catch (error) {
             console.error("backendApi.js getEpisodeBeside() : ", error);
@@ -135,7 +178,7 @@ export const episodeApi = {
             if (!resp.ok) {
                 throw new Error(BAD_REQUEST_MSG);
             }
-            return resp.json();
+            return await resp.json();
         } catch (error) {
             console.error("Error fetching getEpisodesByNovel()", error);
         }
@@ -147,7 +190,7 @@ export const episodeApi = {
             if (!resp.ok) {
                 throw new Error(BAD_REQUEST_MSG);
             }
-            return resp.json();
+            return await resp.json();
         } catch (error) {
             console.error("Error fetching getEpisodesCountByNovel()", error);
         }
@@ -164,7 +207,7 @@ export const episodeApi = {
             body: JSON.stringify(paymentDto)
         }
         try {
-            return (await requestServer(reqUrl, reqMeta)).text();
+            return (await requestApi(reqUrl, reqMeta)).text();
         } catch (error) {
             console.error(`Error fetching toggleNovelFavorite()`, error);
         }
@@ -179,7 +222,7 @@ export const commentApi = {
             if (!resp.ok) {
                 throw new Error(BAD_REQUEST_MSG);
             }
-            return resp.json();
+            return await resp.json();
 
         } catch (error) {
             console.error("Error fetching getCommentsByNovel()", error);
@@ -191,26 +234,36 @@ export const memberApi = {
     //마이페이지 관련 api
     async getMyPageData() {
         try {
-            const reqUrl = `${API_URL}/members/me/mypage`
-            const reqMeta = {
+            const url = `${API_URL}/members/me/mypage`
+            const header = {
                 method: 'GET',
-                credentials: 'include' //쿠키에 인증 session 추가
             }
-            return (await requestServer(reqUrl, reqMeta)).json();
+            const resp = await requestApi(url, header);
+            return await resp.json();
         } catch (error) {
             console.error("Error fetching getMyPageData:", error);
         }
     },
 
+    async getWorks() {
+        try {
+            const url = `${API_URL}/members/me/novels`
+            const header = {
+                method: 'GET',
+            }
+            const resp = await requestApi(url, header);
+            return resp;
+        } catch (error) {
+            console.error("backendApi getWorks() :", error);
+        }
+    },
+
     //읽은 기록 관련 api
     async getRecentReadNovels(page, size) {
+        const url = `${API_URL}/members/me/recent-read?pageNumber=${page}&pageSize=${size}`
         try {
-            const reqUrl = `${API_URL}/members/me/recent-read?pageNumber=${page}&pageSize=${size}`
-            const resp = await fetch(reqUrl);
-            if (!resp.ok) {
-                throw new Error(BAD_REQUEST_MSG);
-            }
-            return resp.json();
+            const resp = await requestApi(url);
+            return await resp.json();
         } catch (error) {
             console.error("Error fetching getRecentReadNovels() ", error);
         }
@@ -218,39 +271,34 @@ export const memberApi = {
 
     //선호작 관련 api
     async getCheckFavorite(id) {
+        const url = `${API_URL}/members/me/favorites/check?novelId=${id}`
         try {
-            const reqUrl = `${API_URL}/members/me/favorites/check?novelId=${id}`
-            const resp = await fetch(reqUrl);
-            if (!resp.ok) {
-                throw new Error(BAD_REQUEST_MSG);
-            }
-            return resp.json();
+            const resp = await requestApi(url);
+            return await resp.json();
         } catch (error) {
             console.error("Error fetching getFavoriteNovels() ", error);
         }
     },
     async toggleNovelFavorite(id) {
-        const reqUrl = `${API_URL}/members/me/favorites/${id}`
-        const reqMeta = {
+        const url = `${API_URL}/members/me/favorites/${id}`
+        const header = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
         }
         try {
-            return requestServer(reqUrl, reqMeta).json();
+            const resp = await requestApi(url, header);
+            return await resp.json();
         } catch (error) {
             console.error(`Error fetching toggleNovelFavorite()`, error);
         }
     },
     async getFavoriteNovels() {
+        const url = `${API_URL}/members/me/favorites`;
         try {
-            const reqUrl = `${API_URL}/members/me/favorites`
-            const resp = await fetch(reqUrl);
-            if (!resp.ok) {
-                throw new Error(BAD_REQUEST_MSG);
-            }
-            return resp.json();
+            const resp = await requestApi(url);
+            return await resp.json();
         } catch (error) {
             console.error("Error fetching getFavoriteNovels() ", error);
         }

@@ -1,12 +1,13 @@
 <template>
     <NovelInfo class="novel-info"></NovelInfo>
     <TabRouter :tabs="tabs" class="base-wrapper"> </TabRouter>
-    <router-view></router-view>
+    <TabView></TabView>
 </template>
 
 <script setup>
 import NovelInfo from "./NovelInfo.vue";
 import TabRouter from "@/components/reusable/TabRouter.vue";
+import TabView from "@/components/reusable/TabView.vue";
 
 import { provide, ref } from "vue";
 

@@ -1,9 +1,9 @@
 <template>
     <div class="infinite-scroll-container">
-        <template v-for="item in database.list">
-            <slot :item="item"></slot>
+        <template v-for="(item, index) in database.list">
+            <slot :item="item" :index="index"></slot>
         </template>
-        <teleport to="main">
+        <teleport to="#app">
             <div
                 class="infinite-scroll-loader"
                 v-if="!database.state.allLoaded"
@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, toRaw } from "vue";
+import { ref, reactive, watch, toRaw, onMounted } from "vue";
 import { useObserver } from "@/hooks/observer";
 
 const props = defineProps(["loadMethod", "loadingMessage", "pageProps"]);
@@ -28,13 +28,10 @@ const database = reactive({
     state: { isLoading: false, allLoaded: false },
     async loadData() {
         //이미 메서드가 실행 중이거나 더이상 가져올 아이템이 없으면 중단
-        console.log(this.state.allLoaded);
         if (this.state.isLoading || this.state.allLoaded) return;
         this.state.isLoading = true; //메서드 실행 상태로 전환
 
         props.loadMethod(this.pageable.number, this.pageable.size).then((newData) => {
-            // console.log(newData);
-
             //더이상 불러올 아이템이 없으면 로드 중단
             if (newData.length === 0) {
                 this.state.allLoaded = true; // 모든 아이템을 로드한 상태로 전환
@@ -44,8 +41,6 @@ const database = reactive({
             this.pageable.number++;
             this.list.push(...newData);
             this.state.isLoading = false; //메서드 미실행 상태로 전환
-
-            // console.log(this.list);
         });
     },
     reset: () => {
@@ -57,12 +52,17 @@ const database = reactive({
     },
 });
 defineExpose({ resetData: database.reset }); //부모 컴포넌트에 메서드 노출
+//첫번째 페이지 값 먼저 불러오기
+onMounted(() => {
+    database.loadData();
+});
 
 //페이지 최하단 도달시 이벤트 발생
 const scrollDetect = reactive({
     loader: useObserver({ threshold: 0 }),
     handler(intersect) {
         if (intersect.state) {
+            console.log("aaa");
             database.loadData();
         }
     },

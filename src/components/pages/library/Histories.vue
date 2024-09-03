@@ -1,27 +1,9 @@
 <template>
     <section>
         <div class="base-wrapper base-distance">
-            <InfiniteScroll
-                class="histories"
-                :load-method="loadReadNovels"
-                :page-props="{ number: 0, size: 30 }"
-                loading-message="Record Loading..."
-            >
-                <template v-slot:default="{ item }">
-                    <NovelListItem :size="itemSize" :brief="getItemBrief(item)" class="history-item">
-                        <template v-slot:default>
-                            <p>{{ item.authorName }}</p>
-                            <p>{{ item.novelType }}</p>
-                            <p>{{ item.updatedAt }}</p>
-                            <p></p>
-                        </template>
-                        <template v-slot:feature>
-                            <div class="item-feature">
-                                <button class="continue-reading">{{ item.episodeTitle }} >></button>
-                                <button class="add-library">+선호작</button>
-                            </div>
-                        </template>
-                    </NovelListItem>
+            <InfiniteScroll class="histories" v-bind="scrollProps">
+                <template #default="{ item }">
+                    <HistoryListItem :novel="item"></HistoryListItem>
                 </template>
             </InfiniteScroll>
         </div>
@@ -29,38 +11,21 @@
 </template>
 
 <script setup>
-import NovelListItem from "@/components/reusable/novel/NovelListItem.vue";
+import HistoryListItem from "./HistoryListItem.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { ref, onMounted, reactive } from "vue";
 import { memberApi } from "@/hooks/backendApi";
 
-//데이터 로드하는 메서드
-const loadReadNovels = async (page, size) => {
-    const novels = memberApi.getRecentReadNovels(page, size);
-    return novels;
-};
-
-//NovelListItem 크기
-const itemSize = ref({ width: "100%", height: "150px" });
-
-//NovelListItem에 보낼 데이터
-function getItemBrief(itemInfo) {
-    return {
-        id: itemInfo.novelId,
-        title: itemInfo.novelTitle,
-        coverImg: itemInfo.thumbnailUrl,
-    };
-}
-
-//선호작 버튼
-// const isFavoriteMsg = (itemInfo) => {
-//     if (itemInfo.isFavorite) {
-//         return "-선호작";
-//     } else {
-//         return "+선호작";
-//     }
-// };
+//InfiniteScroll props 설정
+const scrollProps = reactive({
+    pageProps: { number: 0, size: 30 },
+    loadMethod: async (page, size) => {
+        const novels = memberApi.getRecentReadNovels(page, size);
+        return novels;
+    },
+    loadingMessage: "Record Loading...",
+});
 </script>
 
 <style scoped lang="sass">
@@ -83,27 +48,4 @@ function getItemBrief(itemInfo) {
             position: absolute
             bottom: 10px
             height: 30px
-
-
-.item-feature
-    position: absolute
-    bottom: 0px
-    right: 10px
-    display: flex
-    flex-flow: row wrap
-    gap: 30px
-
-    .continue-reading
-        background: none
-        border: none
-        cursor: pointer
-
-    .add-library
-        background: none
-        border: none
-        height: 35px
-        padding: 0 25px
-        border-radius: 20px
-        background-color: #e6e6fa
-        cursor: pointer
 </style>

@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, computed, readonly, inject } from "vue";
+import { ref, onMounted, computed, inject } from "vue";
 import { View, Heart, MessageCircleHeart } from "lucide-vue-next";
 import { novelApi, memberApi } from "@/hooks/backendApi";
 
@@ -60,7 +60,7 @@ const novel = ref({
     episodeCount: 0,
     tags: [],
     status: "",
-    thumbnailUrl: "/cover/lightnovel_cover.jpeg",
+    thumbnailUrl: "",
 });
 
 //선호작 여부
@@ -82,7 +82,7 @@ const favoriteButtonStyle = computed(() => {
 
 //선호작 설정 메서드
 function toggleFavorite() {
-    memberApi.toggleNovelFavorite(props.novelId).then((check) => {
+    memberApi.toggleNovelFavorite(novelId).then((check) => {
         console.log(check);
         isFavorite.value = check;
         if (check) {
@@ -100,7 +100,7 @@ onMounted(() => {
         novel.value = loadData;
     });
     memberApi.getCheckFavorite(novelId).then((check) => {
-        // console.log(check);
+        console.log(check);
         isFavorite.value = check;
     });
 });

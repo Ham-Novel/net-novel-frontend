@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from './components/pages/home/HomePage.vue';
 import BrowsePage from './components/pages/browse/BrowsePage.vue';
 import RankingPage from './components/pages/ranking/RankingPage.vue';
-import NewWorkPage from './components/pages/new-work/NewWorkPage.vue';
 import SearchPage from './components/pages/search/SearchPage.vue';
 import MyPage from './components/pages/mypage/MyPage.vue';
 
@@ -21,7 +20,9 @@ import WorkManageSection from './components/pages/studio/work/WorkManageSection.
 import TipManageSection from './components/pages/studio/tip/TipManageSection.vue';
 import WorkStatSection from './components/pages/studio/stat/WorkStatSection.vue';
 import SettlementSection from './components/pages/studio/settlement/SettlementSection.vue';
+
 import NovelCreatePage from './components/pages/studio/work/NovelCreatePage.vue';
+import EpisodeCreatePage from './components/pages/studio/work/EpisodeCreatePage.vue';
 
 import NotFoundPage from './components/pages/etc/NotFoundPage.vue';
 import Test from './components/Test.vue';
@@ -31,7 +32,6 @@ import { nextTick } from 'vue';
 const routes = [
     { name: 'home', path: '/home', component: HomePage, alias: '/' },
     { name: 'browse', path: '/browse', component: BrowsePage },
-    { name: 'newWork', path: '/new', component: NewWorkPage },
     { name: 'ranking', path: '/ranking', component: RankingPage },
     { name: 'search', path: '/search', component: SearchPage },
     { name: 'mypage', path: '/mypage', component: MyPage },
@@ -48,23 +48,31 @@ const routes = [
     {
         name: 'novel',
         path: '/novels/:id',
-        redirect: to => `novels/${to.params.id}/episodes`,
+        props: (route) => {
+            // console.log(route.params)
+            return { novelId: Number(route.params.id) }
+            // ...route.params
+        },
+        redirect: to => `/novels/${to.params.id}/episodes`,
         component: NovelPage,
-        props: (route) => ({
-            novelId: Number(route.params.id)
-        }),
         children: [
-            { name: 'novel-episode', path: 'episodes', component: NovelEpiList, props: true },
-            { name: 'novel-comment', path: 'comments', component: NovelCommentList, props: true },
+            {
+                name: 'novel-episode', path: 'episodes', props: true,
+                component: NovelEpiList,
+            },
+            {
+                name: 'novel-comment', path: 'comments', props: true,
+                component: NovelCommentList,
+            },
         ]
     },
     {
         name: 'episode',
         path: '/episodes/:episodeId',
-        component: EpisodePage,
         props: (route) => ({
             episodeId: Number(route.params.episodeId)
         }),
+        component: EpisodePage,
         meta: {
             //id=contents인 태그로 이동
             scrollTo: {
@@ -86,6 +94,14 @@ const routes = [
         ]
     },
     { name: 'novel-create', path: '/novels/new', component: NovelCreatePage },
+    {
+        name: 'episode-create',
+        path: '/novels/:id/episodes/new',
+        component: EpisodeCreatePage,
+        props: (route) => ({
+            novelId: Number(route.params.id)
+        }),
+    },
     { name: 'test', path: '/test', component: Test },
     { path: '/:notFound(.*)', component: NotFoundPage }
 ];
@@ -93,7 +109,10 @@ const routes = [
 //페이지 이동 시 스크롤 설정
 const scrollBehavior = async (to, from, savedPosition) => {
     await nextTick(); //DOM 요소 로드 되고 실행
-    if (to.meta.scroll ?? false) {
+    if (to.query.scrollSave ?? false) {
+        return savedPosition
+    }
+    else if (to.meta.scroll ?? false) {
         return to.meta.scroll
     }
     // id 태그 위치로 스크롤

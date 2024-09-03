@@ -8,6 +8,13 @@ const setup = (store) => {
     });
 }
 
+const myPlugin = store => {
+    store.subscribe((mutation, state) => {
+        console.log('Mutation applied:', mutation.type);
+        console.log('Current state:', state);
+    });
+};
+
 export default createStore({
     modules: {
         navi,

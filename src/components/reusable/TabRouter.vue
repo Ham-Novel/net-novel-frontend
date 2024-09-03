@@ -2,13 +2,10 @@
     <section>
         <form class="tab-menu">
             <template v-for="(tab, index) in props.tabs" :key="index">
-                <router-link class="tab-item" :to="tab.path ?? {}">{{
-                    tab.name
-                }}</router-link>
-                <div
-                    class="tab-divider"
-                    v-if="index < props.tabs.length - 1"
-                ></div>
+                <router-link class="tab-item" :to="toggleTab(tab.path) ?? {}">
+                    {{ tab.name }}
+                </router-link>
+                <div class="tab-divider" v-if="index < props.tabs.length - 1"></div>
             </template>
         </form>
     </section>
@@ -29,7 +26,17 @@ const props = defineProps({
 });
 
 //활성화된 tab 결정하는 코드
-function toggleTab(component) {}
+function toggleTab(path) {
+    if (path.query?.scrollSave ?? false) {
+        return path;
+    }
+    const newPath = { ...path };
+    if (!(newPath.query ?? false)) {
+        newPath.query = {};
+    }
+    newPath.query.scrollSave = true;
+    return newPath;
+}
 </script>
 
 <style lang="sass" scoped>

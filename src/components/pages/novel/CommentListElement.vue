@@ -8,9 +8,7 @@
             </div>
             <div class="comment-content">{{ comment.content }}</div>
             <div class="comment-actions">
-                <button class="action-button">
-                    <ThumbsUp :size="13" /> {{ comment.likes }}
-                </button>
+                <button class="action-button"><ThumbsUp :size="13" /> {{ comment.likes }}</button>
                 <button class="action-button">
                     <ThumbsDown :size="13" /> {{ comment.disLikes }}
                 </button>
@@ -22,7 +20,7 @@
 
 <script setup>
 import { ThumbsUp, ThumbsDown } from "lucide-vue-next";
-import { formatUtil } from "@/format";
+import { formatUtil } from "@/hooks/format";
 import { computed } from "vue";
 
 const props = defineProps(["comment"]);

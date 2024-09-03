@@ -26,7 +26,7 @@
 
 <script setup>
 import { computed } from "vue";
-import { formatUtil } from "@/format";
+import { formatUtil } from "@/hooks/format";
 import { FileText, Eye, MessageCircleMore, Coins } from "lucide-vue-next";
 import { useRouter } from "vue-router";
 

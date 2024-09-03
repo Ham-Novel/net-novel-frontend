@@ -6,16 +6,9 @@
                 <div class="cover-input" @click="coverUpload">
                     <img :src="coverSrc" alt="썸네일 이미지" />
                 </div>
-                <input
-                    type="file"
-                    accept="image/*"
-                    ref="imgInputRef"
-                    @change="applyUpload"
-                />
+                <input type="file" accept="image/*" ref="imgInputRef" @change="applyUpload" />
                 <div class="cover-copyright">
-                    <label for="cover-copyright-check">
-                        표지 사용 규정 :
-                    </label>
+                    <label for="cover-copyright-check"> 표지 사용 규정 : </label>
                     <select
                         id="cover-copyright-check"
                         name="cover-copyright-check"
@@ -23,48 +16,61 @@
                     >
                         <option value="non-select">선택해주세요</option>
                         <option value="own-copyright">표지 저작권 소유</option>
-                        <option value="can-use-commercial">
-                            표지 상업적 이용 가능
-                        </option>
+                        <option value="can-commercial">표지 상업적 이용 가능</option>
                     </select>
                 </div>
             </section>
             <section class="info-form">
-                <div>
-                    <p>작품명</p>
-                    <input type="text" />
-                </div>
-                <div>
-                    <p>작품 소개</p>
-                    <textarea name="desc"></textarea>
-                </div>
-                <div>
-                    <p>해시 태그</p>
-                    <input type="text" />
-                </div>
-                <div>
-                    <p>독점작 여부</p>
-                    <input type="radio" />
-                    <input type="radio" />
-                    <input type="radio" />
-                </div>
-                <div>
-                    <p>연재 요일</p>
-                    <input type="radio" />
-                    <input type="radio" />
-                    <input type="radio" />
+                <h3>작품 상세</h3>
+                <div class="novel-info">
+                    <div>
+                        <p>작품명</p>
+                        <input type="text" v-model="title" />
+                    </div>
+                    <div>
+                        <p>해시 태그</p>
+                        <input type="text" v-model="tags" />
+                    </div>
+                    <div>
+                        <p>작품 소개</p>
+                        <textarea name="desc" v-model="desc"></textarea>
+                    </div>
+                    <div>
+                        <p>독점작 여부</p>
+                        <Radio
+                            :radio-list="ifExclusive.list"
+                            :group="ifExclusive.group"
+                            v-model="ifExclusive.selected"
+                        ></Radio>
+                    </div>
+                    <div>
+                        <p>연재 요일</p>
+                        <CheckBox
+                            :list="uploadPlan.list"
+                            :group="uploadPlan.group"
+                            v-model="uploadPlan.selected"
+                        ></CheckBox>
+                    </div>
                 </div>
             </section>
-            <button class="create-button">작품 등록</button>
+            <button class="create-button" @click="submitNovel">작품 등록</button>
         </form>
     </article>
 </template>
 
 <script setup>
+import CheckBox from "@/components/reusable/CheckBox.vue";
+import Radio from "@/components/reusable/Radio.vue";
+
 import { ref } from "vue";
+import { novelApi } from "@/hooks/backendApi";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const imgInputRef = ref(null); // input file DOM 요소
-const coverSrc = ref(""); //img 태그 src 값
+const coverSrc = ref(""); //img 태그에 적용할 src 값
+const imgFile = ref(); //제출할 multipart file 값
 
 //img 태그 클릭 시 input file 이벤트 실행
 function coverUpload() {
@@ -75,6 +81,7 @@ function coverUpload() {
 function applyUpload(event) {
     const file = event.target.files[0];
     if (file ?? false) {
+        imgFile.value = file;
         const reader = new FileReader();
         //reader 작업 후 결과값 변수에 저장
         reader.onload = (e) => {
@@ -85,6 +92,44 @@ function applyUpload(event) {
 }
 
 const copyrightCheck = ref("non-select");
+
+async function submitNovel() {
+    const resp = await novelApi.createNovel({
+        title: title.value,
+        description: desc.value,
+    });
+    const createdId = await resp.json();
+    await novelApi.setNovelThumbnail(createdId, imgFile.value);
+
+    router.push({ name: "work-manage" });
+}
+
+const ifExclusive = {
+    list: [
+        { name: "독점작", id: "1", value: "exclusive" },
+        { name: "다중 플랫폼 연재", id: "2", value: "non-exclusive" },
+    ],
+    group: "if-exclusive",
+    selected: "exclusive",
+};
+
+const uploadPlan = {
+    list: [
+        { name: "월", id: "3", value: "mon" },
+        { name: "화", id: "4", value: "tue" },
+        { name: "수", id: "5", value: "wed" },
+        { name: "목", id: "6", value: "thu" },
+        { name: "금", id: "7", value: "fri" },
+        { name: "토", id: "8", value: "sat" },
+        { name: "일", id: "9", value: "sun" },
+    ],
+    group: "upload-plan",
+    selected: [],
+};
+
+const title = ref("");
+const tags = ref("");
+const desc = ref("");
 </script>
 
 <style scoped lang="sass">
@@ -102,13 +147,16 @@ const copyrightCheck = ref("non-select");
     display: flex
     flex-flow: row wrap
     justify-content: center
-    gap: 100px
+    gap: 60px
+
+    h3
+        margin-bottom: 10px
+        padding-left: 10px
+        padding-bottom: 5px
+        font-size: 23px
+        border-bottom: 2px solid gray
 
     .cover-form
-        h3
-            margin-bottom: 10px
-            margin-left: 10px
-            font-size: 20px
 
         input
             display: none
@@ -148,6 +196,28 @@ const copyrightCheck = ref("non-select");
 
     .info-form
         flex-grow: 1
+
+        .novel-info
+            display: flex
+            flex-flow: column wrap
+            gap: 10px
+
+            div
+                min-height: 50px
+
+            p
+                margin: 5px
+
+            input[type=text]
+                width: 100%
+                height: 25px
+
+            label
+                margin-right: 10px
+
+            textarea
+                width: 100%
+                height: 200px
 
 .create-button
     position: absolute

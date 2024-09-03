@@ -8,7 +8,7 @@
     <section class="browse-result">
         <div class="browse-content base-wrapper base-distance">
             <InfiniteScroll class="browse-novel-list" v-bind="scrollProps">
-                <template v-slot:default="{ item }">
+                <template #default="{ item }">
                     <NovelListItem
                         class="browse-novel-item"
                         :brief="{

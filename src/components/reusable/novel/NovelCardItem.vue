@@ -26,11 +26,7 @@ const props = defineProps({
     },
     brief: {
         type: Object,
-        default: {
-            id: undefined,
-            title: "NovelListItem",
-            coverImg: "/cover/fantasy_cover.jpeg",
-        },
+        required: true,
     },
 });
 
@@ -41,10 +37,8 @@ const styleHeight = ref(props.size.height);
 //클릭하면 해당 id 값의 NovelPage로 이동
 const router = useRouter();
 function goToNovelPage() {
-    router.push({ name: "novel-episode", params: { id: props.brief.id } });
+    router.push({ name: "novel", params: { id: props.brief.id } });
 }
-
-onMounted(() => {});
 </script>
 
 <style scoped lang="sass">

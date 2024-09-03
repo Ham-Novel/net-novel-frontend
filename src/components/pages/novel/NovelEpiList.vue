@@ -18,7 +18,7 @@ import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { ref, onMounted, inject, reactive, computed } from "vue";
 import { episodeApi } from "@/hooks/backendApi";
-import { formatUtil } from "@/format";
+import { formatUtil } from "@/hooks/format";
 
 //novel id 값
 const novelId = inject("novelId");

@@ -8,12 +8,7 @@
             </li>
         </ul>
         <ul>
-            <Search
-                :size="32"
-                color="white"
-                @click="navTo({ name: 'search' })"
-                class="menu"
-            />
+            <Search :size="32" color="white" @click="navTo({ name: 'search' })" class="menu" />
             <BookOpen
                 :size="32"
                 color="white"
@@ -21,18 +16,8 @@
                 @click="navTo({ name: 'favorite' })"
                 class="menu"
             />
-            <User
-                :size="30"
-                color="white"
-                @click="navTo({ name: 'mypage' })"
-                class="menu"
-            />
-            <SquarePen
-                :size="30"
-                color="white"
-                @click="navTo({ name: 'studio' })"
-                class="menu"
-            />
+            <User :size="30" color="white" @click="navTo({ name: 'mypage' })" class="menu" />
+            <SquarePen :size="30" color="white" @click="navTo({ name: 'studio' })" class="menu" />
         </ul>
     </nav>
     <div class="nav-margin"></div>
@@ -54,10 +39,10 @@ const menuItems = ref([
         name: "Ranking",
         link: { name: "ranking" },
     },
-    {
-        name: "New",
-        link: { name: "newWork" },
-    },
+    // {
+    //     name: "New",
+    //     link: { name: "newWork" },
+    // },
 ]);
 
 const navTo = (link) => {

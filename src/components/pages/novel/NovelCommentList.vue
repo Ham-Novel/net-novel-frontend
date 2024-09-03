@@ -11,6 +11,7 @@
                             type="radio"
                             :id="`${option.sort}-button`"
                             :value="option.sort"
+                            name="sortBy"
                             v-model="sortBy.selected"
                             @click="scrollMethods.resetComments"
                         />
