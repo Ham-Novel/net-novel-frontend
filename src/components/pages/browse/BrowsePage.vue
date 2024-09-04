@@ -9,22 +9,7 @@
         <div class="browse-content base-wrapper base-distance">
             <InfiniteScroll class="browse-novel-list" v-bind="scrollProps">
                 <template #default="{ item }">
-                    <NovelListItem
-                        class="browse-novel-item"
-                        :brief="{
-                            id: item.id,
-                            title: item.title,
-                            coverImg: item.thumbnailUrl,
-                        }"
-                        :size="itemSize"
-                    >
-                        <div class="tag">
-                            <span v-for="tag in item.tags" :key="tag.id">#{{ tag.name }}</span>
-                        </div>
-                        <p class="desc">
-                            {{ item.desc }}
-                        </p>
-                    </NovelListItem>
+                    <BrowseListItem :novel="item"></BrowseListItem>
                 </template>
             </InfiniteScroll>
         </div>
@@ -32,7 +17,7 @@
 </template>
 
 <script setup>
-import NovelListItem from "@/components/reusable/novel/NovelListItem.vue";
+import BrowseListItem from "./BrowseListItem.vue";
 import BrowseFilter from "./BrowseFilter.vue";
 import BrowseSort from "./BrowseSort.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
@@ -49,12 +34,6 @@ const scrollProps = reactive({
     },
     loadingMessage: "Browse Loading....",
 });
-
-//NovelListItem 크기
-const itemSize = {
-    width: "450px",
-    height: "150px",
-};
 </script>
 
 <style lang="sass" scoped>
@@ -85,30 +64,6 @@ const itemSize = {
     justify-content: flex-start
     flex-flow: row wrap
     gap: 30px
-
-    .browse-novel-item
-        .tag
-            margin-bottom: 5px
-
-            span
-                margin-right: 8px
-                font-size: 13px
-                font-weight: bold
-                color: blue
-                cursor: pointer
-
-                &:hover
-                    text-decoration: underline
-
-        .desc
-            max-height: 80px
-            font-size: 15px
-            overflow: hidden
-            overflow-wrap: break-word
-            text-overflow: ellipsis
-            display: -webkit-box
-            -webkit-line-clamp: 3 /* 표시할 줄 수 */
-            -webkit-box-orient: vertical
 
 .line
   border-top: 1px solid #444444

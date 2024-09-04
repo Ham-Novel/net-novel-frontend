@@ -1,9 +1,12 @@
 <template>
-    <section class="payment-section">
+    <article class="payment-section">
         <div class="payment-container">
+            <h1 class="episode-title">{{ props.payment.title }}</h1>
             <div class="pay-check-message">
                 <h2 class="payment-warning">미결제 상태입니다. 결제하시겠습니까?</h2>
-                <h3 class="payment-fail" v-if="paymentFail">결제 실패! 보유한 코인을 재확인 하십시오!</h3>
+                <h3 class="payment-fail" v-if="paymentFail">
+                    결제 실패! 보유한 코인을 재확인 하십시오!
+                </h3>
             </div>
             <div class="choice-list">
                 <!-- <button @click="goBackPage">돌아가기</button> -->
@@ -11,7 +14,7 @@
             </div>
         </div>
         <slot></slot>
-    </section>
+    </article>
 </template>
 
 <script setup>
@@ -39,8 +42,7 @@ async function executePayment() {
     });
     console.log(result);
     if (result === "ok") {
-        paymentFail.value = false;
-        emits("reload", props.payment.episodeId);
+        emits("reload");
     } else {
         paymentFail.value = true;
     }
@@ -55,19 +57,26 @@ async function executePayment() {
     .payment-container
         position: relative
         width: 900px
-        min-height: 300px
+        min-height: 600px
         margin: 0px auto
         padding-top: 30px
         padding-bottom: 100px
         background-color: white
         border-radius: 15px
-        border: 5px solid black
+        border-bottom: 5px solid #d0d0d0
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4)
 
         display: flex
         flex-flow: column wrap
         gap: 50px
-        justify-content: center
+        justify-content: baseline
 
+        .episode-title
+            padding: 0 30px
+            padding-bottom: 20px
+            margin-bottom: 20px
+            border-bottom: 5px solid #d0d0d0
+            font-size: 35px
 
         .pay-check-message
 

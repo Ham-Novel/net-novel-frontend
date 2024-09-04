@@ -2,11 +2,13 @@
     <section class="top300 base-distance">
         <div class="ranking-wrapper base-wrapper">
             <h1 class="ranking-title">Top 300</h1>
-            <InfiniteScroll class="ranking-list" v-bind="scrollProps">
-                <template #default="{ item, index }">
-                    <RankingCardItem :novel="item" :index="index + 1"></RankingCardItem>
-                </template>
-            </InfiniteScroll>
+            <div>
+                <InfiniteScroll class="ranking-list" v-bind="scrollProps">
+                    <template #default="{ item, index }">
+                        <RankingCardItem :novel="item" :index="index + 1"></RankingCardItem>
+                    </template>
+                </InfiniteScroll>
+            </div>
         </div>
     </section>
 </template>
@@ -22,7 +24,7 @@ import { reactive } from "vue";
 const scrollProps = reactive({
     pageProps: { number: 0, size: 30 },
     loadMethod: async (page, size) => {
-        const loadItems = await novelApi.getRanking(page, size, "weekly");
+        const loadItems = await novelApi.getRanking(page, size, "daily");
         console.log(loadItems);
         return loadItems;
     },

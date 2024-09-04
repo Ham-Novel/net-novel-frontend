@@ -1,5 +1,5 @@
 <template>
-    <article class="episode-list-article">
+    <div class="episode-list-article">
         <div
             class="loader"
             v-if="!episodeList.previousLoad.allLoaded"
@@ -9,7 +9,13 @@
         </div>
         <div id="contents" :ref="(el) => (scrollSynchro.contentRef = el)">
             <template v-for="(item, index) in episodeList.list" :key="item.episodeId">
-                <component :is="item.type" class="item" :episode="item" :payment="item" @reload="reloadEpisode">
+                <component
+                    :is="item.component"
+                    class="item"
+                    :episode="item"
+                    :payment="item"
+                    @reload="reloadEpisode"
+                >
                     <div
                         class="url-object-front"
                         :ref="(el) => urlDetect.observer.setTarget(el, `f${index}`)"
@@ -23,10 +29,14 @@
                 </component>
             </template>
         </div>
-        <div class="loader" v-if="!episodeList.nextLoad.allLoaded" :ref="(el) => nextLoader.observer.setTarget(el)">
+        <div
+            class="loader"
+            v-if="!episodeList.nextLoad.allLoaded"
+            :ref="(el) => nextLoader.observer.setTarget(el)"
+        >
             <span>Next Episode...</span>
         </div>
-    </article>
+    </div>
 </template>
 
 <script setup>
@@ -40,6 +50,12 @@ import { useObserver } from "@/hooks/observer";
 //작품, 에피소드 id 가져오기
 const props = defineProps(["episodeId"]);
 
+const loadState = Object.freeze({
+    ok: Symbol(),
+    payment: Symbol(),
+    notFound: Symbol(),
+});
+
 //EpisodeList 컴포넌트 기본 변수 및 메서드
 const episodeList = reactive({
     //에피소드 데이터 저장 변수
@@ -47,21 +63,34 @@ const episodeList = reactive({
     //이전 에피소드 로드 관련 변수
     previousLoad: {
         id: props.episodeId,
-        allLoaded: false,
+        state: loadState.ok,
     },
     //다음 에피소드 로드 관련 변수
     nextLoad: {
         id: props.episodeId,
-        allLoaded: false,
+        allLoaded: loadState.ok,
     },
     //첫번째 에피소드 로드 메서드
     async loadFirstEpisode() {
-        try {
-            const newItem = await episodeApi.getEpisode(props.episodeId);
-            newItem.type = markRaw(EpisodeItem);
+        const resp = await episodeApi.getEpisode(props.episodeId);
+        if (resp.ok) {
+            const newItem = await resp.json();
+            newItem.component = markRaw(EpisodeItem);
             this.list.push(newItem);
-        } catch (error) {
-            console.error("Error In Load First Episodes:", error);
+        } else {
+            this.previousLoad.allLoaded = true;
+            this.nextLoad.allLoaded = true;
+            this.errorHandler(
+                resp.status,
+                async () => {
+                    const paymentItem = await resp.json();
+                    paymentItem.component = markRaw(PaymentItem);
+                    this.list.push(paymentItem);
+                },
+                async () => {
+                    //NotFoundItem list에 push
+                }
+            );
         }
     },
     //다음 에피소드 로드 메서드
@@ -70,26 +99,24 @@ const episodeList = reactive({
         //다음 에피소드 로드 성공 시
         if (resp.ok) {
             const newItem = await resp.json();
-            newItem.type = markRaw(EpisodeItem);
+            newItem.component = markRaw(EpisodeItem);
             this.list.push(newItem);
             this.nextLoad.id = newItem.episodeId;
         }
         //다음 에피소드 로드 실패 시
         else {
             this.nextLoad.allLoaded = true;
-            switch (resp.status) {
-                case 402:
-                    console.log("402");
+            this.errorHandler(
+                resp.status,
+                async () => {
                     const paymentItem = await resp.json();
-                    paymentItem.episodeId = 16;
-                    paymentItem.type = markRaw(PaymentItem);
+                    paymentItem.component = markRaw(PaymentItem);
                     this.list.push(paymentItem);
-                    break;
-                case 404:
-                    console.log("404");
-                    break;
-                default:
-            }
+                },
+                async () => {
+                    //NotFoundItem list에 push
+                }
+            );
         }
     },
     async loadPreviousEpisode() {
@@ -97,35 +124,55 @@ const episodeList = reactive({
         //다음 에피소드 로드 성공 시
         if (resp.ok) {
             const newItem = await resp.json();
-            newItem.type = markRaw(EpisodeItem);
+            newItem.component = markRaw(EpisodeItem);
             this.list.unshift(newItem);
             this.previousLoad.id = newItem.episodeId;
         }
         //다음 에피소드 로드 실패 시
         else {
             this.previousLoad.allLoaded = true;
-            const costPolicy = resp.json();
-            switch (resp.status) {
-                case 402:
-                    console.log("402");
-                    break;
-                case 404:
-                    console.log("404");
-                    break;
-                default:
-            }
+            this.errorHandler(
+                resp.status,
+                async () => {
+                    const paymentItem = await resp.json();
+                    paymentItem.component = markRaw(PaymentItem);
+                    this.list.unshift(paymentItem);
+                },
+                async () => {
+                    //NotFoundItem list에 unshift
+                }
+            );
+        }
+    },
+    async errorHandler(status, paymentCallback, notFoundCallback) {
+        switch (status) {
+            case 402:
+                console.log("402");
+                paymentCallback();
+                break;
+            case 404:
+                console.log("404");
+                notFoundCallback();
+                break;
         }
     },
 });
 
-async function reloadEpisode(episodeId) {
-    episodeList.nextLoad.allLoaded = false;
+async function reloadEpisode() {
     episodeList.list.pop();
-    episodeList.loadNextEpisode();
+    await episodeList.loadNextEpisode();
+    episodeList.nextLoad.allLoaded = false;
+    // switch (direction) {
+    //         break;
+    //     case "previous":
+    //         break;
+    //     case "first":
+    //         break;
+    // }
 }
 
+//페이지 로드 시 첫번째 에피소드 로드
 onMounted(() => {
-    //페이지 로드 시 첫번째 에피소드 로드
     episodeList.loadFirstEpisode();
 });
 
@@ -145,7 +192,6 @@ const scrollSynchro = reactive({
         // 브라우저 화면의 스크롤 높이를 contentRef 컴포넌트가 길어진 만큼 내린다.
         const newHeight = scrollSynchro.contentRef.scrollHeight;
         const scrollTo = currentPosition + (newHeight - scrollSynchro.oldHeight);
-        console.log(scrollSynchro.oldHeight, newHeight, scrollTo);
         window.scrollTo(0, scrollTo);
     },
 });

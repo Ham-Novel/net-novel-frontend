@@ -25,6 +25,35 @@ async function requestApi(reqUrl, reqHeader = { method: 'GET' }) {
     return resp;
 }
 
+export const coinApi = {
+    async getChargeHistory(page, size) {
+        try {
+            const url = `${API_URL}/members/me/coin-charge-history?pageNumber=${page}&pageSize=${size}`;
+            const resp = await requestApi(url);
+            return await resp.json();
+        } catch (error) {
+            console.error("Error fetching getChargeHistory", error);
+        }
+    },
+    async chargeCoins(createDto) {
+        try {
+            const url = `${API_URL}/coin-charge-history`;
+            const header = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(createDto),
+            };
+            const resp = await requestApi(url, header);
+            return await resp.json();
+        } catch (error) {
+            console.error("Error fetching chargeCoins()", error);
+        }
+    },
+
+}
+
 export const novelApi = {
     async getNovel(id) {
         try {
@@ -118,19 +147,9 @@ export const tagApi = {
 export const episodeApi = {
     async getEpisode(id) {
         try {
-            const resp = await fetch(`${API_URL}/episodes/${id}`, { method: 'GET', credentials: 'include' });
-            const data = await resp.json();
-            if (resp.status === 402) {
-                data.payCheck = false;
-                throw new PaymentRequiredError("에피소드 미결제 접근", data);
-            }
-            else if (!resp.ok) {
-                throw new Error(`HTTP error! status: ${resp.status}`);
-            }
-            else {
-                data.payCheck = true;
-                return data;
-            }
+            const url = `${API_URL}/episodes/${id}`;
+            const resp = await requestApi(url);
+            return resp;
         } catch (error) {
             if (error instanceof PaymentRequiredError) {
                 console.info(error.message);

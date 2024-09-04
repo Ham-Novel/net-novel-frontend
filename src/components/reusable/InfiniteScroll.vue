@@ -1,18 +1,16 @@
 <template>
-    <div class="infinite-scroll-container">
-        <template v-for="(item, index) in database.list">
-            <slot :item="item" :index="index"></slot>
-        </template>
-        <teleport to="#app">
-            <div
-                class="infinite-scroll-loader"
-                v-if="!database.state.allLoaded"
-                :ref="(el) => scrollDetect.loader.setTarget(el)"
-            >
-                <span>{{ props.loadingMessage }}</span>
-            </div>
-        </teleport>
-    </div>
+    <template v-for="(item, index) in database.list">
+        <slot :item="item" :index="index"></slot>
+    </template>
+    <teleport to="#app">
+        <div
+            class="infinite-scroll-loader"
+            v-if="!database.state.allLoaded"
+            :ref="(el) => scrollDetect.loader.setTarget(el)"
+        >
+            <span>{{ props.loadingMessage }}</span>
+        </div>
+    </teleport>
 </template>
 
 <script setup>
@@ -37,6 +35,7 @@ const database = reactive({
                 this.state.allLoaded = true; // 모든 아이템을 로드한 상태로 전환
                 return;
             }
+            console.log(newData);
 
             this.pageable.number++;
             this.list.push(...newData);

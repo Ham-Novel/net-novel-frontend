@@ -3,7 +3,10 @@ import HomePage from './components/pages/home/HomePage.vue';
 import BrowsePage from './components/pages/browse/BrowsePage.vue';
 import RankingPage from './components/pages/ranking/RankingPage.vue';
 import SearchPage from './components/pages/search/SearchPage.vue';
+
 import MyPage from './components/pages/mypage/MyPage.vue';
+import MyInfoTab from './components/pages/mypage/MyInfoTab.vue';
+import MyPaymentTab from './components/pages/mypage/MyPaymentTab.vue';
 
 import LibraryPage from './components/pages/library/LibraryPage.vue';
 import Favorites from './components/pages/library/Favorites.vue';
@@ -34,11 +37,15 @@ const routes = [
     { name: 'browse', path: '/browse', component: BrowsePage },
     { name: 'ranking', path: '/ranking', component: RankingPage },
     { name: 'search', path: '/search', component: SearchPage },
-    { name: 'mypage', path: '/mypage', component: MyPage },
     {
-        name: 'library',
-        path: '/library',
-        redirect: '/library/favorites',
+        name: 'mypage', path: '/mypage', component: MyPage,
+        children: [
+            { name: 'my-info', path: 'info', component: MyInfoTab },
+            { name: 'my-payment', path: 'payment', component: MyPaymentTab },
+        ]
+    },
+    {
+        name: 'library', path: '/library', redirect: '/library/favorites',
         component: LibraryPage,
         children: [
             { name: 'favorite', path: 'favorites', component: Favorites },

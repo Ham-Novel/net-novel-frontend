@@ -1,18 +1,14 @@
 <template>
-    <section class="episode-section">
+    <article class="episode-section">
         <div class="content-container">
             <h1 class="title">{{ props.episode.title }}</h1>
             <p class="content">{{ props.episode.content }}</p>
             <slot></slot>
         </div>
-    </section>
+    </article>
 </template>
 
 <script setup>
-import PayCheckDialog from "./PayCheckDialog.vue";
-
-import { onMounted, reactive, ref } from "vue";
-
 const props = defineProps({
     episode: {
         type: Object,
