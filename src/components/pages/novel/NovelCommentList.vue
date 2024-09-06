@@ -1,6 +1,6 @@
 <template>
     <section class="comment-list-section base-wrapper base-distance">
-        <div class="list-info">
+        <section class="list-info">
             <div>
                 <p>전체 댓글: 0개</p>
             </div>
@@ -19,12 +19,14 @@
                     </label>
                 </template>
             </form>
-        </div>
-        <InfiniteScroll class="list-view" v-bind="scrollProps" :ref="scrollMethods.setComponent">
-            <template v-slot:default="{ item }">
-                <CommentListElement :comment="item"></CommentListElement>
-            </template>
-        </InfiniteScroll>
+        </section>
+        <section class="list-view">
+            <InfiniteScroll v-bind="scrollProps" :ref="scrollMethods.setComponent">
+                <template v-slot:default="{ item }">
+                    <CommentListElement :comment="item"></CommentListElement>
+                </template>
+            </InfiniteScroll>
+        </section>
     </section>
 </template>
 
@@ -36,13 +38,23 @@ import { ref, reactive, inject } from "vue";
 import { commentApi } from "@/hooks/backendApi";
 
 //novel id 값
-const novelId = inject("novelId");
+const props = defineProps({
+    novelId: {
+        type: Number,
+        required: true,
+    },
+});
 
 //InfiniteScroll props 설정
 const scrollProps = reactive({
     pageProps: { number: 0, size: 30 },
     loadMethod: async (page, size) => {
-        const loadItems = await commentApi.getCommentsByNovel(novelId, sortBy.selected, page, size);
+        const loadItems = await commentApi.getCommentsByNovel(
+            props.novelId,
+            sortBy.selected,
+            page,
+            size
+        );
         return loadItems;
     },
     loadingMessage: "Episode Loading...",

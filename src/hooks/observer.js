@@ -1,9 +1,5 @@
 import { onMounted, onUnmounted, reactive, } from "vue";
 
-const observer = {
-
-}
-
 //한 곳에 모든 책임과 코드가 모여 있음. 코드 분리 필요.
 export function useObserver(options = {}) {
 

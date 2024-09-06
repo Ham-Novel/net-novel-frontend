@@ -4,7 +4,7 @@
             <h1 class="episode-title">{{ props.payment.title }}</h1>
             <div class="pay-check-message">
                 <h2 class="payment-warning">미결제 상태입니다. 결제하시겠습니까?</h2>
-                <h3 class="payment-fail" v-if="paymentFail">
+                <h3 class="payment-fail" v-if="ifPaymentFail">
                     결제 실패! 보유한 코인을 재확인 하십시오!
                 </h3>
             </div>
@@ -30,22 +30,30 @@ const props = defineProps({
         },
     },
 });
-const emits = defineEmits(["reload"]);
+const emits = defineEmits(["paymentAccepted"]);
 
-const paymentFail = ref(false);
+const ifPaymentFail = ref(false);
 
-//결제 버튼
+//결제 버튼 클릭
 async function executePayment() {
+    const result = await tryPayment();
+    console.log(result);
+    reloadContents(result);
+}
+
+async function tryPayment() {
     const result = await episodeApi.payForEpisode({
         episodeId: props.payment.episodeId,
         usedCoins: props.payment.coinCost,
     });
-    console.log(result);
-    if (result === "ok") {
-        emits("reload");
-    } else {
-        paymentFail.value = true;
+    return result;
+}
+
+function reloadContents(paymentResult) {
+    if (paymentResult !== "ok") {
+        ifPaymentFail.value = true;
     }
+    emits("paymentAccepted", props.payment.episodeId);
 }
 </script>
 

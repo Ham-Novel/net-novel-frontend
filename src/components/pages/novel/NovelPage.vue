@@ -1,7 +1,7 @@
 <template>
-    <NovelInfo class="novel-info"></NovelInfo>
+    <NovelInfo class="novel-info" :novel-id="props.novelId"></NovelInfo>
     <TabRouter :tabs="tabs" class="base-wrapper"> </TabRouter>
-    <TabView></TabView>
+    <TabView class="base-wrapper" :novel-id="props.novelId"></TabView>
 </template>
 
 <script setup>
@@ -18,9 +18,6 @@ const props = defineProps({
         default: 0,
     },
 });
-
-//NovelPage 내부 컴포넌트 전체에 novel id 값 전역 공유
-provide("novelId", props.novelId);
 
 // tab 요소들
 const tabs = ref([

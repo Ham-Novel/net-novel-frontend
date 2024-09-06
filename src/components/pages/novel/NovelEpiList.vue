@@ -4,11 +4,13 @@
             <span>화수: {{ episodesInfo.data.chapterCount }}화</span>
             <span>최신 업데이트 날짜: {{ episodesInfo.data.lastUpdatedAt }}</span>
         </div>
-        <InfiniteScroll class="list-view" v-bind="scrollProps">
-            <template v-slot:default="{ item }">
-                <EpiListElement :episode="item"></EpiListElement>
-            </template>
-        </InfiniteScroll>
+        <div class="list-view">
+            <InfiniteScroll v-bind="scrollProps">
+                <template v-slot:default="{ item }">
+                    <EpiListElement :episode="item"></EpiListElement>
+                </template>
+            </InfiniteScroll>
+        </div>
     </section>
 </template>
 
@@ -16,18 +18,23 @@
 import EpiListElement from "./EpiListElement.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
-import { ref, onMounted, inject, reactive, computed } from "vue";
+import { onMounted, reactive } from "vue";
 import { episodeApi } from "@/hooks/backendApi";
 import { formatUtil } from "@/hooks/format";
 
 //novel id 값
-const novelId = inject("novelId");
+const props = defineProps({
+    novelId: {
+        type: Number,
+        required: true,
+    },
+});
 
 //스크롤 페이지 로드 설정
 const scrollProps = reactive({
     pageProps: { number: 0, size: 30 },
     loadMethod: async (page, size) => {
-        const loaditems = await episodeApi.getEpisodesByNovel(novelId, "initial", page, size);
+        const loaditems = await episodeApi.getEpisodesByNovel(props.novelId, "initial", page, size);
         return loaditems;
     },
     loadingMessage: "Episode Loading...",
@@ -40,7 +47,7 @@ const episodesInfo = reactive({
         lastUpdatedAt: "",
     },
     async load() {
-        const resp = await episodeApi.getEpisodesInfoByNovel(novelId);
+        const resp = await episodeApi.getEpisodesInfoByNovel(props.novelId);
         // console.log(resp);
         this.data.chapterCount = resp.chapterCount;
         this.data.lastUpdatedAt = formatUtil.formatDate(resp.lastUpdatedAt);

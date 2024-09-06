@@ -3,16 +3,6 @@ import { ErrorCodes } from "vue";
 const API_URL = 'http://localhost:8081/api';
 const BAD_REQUEST_MSG = 'Network response was not ok'
 
-
-
-class PaymentRequiredError extends Error {
-    constructor(message, paymentPolicy) {
-        super(message);
-        this.name = 'PaymentRequiredError';
-        this.paymentPolicy = paymentPolicy;
-    }
-}
-
 async function requestApi(reqUrl, reqHeader = { method: 'GET' }) {
     reqHeader.credentials = 'include'
     const resp = await fetch(reqUrl, reqHeader);
@@ -151,11 +141,18 @@ export const episodeApi = {
             const resp = await requestApi(url);
             return resp;
         } catch (error) {
-            if (error instanceof PaymentRequiredError) {
-                console.info(error.message);
-                return error.paymentPolicy;
-            }
             console.error("Error fetching getEpisode()", error);
+        }
+    },
+
+
+    async getEpisodeBeside(id, direction) {
+        try {
+            const url = `${API_URL}/episodes/${id}/beside?direction=${direction}`;
+            const resp = await requestApi(url);
+            return resp;
+        } catch (error) {
+            console.error("backendApi.js getEpisodeBeside() : ", error);
         }
     },
 
@@ -173,20 +170,6 @@ export const episodeApi = {
             return resp;
         } catch (error) {
             console.error("backendApi.js createEpisode() : ", error);
-        }
-    },
-
-
-    async getEpisodeBeside(id, direction) {
-        try {
-            const url = `${API_URL}/episodes/${id}/beside?direction=${direction}`;
-            const header = {
-                method: 'GET',
-            };
-            const resp = await requestApi(url, header);
-            return resp;
-        } catch (error) {
-            console.error("backendApi.js getEpisodeBeside() : ", error);
         }
     },
 

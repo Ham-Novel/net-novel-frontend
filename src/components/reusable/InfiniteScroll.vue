@@ -2,19 +2,21 @@
     <template v-for="(item, index) in database.list">
         <slot :item="item" :index="index"></slot>
     </template>
-    <teleport to="#app">
-        <div
-            class="infinite-scroll-loader"
-            v-if="!database.state.allLoaded"
-            :ref="(el) => scrollDetect.loader.setTarget(el)"
-        >
-            <span>{{ props.loadingMessage }}</span>
+    <teleport to="main">
+        <div class="loader-container">
+            <div
+                class="loader"
+                v-if="!database.state.allLoaded"
+                :ref="(el) => scrollDetect.loader.setTarget(el)"
+            >
+                <span>{{ props.loadingMessage }}</span>
+            </div>
         </div>
     </teleport>
 </template>
 
 <script setup>
-import { ref, reactive, watch, toRaw, onMounted } from "vue";
+import { ref, reactive, watch, toRaw, onMounted, useAttrs } from "vue";
 import { useObserver } from "@/hooks/observer";
 
 const props = defineProps(["loadMethod", "loadingMessage", "pageProps"]);
@@ -71,8 +73,12 @@ watch(scrollDetect.loader.intersection, scrollDetect.handler);
 </script>
 
 <style lang="sass" scoped>
-.infinite-scroll-loader
-    height: 100px
+.loader-container
+    height: 50px
+
+
+.loader
+    height: 100%
     display: flex
     justify-content: center
     align-items: center

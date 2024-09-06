@@ -1,13 +1,13 @@
 <template>
-    <div class="browse-feature">
+    <section class="browse-feature">
         <div class="feature-divider base-wrapper">
             <BrowseFilter class="filter-by"></BrowseFilter>
             <BrowseSort class="sort-by"></BrowseSort>
         </div>
-    </div>
+    </section>
     <section class="browse-result">
-        <div class="browse-content base-wrapper base-distance">
-            <InfiniteScroll class="browse-novel-list" v-bind="scrollProps">
+        <div class="browse-novel-list base-wrapper base-distance">
+            <InfiniteScroll v-bind="scrollProps">
                 <template #default="{ item }">
                     <BrowseListItem :novel="item"></BrowseListItem>
                 </template>
@@ -55,11 +55,9 @@ const scrollProps = reactive({
         flex: 1
         padding: 30px
 
-.browse-content
-    padding-top: 30px
-
 
 .browse-novel-list
+    padding-top: 30px
     display: flex
     justify-content: flex-start
     flex-flow: row wrap

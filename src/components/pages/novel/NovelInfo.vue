@@ -1,18 +1,18 @@
 <template>
-    <section class="novel-info-section base-distance">
-        <div class="novel-division base-wrapper">
-            <div class="novel-cover">
+    <section class="root base-distance">
+        <div class="structure base-wrapper">
+            <figure class="cover">
                 <img :src="novel.thumbnailUrl" :alt="novel.title" />
-            </div>
-            <div class="novel-info">
-                <figure class="novel-detail novel-info-figure">
-                    <h1 class="novel-title">{{ novel.title }}</h1>
-                    <h2 class="novel-author">
+            </figure>
+            <div class="info">
+                <section class="detail">
+                    <h1 class="title">{{ novel.title }}</h1>
+                    <h2 class="author">
                         <span>작가</span>
                         <a href="#">{{ novel.authorName }}</a>
                     </h2>
-                </figure>
-                <figure class="novel-stats novel-info-figure">
+                </section>
+                <section class="stats">
                     <span> <View /> {{ novel.views }} </span>
                     <span>
                         <Heart
@@ -27,14 +27,16 @@
                         <MessageCircleHeart />
                         {{ novel.averageRating }}
                     </span>
-                </figure>
-                <figure class="novel-tags novel-info-figure">
-                    <span v-for="tag in novel.tags" :key="tag.id" class="tag">#{{ tag.name }}</span>
-                </figure>
-                <figure class="novel-description novel-info-figure">
+                </section>
+                <section class="tag-list">
+                    <span class="tag" v-for="tag in novel.tags" :key="tag.id">
+                        #{{ tag.name }}
+                    </span>
+                </section>
+                <section class="description">
                     <h3>작품 소개</h3>
                     <p>{{ novel.desc }}</p>
-                </figure>
+                </section>
             </div>
         </div>
     </section>
@@ -46,7 +48,13 @@ import { View, Heart, MessageCircleHeart } from "lucide-vue-next";
 import { novelApi, memberApi } from "@/hooks/backendApi";
 
 //novel id 값
-const novelId = inject("novelId");
+// url parameter 가져오기
+const props = defineProps({
+    novelId: {
+        type: Number,
+        required: true,
+    },
+});
 
 //default novel 데이터
 const novel = ref({
@@ -82,7 +90,7 @@ const favoriteButtonStyle = computed(() => {
 
 //선호작 설정 메서드
 function toggleFavorite() {
-    memberApi.toggleNovelFavorite(novelId).then((check) => {
+    memberApi.toggleNovelFavorite(props.novelId).then((check) => {
         console.log(check);
         isFavorite.value = check;
         if (check) {
@@ -94,22 +102,23 @@ function toggleFavorite() {
 }
 
 //api 적용
-onMounted(() => {
-    novelApi.getNovel(novelId).then((loadData) => {
-        // console.log(loadData);
-        novel.value = loadData;
-    });
-    memberApi.getCheckFavorite(novelId).then((check) => {
-        console.log(check);
-        isFavorite.value = check;
-    });
+onMounted(async () => {
+    const loaded = await novelApi.getNovel(props.novelId);
+    novel.value = loaded;
+
+    const checked = await memberApi.getCheckFavorite(props.novelId);
+    isFavorite.value = checked;
 });
 </script>
 
 <style scoped lang="sass">
 @use "@/assets/base.sass"
 
-.novel-division
+.root
+    background-color: #f5f6fc
+    padding-top: 30px
+
+.structure
     display: flex
     justify-content: flex-start
     flex-direction: row
@@ -117,49 +126,45 @@ onMounted(() => {
     gap: 30px
 
 
-.novel-info-section
-    background-color: #f5f6fc
-    padding-top: 30px
+.cover
+    width: 300px
+    height: 400px
+    flex-shrink: 0
+    flex-grow: 0
+    border-radius: 5px
+    background-color: gray
+    overflow: hidden
+    cursor: pointer
 
-    .novel-cover
-        width: 300px
-        height: 400px
-        flex-shrink: 0
-        flex-grow: 0
-        border-radius: 5px
-        background-color: gray
-        overflow: hidden
-        cursor: pointer
+    img
+        width: 100%
+        height: 100%
+        object-fit: cover
+        object-position: center
+        transition: transform 0.6s ease // 부드러운 확대 효과를 위한 전환
 
-        img
-            width: 100%
-            height: 100%
-            object-fit: cover
-            object-position: center
-            transition: transform 0.6s ease // 부드러운 확대 효과를 위한 전환
-
-            &:hover
-                transform: scale(1.1) // 마우스 오버 시 이미지 확대
+        &:hover
+            transform: scale(1.1) // 마우스 오버 시 이미지 확대
 
 
-.novel-info
+.info
     position: relative
     box-sizing: border-box
     flex-grow: 1
 
-    .novel-info-figure
+    section
         margin-bottom: 20px
 
         > *
             margin-bottom: 10px
 
-    .novel-detail
-        .novel-title
+    .detail
+        .title
             font-size: 35px
             font-weight: bold
 
 
-        .novel-author
+        .author
             font-size: 15px
 
             span
@@ -171,7 +176,7 @@ onMounted(() => {
                 font-weight: bold
 
 
-    .novel-stats
+    .stats
         font-size: 17px
         display: flex
         flex-direction: row
@@ -195,7 +200,7 @@ onMounted(() => {
                 transform: scale(0.8)
                 box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1)
 
-    .novel-tags
+    .tag-list
         .tag
             background-color: #e0e0e0
             padding: 5px 5px
@@ -204,7 +209,7 @@ onMounted(() => {
             font-size: 12px
             cursor: pointer
 
-    .novel-description
+    .description
         width: 80%
 
         p
@@ -212,22 +217,4 @@ onMounted(() => {
             word-wrap: break-word
             overflow-wrap: break-word
             max-width: 100%
-
-    .features
-        position: absolute
-        right: 30px
-        top: 30px
-        display: flex
-        flex-flow: row nowrap
-        gap: 30px
-
-        *
-            height: 30px
-
-.read-button
-    width: 100px
-    background-color: #4f46e5
-    color: white
-    border-radius: 5px
-    cursor: pointer
 </style>
