@@ -2,8 +2,8 @@
     <section class="top300 base-distance">
         <div class="ranking-wrapper base-wrapper">
             <h1 class="ranking-title">Top 300</h1>
-            <div>
-                <InfiniteScroll class="ranking-list" v-bind="scrollProps">
+            <div class="ranking-list">
+                <InfiniteScroll v-bind="scrollProps">
                     <template #default="{ item, index }">
                         <RankingCardItem :novel="item" :index="index + 1"></RankingCardItem>
                     </template>
@@ -39,15 +39,17 @@ const scrollProps = reactive({
     margin-top:50px
 
 .ranking-wrapper
+    width: 1000px
 
     .ranking-title
-        margin-bottom: 10px
-        font-size: 25px
+        margin-bottom: 30px
+        font-size: 40px
 
     .ranking-list
         padding: 10px
         position: relative
         display: flex
         flex-flow: row wrap
-        gap: 15px
+        justify-content: center
+        gap: 10px
 </style>
