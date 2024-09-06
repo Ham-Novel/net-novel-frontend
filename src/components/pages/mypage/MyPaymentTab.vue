@@ -1,9 +1,9 @@
 <template>
     <div class="list-info base-wrapper">
-        <h2>결제 내역</h2>
-        <button class="coin-charge-button" @click="coinChargeTest">코인 충전</button>
+        <h2>코인 충전 내역</h2>
+        <button class="coin-charge-button" @click="openCoinCharge">코인 충전</button>
     </div>
-    <table class="base-wrapper">
+    <table class="charge-table base-wrapper">
         <!-- <colgroup>
             <col class="col-date" />
             <col class="col-coin" />
@@ -24,13 +24,15 @@
             </InfiniteScroll>
         </tbody>
     </table>
+    <CoinChargedialog v-if="ifcoinChargeDialog" @close-dialog="closeCoinCharge"></CoinChargedialog>
 </template>
 
 <script setup>
 import ChargeHistoryItem from "./ChargeHistoryItem.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
+import CoinChargedialog from "./CoinChargedialog.vue";
 
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { coinApi } from "@/hooks/backendApi";
 
 //스크롤 페이지 로드 설정
@@ -43,12 +45,13 @@ const scrollProps = reactive({
     loadingMessage: "History Loading...",
 });
 
-const coinChargeTest = async () => {
-    const params = {
-        coinAmount: 100,
-        payment: 10000,
-    };
-    await coinApi.chargeCoins(params);
+const ifcoinChargeDialog = ref(false);
+
+const openCoinCharge = () => {
+    ifcoinChargeDialog.value = true;
+};
+const closeCoinCharge = () => {
+    ifcoinChargeDialog.value = false;
 };
 </script>
 
@@ -56,8 +59,8 @@ const coinChargeTest = async () => {
 @use '@/assets/base.sass'
 
 .list-info
-    padding: 10px
-    border-bottom: 2px solid #e0e0e0
+    padding: 0px 10px
+    margin-bottom: 30px
     display: flex
     flex-direction: row
     justify-content: space-between
@@ -75,8 +78,7 @@ const coinChargeTest = async () => {
         &:hover
             background-color: #e0e0e0
 
-table
-    width: 100%
+.charge-table
     border-collapse: collapse
     margin-bottom: 20px
 
@@ -84,7 +86,10 @@ table
         background-color: rgb(247, 251, 255)
         font-weight: bold
         padding: 12px
-        border-bottom: 2px solid #ddd
+        font-size: 18px
+        border-bottom: 2px solid black
+        border-top: 2px solid black
+        border-right: 2px solid black
 
     :deep(.col-date)
         text-align: left

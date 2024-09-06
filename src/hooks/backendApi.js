@@ -36,7 +36,7 @@ export const coinApi = {
                 body: JSON.stringify(createDto),
             };
             const resp = await requestApi(url, header);
-            return await resp.json();
+            return resp;
         } catch (error) {
             console.error("Error fetching chargeCoins()", error);
         }
