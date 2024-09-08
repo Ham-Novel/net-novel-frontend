@@ -2,7 +2,7 @@
     <article class="work-manage-article">
         <NewbieGuideSection
             v-if="works.list.length === 0"
-            @button-event="goToCreateNovelPage"
+            @create-novel-event="goToCreateNovelPage"
             class="base-wrapper"
         ></NewbieGuideSection>
         <template v-else>
