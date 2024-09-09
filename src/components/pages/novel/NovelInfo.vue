@@ -30,7 +30,7 @@
                 </section>
                 <section class="tag-list">
                     <span class="tag" v-for="tag in novel.tags" :key="tag.id">
-                        #{{ tag.name }}
+                        {{ tag.name }}
                     </span>
                 </section>
                 <section class="description">
@@ -74,11 +74,13 @@ const novel = ref({
 //선호작 여부
 const isFavorite = ref(false);
 
+const rootStyels = getComputedStyle(document.documentElement);
+
 const favoriteButtonStyle = computed(() => {
     if (isFavorite.value) {
         return {
-            color: "red",
-            fill: "red",
+            color: rootStyels.getPropertyValue("--accent-color"),
+            fill: rootStyels.getPropertyValue("--accent-color"),
         };
     } else {
         return {
@@ -88,26 +90,44 @@ const favoriteButtonStyle = computed(() => {
     }
 });
 
-//선호작 설정 메서드
-function toggleFavorite() {
-    memberApi.toggleNovelFavorite(props.novelId).then((check) => {
-        console.log(check);
-        isFavorite.value = check;
-        if (check) {
-            novel.value.favoriteCount++;
-        } else {
-            novel.value.favoriteCount--;
-        }
-    });
+function setFavoriteState(state) {
+    isFavorite.value = state;
+    novel.value.favoriteCount += state ? 1 : -1;
+}
+
+//선호작 설정/해제 설정
+async function toggleFavorite() {
+    try {
+        const afterState = await memberApi.toggleNovelFavorite(props.novelId);
+        setFavoriteState(afterState);
+    } catch (error) {
+        console.error("Failed to toggle favorite state: ", error);
+    }
+}
+
+//선호작 상태 가져오기
+async function checkFavorite() {
+    try {
+        const checked = await memberApi.getCheckFavorite(props.novelId);
+        isFavorite.value = checked;
+    } catch (error) {
+        console.error("Failed to confirm favorite state: ", error);
+    }
+}
+
+async function loadNovel() {
+    try {
+        const data = await novelApi.getNovel(props.novelId);
+        novel.value = data;
+    } catch (erorr) {
+        console.error("Failed to load novel info: ", error);
+    }
 }
 
 //api 적용
-onMounted(async () => {
-    const loaded = await novelApi.getNovel(props.novelId);
-    novel.value = loaded;
-
-    const checked = await memberApi.getCheckFavorite(props.novelId);
-    isFavorite.value = checked;
+onMounted(() => {
+    loadNovel();
+    checkFavorite();
 });
 </script>
 
@@ -115,15 +135,15 @@ onMounted(async () => {
 @use "@/assets/base.sass"
 
 .root
-    background-color: #f5f6fc
-    padding-top: 30px
+    background-color: var(--bg-sub)
+    padding-top: 50px
 
 .structure
     display: flex
     justify-content: flex-start
     flex-direction: row
     flex-wrap: nowrap
-    gap: 30px
+    gap: 50px
 
 
 .cover
@@ -149,8 +169,9 @@ onMounted(async () => {
 
 .info
     position: relative
-    box-sizing: border-box
     flex-grow: 1
+    font-size: 18px
+
 
     section
         margin-bottom: 20px
@@ -160,24 +181,23 @@ onMounted(async () => {
 
     .detail
         .title
-            font-size: 35px
-            font-weight: bold
+            font-size: 40px
+            font-weight: 800
 
 
         .author
-            font-size: 15px
+            font-size: 18px
+            font-weight: 700
 
             span
                 margin-right: 5px
 
-            .a
+            a
                 text-decoration: none
-                color: #4a90e2
-                font-weight: bold
+                // color: theme.$primary-color
 
 
     .stats
-        font-size: 17px
         display: flex
         flex-direction: row
         gap: 15px
@@ -201,20 +221,25 @@ onMounted(async () => {
                 box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1)
 
     .tag-list
+        display: flex
+        flex-flow: row wrap
+        gap: 10px
+
         .tag
-            background-color: #e0e0e0
-            padding: 5px 5px
+            padding: 5px 10px
             border-radius: 5px
-            margin-right: 6px
-            font-size: 12px
+            background-color: var(--sub-color)
+            font-size: 16px
+            font-weight: 700
             cursor: pointer
 
     .description
-        width: 80%
+        width: 100%
+
+        h3
 
         p
-            box-sizing: border-box
             word-wrap: break-word
             overflow-wrap: break-word
-            max-width: 100%
+            font-size: 16px
 </style>

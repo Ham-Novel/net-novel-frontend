@@ -1,4 +1,4 @@
-import { ErrorCodes } from "vue";
+import { AuthenticationError, BadRequestError, ServerError } from "./error";
 
 const API_URL = 'http://localhost:8081/api';
 const BAD_REQUEST_MSG = 'Network response was not ok'
@@ -6,11 +6,14 @@ const BAD_REQUEST_MSG = 'Network response was not ok'
 async function requestApi(reqUrl, reqHeader = { method: 'GET' }) {
     reqHeader.credentials = 'include'
     const resp = await fetch(reqUrl, reqHeader);
-    if (resp.status === 401) {
-        throw new Error(`Authentication Error`);
+    if (resp.status === 400) {
+        throw new BadRequestError(`Bad Request!`);
     }
-    else if (resp.status === 400) {
-        throw new Error(`HTTP error! status: ${resp.status}`);
+    else if (resp.status === 401) {
+        throw new AuthenticationError(`Authentication Not Allowed`);
+    }
+    else if (resp.status === 500) {
+        throw new ServerError('Server Api Error');
     }
     return resp;
 }
@@ -46,16 +49,9 @@ export const coinApi = {
 
 export const novelApi = {
     async getNovel(id) {
-        try {
-            const reqUrl = `${API_URL}/novels/${id}`
-            const resp = await fetch(reqUrl);
-            if (!resp.ok) {
-                throw new Error(BAD_REQUEST_MSG);
-            }
-            return await resp.json();
-        } catch (error) {
-            console.error("Error fetching getNovel()", error);
-        }
+        const url = `${API_URL}/novels/${id}`
+        const resp = await requestApi(url);
+        return resp.json();
     },
 
     async createNovel(createDto) {
@@ -141,6 +137,9 @@ export const episodeApi = {
             const resp = await requestApi(url);
             return resp;
         } catch (error) {
+            if (error instanceof AuthenticationError) {
+                error.handle();
+            }
             console.error("Error fetching getEpisode()", error);
         }
     },
@@ -151,6 +150,9 @@ export const episodeApi = {
             const resp = await requestApi(url);
             return resp;
         } catch (error) {
+            if (error instanceof AuthenticationError) {
+                error.handle();
+            }
             console.error("backendApi.js getEpisodeBeside() : ", error);
         }
     },
@@ -232,6 +234,7 @@ export const commentApi = {
 }
 
 export const memberApi = {
+    AuthenticationError,
     //마이페이지 관련 api
     async getMyPageData() {
         try {
@@ -273,12 +276,8 @@ export const memberApi = {
     //선호작 관련 api
     async getCheckFavorite(id) {
         const url = `${API_URL}/members/me/favorites/check?novelId=${id}`
-        try {
-            const resp = await requestApi(url);
-            return await resp.json();
-        } catch (error) {
-            console.error("Error fetching getFavoriteNovels() ", error);
-        }
+        const resp = await requestApi(url);
+        return resp;
     },
     async toggleNovelFavorite(id) {
         const url = `${API_URL}/members/me/favorites/${id}`
@@ -288,20 +287,12 @@ export const memberApi = {
                 'Content-Type': 'application/json',
             },
         }
-        try {
-            const resp = await requestApi(url, header);
-            return await resp.json();
-        } catch (error) {
-            console.error(`Error fetching toggleNovelFavorite()`, error);
-        }
+        const resp = await requestApi(url, header);
+        return resp.json();
     },
     async getFavoriteNovels() {
         const url = `${API_URL}/members/me/favorites`;
-        try {
-            const resp = await requestApi(url);
-            return await resp.json();
-        } catch (error) {
-            console.error("Error fetching getFavoriteNovels() ", error);
-        }
+        const resp = await requestApi(url);
+        return await resp.json();
     },
 }
