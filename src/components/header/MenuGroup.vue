@@ -2,7 +2,7 @@
     <ul>
         <li v-for="(item, index) in props.menuList" :key="index">
             <router-link class="menu" :to="item.link">
-                <component :is="item.icon" size="25" stroke-width="2.5"></component>
+                <component :is="item.icon" size="28" stroke-width="2.5"></component>
             </router-link>
         </li>
     </ul>
@@ -24,12 +24,12 @@ ul
     gap: 20px
 
 .menu
-    // color: theme.$text-color
+    color: var(--text-basic)
     cursor: pointer
     text-decoration: none
 
     transition: all 0.3s
 
     &:hover
-        // color: theme.$primary-color
+        color: var(--primary-color)
 </style>
