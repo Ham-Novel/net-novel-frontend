@@ -1,66 +1,78 @@
 <template>
     <nav>
-        <ul>
-            <li v-for="item in menuItems" :key="item">
-                <router-link class="menu" :to="item.link">
-                    {{ item.name }}
-                </router-link>
-            </li>
-        </ul>
-        <ul>
-            <Search :size="32" color="white" @click="navTo({ name: 'search' })" class="menu" />
-            <BookOpen
-                :size="32"
-                color="white"
-                stroke-width="1.5"
-                @click="navTo({ name: 'favorite' })"
-                class="menu"
-            />
-            <User :size="30" color="white" @click="navTo({ name: 'mypage' })" class="menu" />
-            <SquarePen :size="30" color="white" @click="navTo({ name: 'studio' })" class="menu" />
-        </ul>
+        <MenuGroup class="menu-group" :menu-list="publicList"></MenuGroup>
+        <MenuGroup class="menu-group" :menu-list="privateList"></MenuGroup>
     </nav>
     <div class="nav-margin"></div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { Search, BookOpen, User, SquarePen } from "lucide-vue-next";
-import { useRouter } from "vue-router";
+import MenuGroup from "./MenuGroup.vue";
+import { Search, BookOpen, User, SquarePen, BarChart, Compass, Bell } from "lucide-vue-next";
 
-const router = useRouter();
+import { ref, toRaw } from "vue";
 
-const menuItems = ref([
+const publicList = ref([
     {
-        name: "Browse",
+        name: "browse",
+        icon: toRaw(Compass),
         link: { name: "browse" },
     },
     {
-        name: "Ranking",
+        name: "ranking",
+        icon: toRaw(BarChart),
         link: { name: "ranking" },
     },
-    // {
-    //     name: "New",
-    //     link: { name: "newWork" },
-    // },
+    {
+        name: "search",
+        icon: toRaw(Search),
+        link: { name: "search" },
+    },
 ]);
 
-const navTo = (link) => {
-    router.push(link);
-};
+const privateList = ref([
+    {
+        name: "alram",
+        icon: toRaw(Bell),
+        link: { name: "test" },
+    },
+    {
+        name: "studio",
+        icon: toRaw(SquarePen),
+        link: { name: "studio" },
+    },
+    {
+        name: "library",
+        icon: toRaw(BookOpen),
+        link: { name: "library" },
+    },
+    {
+        name: "mypage",
+        icon: toRaw(User),
+        link: { name: "mypage" },
+    },
+]);
+
+function toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    document.body.classList.toggle("dark-mode");
+}
 </script>
 
 <style scoped lang="sass">
+
 .nav-margin
     height: 70px
 
 nav
+    height: 70px
+    padding: 0 20px
+
+    // background-color: theme.$bg-color
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+
     display: flex
     justify-content: space-between
-    background-color: #6159f7
-    padding: 0 10px
-    height: 70px
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
     align-items: center
 
     position: fixed
@@ -68,20 +80,4 @@ nav
     left: 0
     width: 100%
     z-index: 1000
-
-    ul
-        display: inline-flex
-        justify-content: center
-        list-style-type: none
-        gap: 1.5rem
-        padding: 0
-
-    .menu
-        text-decoration: none
-        color: white
-        transition: color 0.3s
-        cursor: pointer
-
-        &:hover
-            color: #818cf8
 </style>

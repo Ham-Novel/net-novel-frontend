@@ -21,16 +21,20 @@ const navActivate = computed(() => {
 </script>
 
 <style lang="sass">
+@use "@/assets/theme.sass"
+
 *
     margin: 0
     padding: 0
     box-sizing: border-box
 
 html
-    font-family: sans-serif
+    font-family: 'Nanum Gothic', sans-serif
 
 
 body
+    background-color: var(--bg-main)
+    color: var(--text-basic)
     overflow-y: scroll
 
 
@@ -39,8 +43,4 @@ main
 
 span
     display: inline-block
-
-// primary: #4f46e5
-// sub: #212121, #f5f6fc
-// background: #f5f8fa
 </style>
