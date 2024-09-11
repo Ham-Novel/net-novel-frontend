@@ -31,21 +31,11 @@ Voluptate voluptate aliquip ipsum magna aliquip consectetur excepteur et volupta
 
     .content-container
         position: relative
-        width: 900px
-        min-height: 900px
-        margin: 0px auto
-        padding-top: 30px
         padding-bottom: 100px
         background-color: white
-        border-radius: 15px
-        border-bottom: 5px solid #d0d0d0
-        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4)
 
         .title
-            padding: 0 30px
-            padding-bottom: 20px
-            margin-bottom: 20px
-            border-bottom: 5px solid #d0d0d0
+            padding: 30px
             font-size: 35px
 
         .content

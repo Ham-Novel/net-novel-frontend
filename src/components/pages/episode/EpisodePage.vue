@@ -40,7 +40,7 @@ const props = defineProps({
 @use "@/assets/base.sass"
 
 .episode-page
-    background-color: #f3f2f1
+    background-color: var(--line-color)
 
 .episode-nav
     position: fixed

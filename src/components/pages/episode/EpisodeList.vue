@@ -4,9 +4,7 @@
             class="loader"
             v-if="priorLoader.state === loadState.ok && mountLoader.state === loadState.ok"
             :ref="(el) => priorDetect.observer.setTarget(el)"
-        >
-            <span>Previous Episode...</span>
-        </div>
+        ></div>
         <div id="contents" :ref="(el) => (scrollSynchro.contentRef = el)">
             <template v-for="(item, index) in episodeList.list" :key="item.episodeId">
                 <component
@@ -33,9 +31,7 @@
             class="loader"
             v-if="nextLoader.state === loadState.ok && mountLoader.state === loadState.ok"
             :ref="(el) => nextDetect.observer.setTarget(el)"
-        >
-            <span>Next Episode...</span>
-        </div>
+        ></div>
     </div>
 </template>
 
@@ -306,23 +302,21 @@ watch(urlDetect.observer.intersection, urlDetect.handler);
     .loader
         margin: 0 auto
         width: 900px
-        height: 100px
+        height: 0px
         background-color: white
 
         display: flex
         justify-content: center
         align-items: center
 
-        span
-            display: inline
-
 #contents
+    width: 900px
+    min-height: 900px
+    margin: 0px auto
     margin-top: 50px
     min-height: 300px
     scroll-padding-top: 0px
-
-    article
-        margin-bottom: 30px
+    box-shadow: 8px 0 6px -3px rgba(0, 0, 0, 0.2), -8px 0 6px -3px rgba(0, 0, 0, 0.2)
 
     .url-object-front
         position: absolute
