@@ -1,17 +1,20 @@
 <template>
     <ListItem
+        class="brows-item"
         :brief="{
             title: props.novel.title,
             coverImg: props.novel.thumbnailUrl,
         }"
         :link="{ name: 'novel', params: { id: props.novel.id } }"
     >
-        <div class="tag">
-            <span v-for="tag in props.novel.tags" :key="tag.id">#{{ tag.name }}</span>
+        <div class="detailed">
+            <div class="tag">
+                <span v-for="tag in props.novel.tags" :key="tag.id">#{{ tag.name }}</span>
+            </div>
+            <p class="desc">
+                {{ props.novel.desc }}
+            </p>
         </div>
-        <p class="desc">
-            {{ props.novel.desc }}
-        </p>
     </ListItem>
 </template>
 
@@ -27,26 +30,41 @@ const props = defineProps({
 </script>
 
 <style scoped lang="sass">
-.tag
-    margin-bottom: 5px
+.brows-item
+    height: 150px
 
-    span
-        margin-right: 8px
-        font-size: 13px
-        font-weight: bold
-        color: blue
-        cursor: pointer
+.detailed
 
-        &:hover
-            text-decoration: underline
+    .tag
+        margin-top: 15px
+        width: 500px
+        height: 20px
 
-.desc
-    max-height: 80px
-    font-size: 15px
-    overflow: hidden
-    overflow-wrap: break-word
-    text-overflow: ellipsis
-    display: -webkit-box
-    -webkit-line-clamp: 3 /* 표시할 줄 수 */
-    -webkit-box-orient: vertical
+        overflow: hidden
+
+        display: flex
+        flex-flow: row wrap
+        gap: 8px
+
+
+        span
+            flex-shrink: 0
+            color: var(--primary-color)
+            font-size: 12px
+            font-weight: bold
+            cursor: pointer
+
+            &:hover
+                text-decoration: underline
+
+    .desc
+        margin-top: 10px
+        max-height: 80px
+        font-size: 15px
+        overflow: hidden
+        overflow-wrap: break-word
+        text-overflow: ellipsis
+        display: -webkit-box
+        -webkit-line-clamp: 3 /* 표시할 줄 수 */
+        -webkit-box-orient: vertical
 </style>

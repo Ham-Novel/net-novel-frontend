@@ -40,20 +40,23 @@ const scrollProps = reactive({
 @use "@/assets/base.sass"
 
 .browse-feature
-    display: relative
+    position: relative
 
 .feature-divider
     height: 200px
     display: flex
     flex-flow: row wrap
+    align-items: stretch
 
     .filter-by
         flex: 1
-        padding: 30px
+        padding: 15px
+        margin: 15px
 
     .sort-by
         flex: 1
-        padding: 30px
+        padding: 15px
+        margin: 15px
 
 
 .browse-novel-list
