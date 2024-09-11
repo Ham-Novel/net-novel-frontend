@@ -1,5 +1,5 @@
 <template>
-    <section class="root base-distance">
+    <section class="root">
         <div class="structure base-wrapper">
             <figure class="cover">
                 <img :src="novel.thumbnailUrl" :alt="novel.title" />
@@ -74,17 +74,17 @@ const novel = ref({
 //선호작 여부
 const isFavorite = ref(false);
 
-const rootStyels = getComputedStyle(document.documentElement);
+const rootStyles = getComputedStyle(document.documentElement);
 
 const favoriteButtonStyle = computed(() => {
     if (isFavorite.value) {
         return {
-            color: rootStyels.getPropertyValue("--accent-color"),
-            fill: rootStyels.getPropertyValue("--accent-color"),
+            color: rootStyles.getPropertyValue("--accent-color"),
+            fill: rootStyles.getPropertyValue("--accent-color"),
         };
     } else {
         return {
-            color: "black",
+            color: rootStyles.getPropertyValue("--accent-color"),
             fill: "transparent",
         };
     }
@@ -135,15 +135,18 @@ onMounted(() => {
 @use "@/assets/base.sass"
 
 .root
-    background-color: var(--bg-sub)
-    padding-top: 50px
+    padding-top: 40px
+    padding-bottom: 20px
+    border-bottom: 20px solid var(--bg-sub)
 
 .structure
+    margin-bottom: 0px
+
     display: flex
     justify-content: flex-start
     flex-direction: row
     flex-wrap: nowrap
-    gap: 50px
+    gap: 40px
 
 
 .cover
@@ -170,7 +173,7 @@ onMounted(() => {
 .info
     position: relative
     flex-grow: 1
-    font-size: 18px
+    font-size: 16px
 
 
     section
@@ -181,12 +184,12 @@ onMounted(() => {
 
     .detail
         .title
-            font-size: 40px
+            font-size: 38px
             font-weight: 800
 
 
         .author
-            font-size: 18px
+            font-size: 16px
             font-weight: 700
 
             span
@@ -194,7 +197,7 @@ onMounted(() => {
 
             a
                 text-decoration: none
-                // color: theme.$primary-color
+                color: var(--primary-color)
 
 
     .stats
@@ -206,10 +209,11 @@ onMounted(() => {
             height: 25px
 
         > span
-            color: black
+            color: var(--text-basic)
+            font-size: 16px
             display: flex
             align-items: center
-            gap: 3px
+            gap: 2px
 
         .favorite-button
             cursor: pointer
@@ -226,20 +230,26 @@ onMounted(() => {
         gap: 10px
 
         .tag
-            padding: 5px 10px
+            margin-bottom: 0px
+            padding: 4px 8px
             border-radius: 5px
-            background-color: var(--sub-color)
-            font-size: 16px
+            background-color: var(--primary-color)
+            color: var(--text-reverse)
+            font-size: 13px
             font-weight: 700
             cursor: pointer
 
     .description
         width: 100%
+        padding: 15px
+        border-radius: 10px
+        background-color: var(--bg-sub)
 
         h3
+            font-size: 16px
 
         p
             word-wrap: break-word
             overflow-wrap: break-word
-            font-size: 16px
+            font-size: 15px
 </style>

@@ -3,11 +3,13 @@
         <MenuGroup class="menu-group" :menu-list="publicList"></MenuGroup>
         <DarkModeSwitch></DarkModeSwitch>
         <MenuGroup class="menu-group" :menu-list="privateList"></MenuGroup>
+        <DarkModeSwitch></DarkModeSwitch>
     </nav>
     <div class="nav-margin"></div>
 </template>
 
 <script setup>
+import DarkModeSwitch from "./DarkModeSwitch.vue";
 import MenuGroup from "./MenuGroup.vue";
 import { Search, BookOpen, User, SquarePen, BarChart, Compass, Bell } from "lucide-vue-next";
 
@@ -53,11 +55,6 @@ const privateList = ref([
         link: { name: "mypage" },
     },
 ]);
-
-function toggleDarkMode() {
-    this.isDarkMode = !this.isDarkMode;
-    document.body.classList.toggle("dark-mode");
-}
 </script>
 
 <style scoped lang="sass">
@@ -69,7 +66,7 @@ nav
     height: 70px
     padding: 0 20px
 
-    // background-color: theme.$bg-color
+    background-color: var(--bg-sub)
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
 
     display: flex

@@ -66,7 +66,7 @@ onMounted(() => {
 
     .list-info
         padding: 10px
-        border-bottom: 2px solid #e0e0e0
+        border-bottom: 2px solid var(--bg-dark)
         display: flex
         flex-direction: row
         justify-content: space-between

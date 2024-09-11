@@ -50,7 +50,7 @@ function toggleTab(path) {
 
     .tab-item
         text-decoration: none
-        color: black
+        color: var(--text-basic)
         padding: 10px
         cursor: pointer
         font-weight: bold
@@ -59,7 +59,7 @@ function toggleTab(path) {
             transform: translate(0, -5px)
 
     .router-link-active
-        color: #6159f7
+        color: var(--primary-color)
 
     .tab-divider
         height: 0.8em
