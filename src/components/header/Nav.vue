@@ -1,6 +1,7 @@
 <template>
     <nav>
         <MenuGroup class="menu-group" :menu-list="publicList"></MenuGroup>
+        <DarkModeSwitch></DarkModeSwitch>
         <MenuGroup class="menu-group" :menu-list="privateList"></MenuGroup>
     </nav>
     <div class="nav-margin"></div>
