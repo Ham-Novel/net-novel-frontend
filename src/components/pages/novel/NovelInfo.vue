@@ -233,7 +233,7 @@ onMounted(() => {
             margin-bottom: 0px
             padding: 4px 8px
             border-radius: 5px
-            background-color: var(--second-color)
+            background-color: var(--primary-color)
             color: var(--text-reverse)
             font-size: 13px
             font-weight: 700

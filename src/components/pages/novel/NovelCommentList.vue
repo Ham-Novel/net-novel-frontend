@@ -93,26 +93,28 @@ const sortBy = reactive({
 .comment-list-section
     .list-info
         padding: 10px
-        border-bottom: 2px solid #e0e0e0
+        border-bottom: 2px solid
         display: flex
         flex-direction: row
         justify-content: space-between
         font-size: 14px
 
-    .sort-interface
-        display: flex
-        flex-direction: row
-        justify-content: space-between
-        gap: 5px
+        .sort-interface
+            display: flex
+            flex-direction: row
+            justify-content: space-between
+            gap: 5px
 
-        label
-            font-size: inherit
-            cursor: pointer
+            label
+                font-size: inherit
+                cursor: pointer
 
-        input
-            display: none
+            input
+                display: none
 
-            &:checked + span
-                font-weight: bold
-                color: #7048fe
+                &:checked + span
+                    font-weight: bold
+                    color: var(--primary-color)
+
+    .list-view
 </style>

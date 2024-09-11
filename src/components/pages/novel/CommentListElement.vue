@@ -1,19 +1,17 @@
 <template>
     <article class="comment">
-        <div class="comment-menu-icon"></div>
-        <div class="comment-detail">
+        <div class="menu-icon"></div>
+        <div class="detail">
             <div class="user-info">
                 <span class="nickName">{{ comment.nickName }}</span>
                 <span class="timestamp">{{ updatedDate }}</span>
             </div>
-            <div class="comment-content">{{ comment.content }}</div>
-            <div class="comment-actions">
-                <button class="action-button"><ThumbsUp :size="13" /> {{ comment.likes }}</button>
-                <button class="action-button">
-                    <ThumbsDown :size="13" /> {{ comment.disLikes }}
-                </button>
-                <button class="action-button">신고</button>
-            </div>
+            <div class="content">{{ comment.content }}</div>
+        </div>
+        <div class="actions">
+            <button class="action-button"><ThumbsUp :size="13" /> {{ comment.likes }}</button>
+            <button class="action-button"><ThumbsDown :size="13" /> {{ comment.disLikes }}</button>
+            <button class="action-button">신고</button>
         </div>
     </article>
 </template>
@@ -42,20 +40,21 @@ const updatedDate = computed(() => {
 
 <style scoped lang="sass">
 .comment
-    border-bottom: 1px solid #e0e0e0
+    position: relative
+    border-bottom: 1px solid var(--bg-dark)
     padding: 15px 0
     display: flex
     flex-direction: row
     align-items: center
-    gap: 8px
+    gap: 10px
 
-.comment-menu-icon
+.menu-icon
     margin-left: 5px
     width: 5px
     align-self: stretch
-    background-color: #eee
+    background-color: var(--bg-sub)
 
-.comment-detail
+.detail
     flex: 1
 
 .user-info
@@ -74,20 +73,28 @@ const updatedDate = computed(() => {
         margin-right: 10px
 
     .timestamp
-        color: #757575
+        color: var(--bg-dark)
         font-size: 0.8em
 
-.comment-content
+.content
     margin-bottom: 10px
 
-.comment-actions
+.actions
+    position: absolute
+    top: 15px
+    right: 15px
+
     display: flex
+    gap: 12px
 
     .action-button
         background: none
         border: none
-        color: #757575
+        color: var(--text-color)
         cursor: pointer
-        margin-right: 15px
         font-size: 13px
+
+        display: flex
+        align-items: center
+        gap: 3px
 </style>
