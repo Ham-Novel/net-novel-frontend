@@ -1,8 +1,8 @@
 <template>
-    <article class="episode-item" @click="openEpisode">
-        <div class="episode-chapter">EP.{{ episode.chapter }}</div>
-        <div class="episode-title">{{ episode.title }}</div>
-        <div class="episode-stats">
+    <article class="item" @click="openEpisode">
+        <div class="chapter">EP.{{ episode.chapter }}</div>
+        <div class="title">{{ episode.title }}</div>
+        <div class="stats">
             <div>
                 <FileText :size="15" />
                 <span class="word-count">{{ episode.letterCount }}</span>
@@ -51,54 +51,48 @@ function openEpisode() {
 }
 </script>
 
-<style scoped>
-.episode-item {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-}
+<style scoped lang="sass">
+.item
+    display: flex
+    align-items: center
+    padding: 20px
+    border-bottom: 4px solid var(--bg-sub)
+    cursor: pointer
 
-.episode-item:hover {
-    background-color: #f5f5f5;
-}
+    &:hover
+        background-color: var(--bg-sub)
 
-.episode-chapter {
-    width: 50px;
-    font-weight: bold;
-}
 
-.episode-title {
-    flex-grow: 1;
-    margin-right: 20px;
-    font-size: 16px;
-    font-weight: bold;
-}
+.chapter
+    width: 50px
+    font-weight: 800
 
-.episode-stats {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-}
 
-.episode-stats > div {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-}
+.title
+    flex-grow: 1
+    margin-right: 20px
+    font-size: 16px
+    font-weight: 700
 
-.episode-stats span {
-    color: #666;
-    font-size: 1em;
-    vertical-align: middle;
-    line-height: 15px;
-}
 
-.upload-date {
-    text-align: right;
-    color: #666;
-    font-size: 1em;
-}
+.stats
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 20px
+
+
+    div
+        display: flex
+        align-items: center
+        gap: 2px
+
+
+    span
+        vertical-align: middle
+        line-height: 15px
+
+
+.upload-date
+    text-align: right
 </style>

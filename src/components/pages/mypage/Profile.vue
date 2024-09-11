@@ -35,11 +35,11 @@ const props = defineProps({
 
 .profile-header
     position: relative
-    height: 400px
+    height: 300px
 
     .background
         height: 85%
-        background-color: #6495ed
+        background-color: var(--primary-color)
 
     .img
         position: absolute

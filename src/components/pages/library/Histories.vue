@@ -1,11 +1,13 @@
 <template>
     <section>
         <div class="base-wrapper base-distance">
-            <InfiniteScroll class="histories" v-bind="scrollProps">
-                <template #default="{ item }">
-                    <HistoryListItem :novel="item"></HistoryListItem>
-                </template>
-            </InfiniteScroll>
+            <div class="histories">
+                <InfiniteScroll v-bind="scrollProps">
+                    <template #default="{ item }">
+                        <HistoryListItem :novel="item"></HistoryListItem>
+                    </template>
+                </InfiniteScroll>
+            </div>
         </div>
     </section>
 </template>
@@ -33,6 +35,7 @@ const scrollProps = reactive({
 
 .histories
     padding-top: 30px
+    min-height: 500px
     display: flex
     justify-content: flex-start
     flex-flow: column wrap

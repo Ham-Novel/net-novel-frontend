@@ -4,6 +4,8 @@ import BrowsePage from './components/pages/browse/BrowsePage.vue';
 import RankingPage from './components/pages/ranking/RankingPage.vue';
 import SearchPage from './components/pages/search/SearchPage.vue';
 
+import LoginPage from './components/pages/login/LoginPage.vue';
+
 import MyPage from './components/pages/mypage/MyPage.vue';
 import MyInfoTab from './components/pages/mypage/MyInfoTab.vue';
 import MyPaymentTab from './components/pages/mypage/MyPaymentTab.vue';
@@ -34,6 +36,7 @@ import { nextTick } from 'vue';
 //url에 따른 로드할 컴포넌트 매핑
 const routes = [
     { name: 'home', path: '/home', component: HomePage, alias: '/' },
+    { name: 'login', path: '/login', component: LoginPage },
     { name: 'browse', path: '/browse', component: BrowsePage },
     { name: 'ranking', path: '/ranking', component: RankingPage },
     { name: 'search', path: '/search', component: SearchPage },

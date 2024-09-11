@@ -33,6 +33,7 @@ const userData = ref({
 async function loadUserData() {
     const data = await memberApi.getMyPageData();
     userData.value = data;
+    console.log(data);
 }
 onMounted(() => {
     loadUserData();
@@ -43,7 +44,7 @@ onMounted(() => {
 @use "@/assets/base.sass"
 .profile
     position: relative
-    background-color: rgb(247, 251, 255)
+    background-color: var(--bg-sub)
     padding-bottom: 20px
 
 .mypage-menu

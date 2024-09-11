@@ -22,10 +22,11 @@ const tabs = ref([
 @use "@/assets/base.sass"
 .library-header
     display: relative
-    background-color: #f5f6fc
+    background-color: var(--bg-sub)
 
 .header-info
     .title
         font-size: 40px
+        font-weight: 800
         padding: 30px 0
 </style>

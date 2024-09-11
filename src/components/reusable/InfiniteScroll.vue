@@ -2,7 +2,7 @@
     <template v-for="(item, index) in itemList">
         <slot :item="item" :index="index"></slot>
     </template>
-    <teleport to="main">
+    <teleport defer to="main">
         <div
             class="loader-container"
             v-if="!itemLoader.state.allLoaded"
@@ -77,5 +77,4 @@ watch(scrollDetect.loader.intersection, scrollDetect.handler);
 <style lang="sass" scoped>
 .loader-container
     height: 50px
-    background-color: blue
 </style>

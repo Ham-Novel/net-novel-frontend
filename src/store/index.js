@@ -2,6 +2,7 @@ import { createStore } from "vuex";
 import navi from "./modules/navi";
 import devToolBan from "./modules/devToolBan";
 
+//개발자 도구 감지
 const setup = (store) => {
     window.addEventListener('devtoolschange', event => {
         console.log("ddd")

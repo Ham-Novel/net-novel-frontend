@@ -72,7 +72,7 @@ onMounted(() => {});
 
 .info
     position: relative
-    flex: 1 0 auto
+    flex: 1
 
     .title
         display: inline-block

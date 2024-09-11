@@ -27,7 +27,7 @@ const tabs = ref([
 <style scoped lang="sass">
 @use "@/assets/base.sass"
 .studio-header
-    background-color: #f5f6fc
+    background-color: var(--bg-sub)
 
 .studio-navi
     position: relative
@@ -36,7 +36,7 @@ const tabs = ref([
         padding: 20px
         padding-left: 50px
         font-size: 40px
-        font-weight: bold
+        font-weight: 800
 
     .studio-menu
         padding: 10px
