@@ -5,14 +5,28 @@
             <div class="line"></div>
         </div>
         <div class="filter-item-list">
-            <span class="filter-item" v-for="item in [1, 2, 3, 4, 5, 6, 7, 8, 9]">태그</span>
+            <template v-for="tag in tags">
+                <label class="filter-item" :for="'filter' + tag" @change="emits('filter')">
+                    <input type="checkbox" :id="'filter' + tag" v-model="selected" :value="tag" />
+                    <span>태그{{ tag }}</span>
+                </label>
+            </template>
             <input class="filter-input" type="text" value="태그 생성" />
         </div>
     </section>
 </template>
 
-<style scoped lang="sass">
+<script setup>
+import { ref, watch } from "vue";
 
+const selected = defineModel({ default: [] });
+const emits = defineEmits(["filter"]);
+
+//todo: 내가 선택한 태그들을 불러오는 api
+const tags = ref([1, 2, 3, 4, 5, 6, 7]);
+</script>
+
+<style scoped lang="sass">
 .novel-filter
     border-radius: 30px
     border: 5px solid var(--bg-sub)
@@ -27,17 +41,29 @@
     gap: 10px
 
     .filter-item
-        padding: 4px 8px
         border: 2px solid var(--line-color)
         border-radius: 12px
-        font-size: 12px
         cursor: pointer
+
+        input
+            display: none
+
+        span
+            padding: 4px 8px
+            font-size: 12px
+
+        &:hover
+            background-color: var(--bg-sub)
+
+        &:has(input:checked)
+            background-color: var(--bg-sub)
+
 
 
 .filter-input
     display: inline-block
     width: 100px
-    padding: 5px 10px
+    padding: 4px 8px
     border: 2px solid var(--line-color)
     border-radius: 12px
     font-size: 12px

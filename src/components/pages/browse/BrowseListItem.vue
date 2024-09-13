@@ -31,7 +31,7 @@ const props = defineProps({
 
 <style scoped lang="sass">
 .brows-item
-    height: 150px
+    height: 180px
 
 .detailed
 

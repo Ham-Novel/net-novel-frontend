@@ -29,7 +29,7 @@ const props = defineProps({
 
 <style scoped lang="sass">
 .item
-    width: auto
+    width: 100%
     height: 200px
     gap: 20px
 </style>

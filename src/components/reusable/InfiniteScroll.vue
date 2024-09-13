@@ -23,42 +23,48 @@ const itemList = ref([]);
 const itemLoader = reactive({
     pageable: { ...props.pageProps } ?? { number: 0, size: 10 },
     state: { isLoading: false, allLoaded: false },
-    load() {
-        this.progressLoading(async () => {
-            if (this.state.allLoaded) return;
-            const loadedItems = await this.putItems();
-            this.pageable.number++;
-            if (loadedItems.length === 0) this.state.allLoaded = true;
-        });
-    },
     async putItems() {
         const loadItems = await props.loadMethod(this.pageable.number, this.pageable.size);
         itemList.value.push(...loadItems);
+        this.pageable.number++;
         return loadItems;
     },
     async progressLoading(method) {
-        if (this.state.isLoading) return;
+        if (this.state.isLoading) {
+            console.info("[SCROLL] loading");
+            return;
+        }
         this.state.isLoading = true;
 
         await method();
 
         this.state.isLoading = false;
     },
-    reset: () => {
-        this.progressLoading(() => {
-            itemLoader.pageable.number = 0;
-            itemList.value.splice(0, itemLoader.value.length);
-            itemLoader.state.allLoaded = false;
+    load: (msg) => {
+        itemLoader.progressLoading(async () => {
+            console.info("[SCROLL] " + msg);
+            if (itemLoader.state.allLoaded) return;
+            const loadedItems = await itemLoader.putItems();
+            if (loadedItems.length < itemLoader.pageable.size) itemLoader.state.allLoaded = true;
         });
+    },
+    reset: async () => {
+        await itemLoader.progressLoading(() => {
+            itemLoader.pageable.number = 0;
+            itemList.value.splice(0);
+            itemLoader.state.allLoaded = false;
+            console.info("[SCROLL] reset", itemList.value);
+        });
+        itemLoader.load("reload");
     },
 });
 
 //부모 컴포넌트에 메서드 노출
-defineExpose({ resetData: itemLoader.reset });
+defineExpose({ reset: itemLoader.reset });
 
 //첫번째 페이지 값 먼저 불러오기
 onMounted(() => {
-    itemLoader.load();
+    itemLoader.load("first");
 });
 
 //페이지 최하단 도달시 이벤트 발생
@@ -66,7 +72,7 @@ const scrollDetect = reactive({
     loader: useObserver({ threshold: 0 }),
     handler(intersect) {
         if (intersect.state) {
-            itemLoader.load();
+            itemLoader.load("put");
         }
     },
 });
@@ -77,4 +83,5 @@ watch(scrollDetect.loader.intersection, scrollDetect.handler);
 <style lang="sass" scoped>
 .loader-container
     height: 50px
+    // background-color: blue
 </style>
