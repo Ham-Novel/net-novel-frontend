@@ -5,15 +5,15 @@
                 <p>전체 댓글: 0개</p>
             </div>
             <form class="sort-interface" @submit.prevent>
-                <template v-for="option in sortBy.options">
+                <template v-for="option in sortOptions">
                     <label :for="`${option.sort}-button`">
                         <input
                             type="radio"
                             :id="`${option.sort}-button`"
                             :value="option.sort"
                             name="sortBy"
-                            v-model="sortBy.selected"
-                            @click="scrollMethods.resetComments"
+                            v-model="sortSelected"
+                            @change="resetComments"
                         />
                         <span>{{ option.name }}</span>
                     </label>
@@ -21,7 +21,7 @@
             </form>
         </section>
         <section class="list-view">
-            <InfiniteScroll v-bind="scrollProps" :ref="scrollMethods.setComponent">
+            <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
                 <template v-slot:default="{ item }">
                     <CommentListElement :comment="item"></CommentListElement>
                 </template>
@@ -49,9 +49,10 @@ const props = defineProps({
 const scrollProps = reactive({
     pageProps: { number: 0, size: 30 },
     loadMethod: async (page, size) => {
+        console.log(sortSelected.value);
         const loadItems = await commentApi.getCommentsByNovel(
             props.novelId,
-            sortBy.selected,
+            sortSelected.value,
             page,
             size
         );
@@ -61,30 +62,18 @@ const scrollProps = reactive({
 });
 
 //댓글 리스트 초기화 메서드
-const scrollMethods = reactive({
-    scrollRef: ref(null),
-    setComponent: (el) => {
-        scrollMethods.scrollRef = el;
-    },
-    resetComments() {
-        this.scrollRef.resetData();
-    },
-});
+const scrollRef = ref(null);
+const resetComments = () => {
+    scrollRef.value.reset();
+};
 
 //댓글 정렬 방식 설정
-const sortBy = reactive({
-    options: {
-        recent: {
-            name: "최신순",
-            sort: "recent",
-        },
-        likes: {
-            name: "추천순",
-            sort: "likes",
-        },
-    },
-    selected: "recent",
-});
+const sortOptions = ref([
+    { name: "최신순", sort: "recent" },
+    { name: "추천순", sort: "likes" },
+]);
+
+const sortSelected = ref("recent");
 </script>
 
 <style lang="sass" scoped>
@@ -115,6 +104,4 @@ const sortBy = reactive({
                 &:checked + span
                     font-weight: bold
                     color: var(--primary-color)
-
-    .list-view
 </style>
