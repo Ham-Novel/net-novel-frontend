@@ -1,4 +1,6 @@
 <template>
+    <main>
+    <main>
     <section class="browse-feature">
         <div class="feature-divider base-wrapper">
             <BrowseFilter
@@ -18,6 +20,7 @@
             </InfiniteScroll>
         </div>
     </section>
+    </main>
 </template>
 
 <script setup>

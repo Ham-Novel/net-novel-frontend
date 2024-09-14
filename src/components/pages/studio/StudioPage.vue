@@ -1,18 +1,17 @@
 <template>
-    <section class="studio-header base-distance">
-        <div class="studio-navi base-wrapper">
-            <h1 class="studio-title">Work Studio</h1>
-            <TabRouter :tabs="tabs" v class="studio-menu"></TabRouter>
-        </div>
-    </section>
-    <router-view v-slot="{ Component }">
-        <keep-alive>
-            <component :is="Component" />
-        </keep-alive>
-    </router-view>
+    <main>
+        <section class="studio-header base-distance">
+            <div class="studio-navi base-wrapper">
+                <h1 class="studio-title">Work Studio</h1>
+                <TabRouter :tabs="tabs" v class="studio-menu"></TabRouter>
+            </div>
+        </section>
+        <TabView></TabView>
+    </main>
 </template>
 
 <script setup>
+import TabView from "@/components/reusable/TabView.vue";
 import TabRouter from "@/components/reusable/TabRouter.vue";
 import { ref } from "vue";
 

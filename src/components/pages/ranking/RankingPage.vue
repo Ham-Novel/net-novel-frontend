@@ -1,6 +1,6 @@
 <template>
-    <section class="top300 base-distance">
-        <div class="ranking-wrapper base-wrapper">
+    <main>
+        <section class="top300 base-wrapper base-distance">
             <h1 class="ranking-title">Top 300</h1>
             <div class="ranking-list">
                 <InfiniteScroll v-bind="scrollProps">
@@ -9,8 +9,8 @@
                     </template>
                 </InfiniteScroll>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 </template>
 
 <script setup>
@@ -37,8 +37,6 @@ const scrollProps = reactive({
 
 .top300
     margin-top:50px
-
-.ranking-wrapper
     width: 1000px
 
     .ranking-title

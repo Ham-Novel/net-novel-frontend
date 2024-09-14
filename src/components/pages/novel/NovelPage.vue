@@ -1,7 +1,11 @@
 <template>
-    <NovelInfo class="novel-info" :novel-id="props.novelId"></NovelInfo>
-    <TabRouter :tabs="tabs" class="base-wrapper"> </TabRouter>
-    <TabView class="base-wrapper" :novel-id="props.novelId"></TabView>
+    <main>
+        <NovelInfo class="novel-info" :novel-id="props.novelId"></NovelInfo>
+        <section>
+            <TabRouter :tabs="tabs" class="base-wrapper"> </TabRouter>
+            <TabView class="base-wrapper" :novel-id="props.novelId"></TabView>
+        </section>
+    </main>
 </template>
 
 <script setup>

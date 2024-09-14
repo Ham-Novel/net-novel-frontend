@@ -1,12 +1,18 @@
 <template>
-    <section class="profile base-distance">
-        <Profile :nick-name="userData.nickName" :email="userData.email" :coins="userData.coinCount">
-            <TabRouter :tabs="tabs" class="mypage-menu base-wrapper"></TabRouter>
-        </Profile>
-    </section>
-    <section class="base-distance">
-        <TabView></TabView>
-    </section>
+    <main>
+        <section class="profile base-distance">
+            <Profile
+                :nick-name="userData.nickName"
+                :email="userData.email"
+                :coins="userData.coinCount"
+            >
+                <TabRouter :tabs="tabs" class="mypage-menu base-wrapper"></TabRouter>
+            </Profile>
+        </section>
+        <section class="base-distance">
+            <TabView></TabView>
+        </section>
+    </main>
 </template>
 
 <script setup>

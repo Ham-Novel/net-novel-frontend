@@ -1,7 +1,7 @@
 <template>
-    <div class="episode-page">
+    <main class="episode-page">
         <EpisodeList :novelId="props.novelId" :episodeId="props.episodeId"></EpisodeList>
-    </div>
+    </main>
 </template>
 
 <script setup>

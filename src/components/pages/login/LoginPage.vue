@@ -1,5 +1,5 @@
 <template>
-    <div class="login-container">
+    <main class="login-container">
         <div class="login-box">
             <div class="logo">
                 <Waypoints size="30"></Waypoints>
@@ -15,7 +15,7 @@
                 <GoogleLoginButton></GoogleLoginButton>
             </div>
         </div>
-    </div>
+    </main>
 </template>
 
 <script setup>

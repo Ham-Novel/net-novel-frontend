@@ -1,6 +1,8 @@
 <template>
-    <LibraryHeader></LibraryHeader>
-    <TabView class="library-component"></TabView>
+    <main>
+        <LibraryHeader></LibraryHeader>
+        <TabView class="library-component"></TabView>
+    </main>
 </template>
 
 <script setup>
