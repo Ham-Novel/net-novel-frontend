@@ -5,12 +5,33 @@
             <div class="line"></div>
         </div>
         <div class="sort-item-list">
-            <span class="sort-item" v-for="item in ['최신순', '추천순', '선작순']"
-                >{{ item }}
-            </span>
+            <template v-for="sort in sortList">
+                <label class="sort-item" :for="`sort-${sort.value}`" @change="emits('sort')">
+                    <input
+                        type="radio"
+                        :id="`sort-${sort.value}`"
+                        v-model="selected"
+                        :value="sort.value"
+                    />
+                    <span>{{ sort.name }}</span>
+                </label>
+            </template>
         </div>
     </section>
 </template>
+
+<script setup>
+import { ref } from "vue";
+
+const emits = defineEmits(["sort"]);
+const selected = defineModel({ default: "latest" });
+
+const sortList = ref([
+    { name: "최신순", value: "latest" },
+    { name: "추천순", value: "favorites" },
+    { name: "선작순", value: "view" },
+]);
+</script>
 
 <style scoped lang="sass">
 
@@ -32,11 +53,22 @@
     gap: 10px
 
     .sort-item
-        padding: 4px 8px
         border: 2px solid var(--line-color)
         border-radius: 12px
-        font-size: 12px
         cursor: pointer
+
+        input
+            display: none
+
+        span
+            padding: 4px 8px
+            font-size: 12px
+
+        &:hover
+            background-color: var(--bg-sub)
+
+        &:has(input:checked)
+            background-color: var(--bg-sub)
 
 .line
     border-top: 5px solid var(--primary-color)
