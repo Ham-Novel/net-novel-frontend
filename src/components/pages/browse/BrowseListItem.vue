@@ -9,7 +9,9 @@
     >
         <div class="detailed">
             <div class="tag">
-                <span v-for="tag in props.novel.tags" :key="tag.id">#{{ tag.name }}</span>
+                <span v-for="tag in props.novel.tags" :key="tag.id" @click="browseTag(tag.id)"
+                    >#{{ tag.name }}</span
+                >
             </div>
             <p class="desc">
                 {{ props.novel.desc }}
@@ -20,6 +22,7 @@
 
 <script setup>
 import ListItem from "@/components/reusable/novel/ListItem.vue";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
     novel: {
@@ -27,6 +30,11 @@ const props = defineProps({
         required: true,
     },
 });
+
+const router = useRouter();
+const browseTag = (tagId) => {
+    router.push({ name: "browse", query: { tags: tagId } });
+};
 </script>
 
 <style scoped lang="sass">
