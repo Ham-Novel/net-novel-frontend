@@ -6,6 +6,9 @@
             link: props.link,
         }"
     >
+        <template #cover>
+            <slot name="cover"></slot>
+        </template>
         <template #default>
             <slot></slot>
         </template>

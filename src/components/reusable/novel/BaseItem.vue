@@ -2,6 +2,7 @@
     <section class="item">
         <div class="cover" @click="goLinkPage">
             <img :src="props.coverImg" />
+            <slot name="cover"></slot>
         </div>
         <div class="info">
             <h3 class="title" @click="goLinkPage">
