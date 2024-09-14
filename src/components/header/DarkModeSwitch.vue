@@ -13,7 +13,6 @@ const toggleDarkMode = watch(darkMode, (newValue) => {
 });
 
 function setDarkMode(state) {
-    console.log(state);
     darkMode.value = state;
     if (state) {
         document.body.classList.add("dark-mode");

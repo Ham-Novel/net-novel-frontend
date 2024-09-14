@@ -5,7 +5,7 @@
                 <p>전체 댓글: 0개</p>
             </div>
             <form class="sort-interface" @submit.prevent>
-                <template v-for="option in sortOptions">
+                <template v-for="option in sortOptions" :key="option.value">
                     <label :for="`${option.sort}-button`">
                         <input
                             type="radio"

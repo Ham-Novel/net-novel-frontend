@@ -31,7 +31,7 @@ const itemLoader = reactive({
     },
     async progressLoading(method) {
         if (this.state.isLoading) {
-            console.info("[SCROLL] loading");
+            console.debug("[SCROLL] loading");
             return;
         }
         this.state.isLoading = true;
@@ -42,7 +42,7 @@ const itemLoader = reactive({
     },
     load: (msg) => {
         itemLoader.progressLoading(async () => {
-            console.info("[SCROLL] " + msg);
+            console.debug("[SCROLL] " + msg);
             if (itemLoader.state.allLoaded) return;
             const loadedItems = await itemLoader.putItems();
             if (loadedItems.length < itemLoader.pageable.size) itemLoader.state.allLoaded = true;
@@ -53,7 +53,7 @@ const itemLoader = reactive({
             itemLoader.pageable.number = 0;
             itemList.value.splice(0);
             itemLoader.state.allLoaded = false;
-            console.info("[SCROLL] reset", itemList.value);
+            console.debug("[SCROLL] reset", itemList.value);
         });
         itemLoader.load("reload");
     },

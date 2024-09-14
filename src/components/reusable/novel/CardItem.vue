@@ -32,7 +32,6 @@ const props = defineProps({
     width: 150px
     height: auto
     flex-flow: column nowrap
-    gap: 0px
 
     :deep(.info)
         overflow: hidden

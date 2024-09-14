@@ -25,7 +25,7 @@ import { reactive } from "vue";
 
 //InfiniteScroll props 설정
 const scrollProps = reactive({
-    pageProps: { number: 0, size: 30 },
+    pageProps: { number: 0, size: 50 },
     loadMethod: async (page, size) => {
         const loadItems = await novelApi.getRanking(page, size, "daily");
         console.log(loadItems);
