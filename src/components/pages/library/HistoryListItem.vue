@@ -27,7 +27,7 @@ const props = defineProps({
 const itemProps = {
     brief: {
         title: props.novel.novelTitle,
-        coverImg: "/cover/fantasy_cover.jpeg",
+        coverImg: props.novel.thumbnailUrl,
     },
     link: { name: "novel", params: { id: props.novel.novelId } },
 };
