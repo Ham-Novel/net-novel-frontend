@@ -1,12 +1,27 @@
 <template>
     <CardItem v-bind="itemProps">
-        <p class="author">{{ props.novel.authorName }}</p>
-        <p class="status">{{ novelStatus }}</p>
+        <template #cover>
+            <p class="status">{{ novelStatus }}</p>
+        </template>
+        <template #default>
+            <p class="stats">
+                <span> <Eye size="17" /> {{ novel.views }} </span>
+                <span>
+                    <Heart size="17" />
+                    {{ novel.favoriteCount }}
+                </span>
+                <span>
+                    <Layers size="17" />
+                    {{ novel.episodeCount }}
+                </span>
+            </p>
+        </template>
     </CardItem>
 </template>
 
 <script setup>
 import CardItem from "@/components/reusable/novel/CardItem.vue";
+import { Eye, Heart, Layers } from "lucide-vue-next";
 import { computed } from "vue";
 
 const props = defineProps({
@@ -41,20 +56,36 @@ const novelStatus = computed(() => {
 <style scoped lang="sass">
 .item
     width: 150px
+    gap: 5px
 
     :deep(.info)
-        p
-            margin-top: 3px
-            font-size: 14px
+        .title
+            font-size: 20px
+            font-weight: 700
 
-        .author
-            color: gray
-            font-weight: bold
 
-        .status
-            display: inline-block
-            padding: 1px 4px
-            border-radius: 3px
-            color: white
-            background-color: green
+.status
+    position: absolute
+    top: 0
+    right: 0
+
+    display: inline-block
+    padding: 2px 5px
+    border-radius: 3px
+
+    font-size: 12px
+    color: white
+    background-color: green
+
+.stats
+    margin-top: 5px
+    display: flex
+    flex-flow: row wrap
+    font-size: 13px
+    gap: 10px
+
+    span
+        display: flex
+        align-items: center
+        gap: 1px
 </style>
