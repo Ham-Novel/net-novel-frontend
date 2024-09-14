@@ -39,10 +39,8 @@ const itemProps = {
     left: -3%
     z-index: 1
 
-    display: inline-block
     width: 30px
     height: 30px
-    margin-bottom: 5px
     border-radius: 15px
 
     background-color: #6159f7
@@ -50,6 +48,16 @@ const itemProps = {
     font-size: 20px
     text-align: center
 
+    display: flex
+    justify-content: center
+    align-items: center
+
 .item
-    width: 180px
+    width: 150px
+    gap: 5px
+
+    :deep(.info)
+        .title
+            font-size: 20px
+            overflow: hidden
 </style>
