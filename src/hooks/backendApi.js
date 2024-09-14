@@ -4,13 +4,17 @@ const API_URL = 'http://localhost:8081/api';
 const BAD_REQUEST_MSG = 'Network response was not ok'
 
 async function requestApi(reqUrl, reqHeader = { method: 'GET' }) {
+    console.debug(reqUrl)
     reqHeader.credentials = 'include'
+    console.debug(reqHeader)
     const resp = await fetch(reqUrl, reqHeader);
     if (resp.status === 400) {
         throw new BadRequestError(`Bad Request!`);
     }
     else if (resp.status === 401) {
-        throw new AuthenticationError(`Authentication Not Allowed`);
+        const error = new AuthenticationError(`Authentication Not Allowed`);
+        error.handle();
+        throw error;
     }
     else if (resp.status === 500) {
         throw new ServerError('Server Api Error');
@@ -91,7 +95,7 @@ export const novelApi = {
         }
     },
 
-    async getBrowseNovels(page, size) {
+    async getListNovels(page, size) {
         try {
             const reqUrl = `${API_URL}/novels?pageNumber=${page}&pageSize=${size}`
             const resp = await fetch(reqUrl);
@@ -104,11 +108,24 @@ export const novelApi = {
         }
     },
 
+    async getBrowseNovels(view, page, size, tags) {
+        let url = `${API_URL}/novels/search?sortBy=${view}&pageNumber=${page}&pageSize=${size}`
+        if ((tags ?? false) && tags.length !== 0) {
+            url += `&tagId=${tags.join(",")}`
+        }
+        try {
+            const resp = await requestApi(url);
+            return resp.json();
+        } catch (error) {
+            console.error("Error fetching getBrowseNovels()", error);
+        }
+    },
+
     async getRanking(page, size, period) {
         const url = `${API_URL}/novels/ranking?pageNumber=${page}&pageSize=${size}&period=${period}`
         try {
             const resp = await requestApi(url)
-            return await resp.json();
+            return resp.json();
         } catch (error) {
             console.error(`Error fetching toggleNovelFavorite()`, error);
         }
@@ -118,14 +135,23 @@ export const novelApi = {
 export const tagApi = {
     async getTagsByNovel(id) {
         try {
-            const reqUrl = `${API_URL}/novels/${id}/tags`
-            const resp = await fetch(reqUrl);
+            const url = `${API_URL}/novels/${id}/tags`
+            const resp = await fetch(url);
             if (!resp.ok) {
                 throw new Error(BAD_REQUEST_MSG);
             }
             return await resp.json();
         } catch (error) {
             console.error("Error fetching getTagsByNovel()", error);
+        }
+    },
+    async getTagByName(name) {
+        try {
+            const url = `${API_URL}/tags?tagName=${name}`
+            const resp = await requestApi(url)
+            return resp.json();
+        } catch (error) {
+
         }
     }
 }

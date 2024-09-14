@@ -1,25 +1,24 @@
 <template>
     <main>
-    <main>
-    <section class="browse-feature">
-        <div class="feature-divider base-wrapper">
-            <BrowseFilter
-                class="filter-by"
-                v-model="tags"
-                @filter="reloadBrowseList"
-            ></BrowseFilter>
-            <BrowseSort class="sort-by"></BrowseSort>
-        </div>
-    </section>
-    <section class="browse-result">
-        <div class="browse-novel-list base-wrapper base-distance">
-            <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
-                <template #default="{ item }">
-                    <BrowseListItem :novel="item"></BrowseListItem>
-                </template>
-            </InfiniteScroll>
-        </div>
-    </section>
+        <section class="browse-feature">
+            <div class="feature-divider base-wrapper">
+                <BrowseFilter
+                    class="filter-by"
+                    v-model="tags"
+                    @filter="reloadBrowseList"
+                ></BrowseFilter>
+                <BrowseSort class="sort-by" v-model="sort" @sort="reloadBrowseList"></BrowseSort>
+            </div>
+        </section>
+        <section class="browse-result">
+            <div class="browse-novel-list base-wrapper base-distance">
+                <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
+                    <template #default="{ item }">
+                        <BrowseListItem :novel="item"></BrowseListItem>
+                    </template>
+                </InfiniteScroll>
+            </div>
+        </section>
     </main>
 </template>
 
@@ -30,10 +29,23 @@ import BrowseSort from "./BrowseSort.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { novelApi } from "@/hooks/backendApi";
-import { onMounted, reactive, ref, toRaw } from "vue";
+import { computed, onMounted, reactive, ref, toRaw } from "vue";
+import { useRoute } from "vue-router";
 
-const sort = ref("view");
-const tags = ref([]);
+const route = useRoute();
+
+const sort = ref("latest");
+
+const queryTags = (() => {
+    if (route.query.tags === null || route.query.tags === undefined) {
+        return [];
+    }
+    if (Array.isArray(route.query.tags)) {
+        return route.query.tags;
+    }
+    return [route.query.tags];
+})();
+const tags = ref(queryTags);
 
 //스크롤 페이지 로드 설정
 const scrollProps = reactive({
@@ -47,6 +59,7 @@ const scrollProps = reactive({
 //댓글 리스트 초기화 메서드
 const scrollRef = ref(null);
 const reloadBrowseList = () => {
+    console.debug("[BROWSE] realod: ", tags.value);
     scrollRef.value.reset();
 };
 </script>

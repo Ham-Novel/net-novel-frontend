@@ -5,25 +5,79 @@
             <div class="line"></div>
         </div>
         <div class="filter-item-list">
-            <template v-for="tag in tags">
-                <label class="filter-item" :for="'filter' + tag" @change="emits('filter')">
-                    <input type="checkbox" :id="'filter' + tag" v-model="selected" :value="tag" />
-                    <span>태그{{ tag }}</span>
+            <template v-for="tagMenu in tagMenuList">
+                <label class="filter-item" :for="`filter-${tagMenu.id}`" @change="emits('filter')">
+                    <input
+                        type="checkbox"
+                        :id="`filter-${tagMenu.id}`"
+                        v-model="checkedTags"
+                        :value="tagMenu.id"
+                    />
+                    <span>{{ tagMenu.name }}</span>
                 </label>
             </template>
-            <input class="filter-input" type="text" value="태그 생성" />
+            <input
+                class="filter-input"
+                type="text"
+                placeholder="태그를 입력하고 enter를 누르십시오."
+                v-model="inputTag"
+                @keyup.enter="searchTag"
+            />
         </div>
     </section>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { tagApi } from "@/hooks/backendApi";
+import { computed, ref, watch } from "vue";
 
-const selected = defineModel({ default: [] });
+const checkedTags = defineModel({ default: [] });
 const emits = defineEmits(["filter"]);
 
 //todo: 내가 선택한 태그들을 불러오는 api
-const tags = ref([1, 2, 3, 4, 5, 6, 7]);
+const tagMenuList = ref([
+    { id: 1, name: "태그1" },
+    { id: 2, name: "태그2" },
+    { id: 3, name: "태그3" },
+    { id: 4, name: "태그4" },
+    { id: 5, name: "태그5" },
+]);
+
+const inputTag = ref("");
+
+const searchTag = async () => {
+    const targetTag = await loadInputTag();
+
+    //태그 메뉴에 없으면 추가
+    if (!existInMenu(targetTag.id)) {
+        tagMenuList.value.push(targetTag);
+        checkedTags.value.push(targetTag.id);
+        emits("filter");
+        return;
+    }
+
+    //태그 메뉴에 있지만 체크 상태가 아니면 체크
+    if (!existInChecked(targetTag.id)) {
+        checkedTags.value.push(targetTag.id);
+        emits("filter");
+        return;
+    }
+
+    //이미 태그 메뉴가 있고 체크까지 되어 있으면 아무것도 안함
+};
+
+const loadInputTag = async () => {
+    const browseName = inputTag.value;
+    inputTag.value = "";
+
+    const loadTag = await tagApi.getTagByName(browseName);
+    console.debug("[BROWSE] load tag: ", loadTag);
+    return loadTag;
+};
+
+const existInMenu = (tagId) => tagMenuList.value.some((menu) => menu.id === tagId);
+
+const existInChecked = (tagId) => checkedTags.value.some((checkedId) => checkedId === tagId);
 </script>
 
 <style scoped lang="sass">
@@ -62,7 +116,7 @@ const tags = ref([1, 2, 3, 4, 5, 6, 7]);
 
 .filter-input
     display: inline-block
-    width: 100px
+    width: 250px
     padding: 4px 8px
     border: 2px solid var(--line-color)
     border-radius: 12px
