@@ -10,7 +10,7 @@
 <script setup>
 import DarkModeSwitch from "./DarkModeSwitch.vue";
 import MenuGroup from "./MenuGroup.vue";
-import { Search, BookOpen, User, SquarePen, BarChart, Compass, Bell } from "lucide-vue-next";
+import { Search, SquareLibrary, User, SquarePen, BarChart, Compass, Bell } from "lucide-vue-next";
 
 import { ref, toRaw } from "vue";
 
@@ -45,7 +45,7 @@ const privateList = ref([
     },
     {
         name: "library",
-        icon: toRaw(BookOpen),
+        icon: toRaw(SquareLibrary),
         link: { name: "library" },
     },
     {

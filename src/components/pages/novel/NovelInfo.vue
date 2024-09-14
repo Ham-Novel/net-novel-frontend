@@ -13,7 +13,7 @@
                     </h2>
                 </section>
                 <section class="stats">
-                    <span> <View /> {{ novel.views }} </span>
+                    <span> <Eye /> {{ novel.views }} </span>
                     <span>
                         <Heart
                             class="favorite-button"
@@ -49,7 +49,7 @@
 
 <script setup>
 import { ref, onMounted, computed, inject } from "vue";
-import { View, Heart, MessageCircleHeart } from "lucide-vue-next";
+import { Eye, Heart, MessageCircleHeart } from "lucide-vue-next";
 import { novelApi, memberApi } from "@/hooks/backendApi";
 import { useRouter } from "vue-router";
 
