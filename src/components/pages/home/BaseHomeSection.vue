@@ -1,9 +1,11 @@
 <template>
     <section class="base-wrapper base-distance">
-        <h2>
-            <slot name="title"></slot>
-        </h2>
-        <slot></slot>
+        <div class="header">
+            <slot name="header"></slot>
+        </div>
+        <div>
+            <slot></slot>
+        </div>
     </section>
 </template>
 
@@ -14,16 +16,10 @@ import { ref } from "vue";
 <style scoped lang="sass">
 @use "@/assets/base.sass"
 
-h2
-    margin: 20px 0
+.header
+    padding-bottom: 15px
+    margin-bottom: 15px
+    border-bottom: 1px solid var(--line-color)
     font-size: 25px
     font-weight: 800
-
-    display: flex
-    align-items: center
-    gap: 10px
-
-.icon
-    margin-right: 0.5rem
-    color: #4f46e5
 </style>
