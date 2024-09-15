@@ -10,11 +10,25 @@
 <script setup>
 import DarkModeSwitch from "./DarkModeSwitch.vue";
 import MenuGroup from "./MenuGroup.vue";
-import { Search, SquareLibrary, User, SquarePen, BarChart, Compass, Bell } from "lucide-vue-next";
+import {
+    Search,
+    SquareLibrary,
+    User,
+    SquarePen,
+    BarChart,
+    Compass,
+    Bell,
+    Waypoints,
+} from "lucide-vue-next";
 
 import { ref, toRaw } from "vue";
 
 const publicList = ref([
+    {
+        name: "home",
+        icon: toRaw(Waypoints),
+        link: { name: "home" },
+    },
     {
         name: "browse",
         icon: toRaw(Compass),
