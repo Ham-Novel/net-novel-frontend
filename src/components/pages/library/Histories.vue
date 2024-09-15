@@ -5,6 +5,7 @@
                 <InfiniteScroll v-bind="scrollProps">
                     <template #default="{ item }">
                         <HistoryListItem :novel="item"></HistoryListItem>
+                        <div class="line"></div>
                     </template>
                 </InfiniteScroll>
             </div>
@@ -42,13 +43,6 @@ const scrollProps = reactive({
     gap: 10px
 
 
-    .history-item
-        p
-            font-size: 14px
-            color: gray
-
-        .progress
-            position: absolute
-            bottom: 10px
-            height: 30px
+.line
+    border-bottom: 2px solid var(--line-color)
 </style>

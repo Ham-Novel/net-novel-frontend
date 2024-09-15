@@ -37,7 +37,7 @@ onMounted(() => {
     padding-top: 30px
     display: flex
     flex-flow: row wrap
-    gap: 20px
+    gap: 25px
 
     .author
         font-size: 14px

@@ -5,13 +5,13 @@
         </template>
         <template #default>
             <p class="stats">
-                <span> <Eye size="17" /> {{ novel.views }} </span>
+                <span> <Eye size="14" /> {{ novel.views }} </span>
                 <span>
-                    <Heart size="17" />
+                    <Heart size="14" />
                     {{ novel.favoriteCount }}
                 </span>
                 <span>
-                    <Layers size="17" />
+                    <Layers size="14" />
                     {{ novel.episodeCount }}
                 </span>
             </p>
@@ -55,8 +55,8 @@ const novelStatus = computed(() => {
 
 <style scoped lang="sass">
 .item
-    width: 150px
-    gap: 5px
+    width: 140px
+    gap: 2px
 
     :deep(.info)
         .title
@@ -67,7 +67,7 @@ const novelStatus = computed(() => {
 .status
     position: absolute
     top: 0
-    right: 0
+    left: 0
 
     display: inline-block
     padding: 2px 5px
@@ -78,14 +78,13 @@ const novelStatus = computed(() => {
     background-color: green
 
 .stats
-    margin-top: 5px
+    margin-top: 4px
     display: flex
     flex-flow: row wrap
-    font-size: 13px
-    gap: 10px
+    font-size: 12px
 
     span
+        flex: 1
         display: flex
         align-items: center
-        gap: 1px
 </style>
