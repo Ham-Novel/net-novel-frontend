@@ -1,12 +1,14 @@
 <template>
     <main>
-        <TodayTop></TodayTop>
-        <RecentUpdated></RecentUpdated>
+        <RankingSection class="section"></RankingSection>
     </main>
 </template>
 
 <script setup>
-import TodayTop from "./TodayTop.vue";
-import Recommend from "./Recommend.vue";
-import RecentUpdated from "./RecentUpdated.vue";
+import RankingSection from "./RankingSection.vue";
 </script>
+
+<style scoped lang="sass">
+.section
+    margin-top: 40px
+</style>
