@@ -1,8 +1,14 @@
 <template>
-    <button @click="toggleState">
+    <button>
         <div class="container" :class="{ 'toggle-on': toggleOn }">
             <div class="switch" :class="{ 'toggle-on': toggleOn }">
-                <div></div>
+                <div class="lever" @click="toggleState"></div>
+            </div>
+            <div class="toggle-off-content" v-if="!toggleOn">
+                <slot></slot>
+            </div>
+            <div class="toggle-on-content" v-if="toggleOn">
+                <slot name="toggle-on"></slot>
             </div>
         </div>
     </button>
@@ -21,11 +27,10 @@ const toggleState = () => {
 <style scoped lang="sass">
 button
     position: relative
-    width: 60px
+    width: 50px
     aspect-ratio: 2 / 1
     background-color: transparent
     border: none
-    cursor: pointer
 
 .container
     width: 100%
@@ -49,8 +54,26 @@ button
     &.toggle-on
         transform: translateX(100%)
 
-    div
+    .lever
         aspect-ratio: 1 / 1
         border-radius: 50%
         background-color: var(--bg-main)
+        cursor: pointer
+
+.toggle-off-content
+    position: absolute
+    right: 7%
+    width: 50%
+    display: flex
+    justify-content: center
+    align-items: center
+    color: var(--accent-color)
+
+.toggle-on-content
+    position: absolute
+    left: 7%
+    width: 50%
+    display: flex
+    justify-content: center
+    align-items: center
 </style>

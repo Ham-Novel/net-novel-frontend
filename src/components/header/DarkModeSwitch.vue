@@ -1,10 +1,14 @@
 <template>
-    <ToggleSwitch v-model:toggle-on="darkMode"></ToggleSwitch>
+    <ToggleSwitch v-model:toggle-on="darkMode">
+        <template #default> <Sun size="18" /> </template>
+        <template #toggle-on> <Moon size="18" /> </template>
+    </ToggleSwitch>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
 import ToggleSwitch from "../reusable/ToggleSwitch.vue";
+import { Sun, Moon } from "lucide-vue-next";
+import { ref, watch } from "vue";
 
 const darkMode = ref(false);
 
