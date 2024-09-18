@@ -29,14 +29,13 @@
                     </span>
                 </section>
                 <section class="tag-list">
-                    <span
+                    <Tag
                         class="tag"
                         v-for="tag in novel.tags"
                         :key="tag.id"
-                        @click="browseTag(tag.id)"
-                    >
-                        {{ tag.name }}
-                    </span>
+                        :tag="tag"
+                        :block-style="true"
+                    ></Tag>
                 </section>
                 <section class="description">
                     <h3>작품 소개</h3>
@@ -48,10 +47,11 @@
 </template>
 
 <script setup>
+import Tag from "@/components/reusable/Tag.vue";
+
 import { ref, onMounted, computed, inject } from "vue";
 import { Eye, Heart, MessageCircleHeart } from "lucide-vue-next";
 import { novelApi, memberApi } from "@/hooks/backendApi";
-import { useRouter } from "vue-router";
 
 //novel id 값
 // url parameter 가져오기
@@ -135,12 +135,6 @@ onMounted(() => {
     loadNovel();
     checkFavorite();
 });
-
-//태그 클릭 시 태그 검색
-const router = useRouter();
-const browseTag = (tagId) => {
-    router.push({ name: "browse", query: { tags: tagId } });
-};
 </script>
 
 <style scoped lang="sass">
@@ -242,14 +236,7 @@ const browseTag = (tagId) => {
         gap: 10px
 
         .tag
-            margin-bottom: 0px
-            padding: 4px 8px
-            border-radius: 5px
-            background-color: var(--primary-color)
-            color: var(--text-reverse)
-            font-size: 13px
-            font-weight: 700
-            cursor: pointer
+            font-size: 12px
 
     .description
         width: 100%

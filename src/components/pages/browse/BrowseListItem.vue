@@ -24,9 +24,9 @@
                 </span>
             </p>
             <div class="tag" v-if="props.novel.tags.length !== 0">
-                <span v-for="tag in props.novel.tags" :key="tag.id" @click="browseTag(tag.id)"
-                    >#{{ tag.name }}</span
-                >
+                <template v-for="tag in props.novel.tags" :key="tag.id">
+                    <Tag :tag="tag"></Tag>
+                </template>
             </div>
             <p class="desc">
                 {{ props.novel.desc }}
@@ -37,6 +37,7 @@
 
 <script setup>
 import ListItem from "@/components/reusable/novel/ListItem.vue";
+import Tag from "@/components/reusable/Tag.vue";
 import { Eye, Heart, Clock8, PencilLine } from "lucide-vue-next";
 import { useRouter } from "vue-router";
 import { formatUtil } from "@/hooks/format";
@@ -59,6 +60,8 @@ const browseTag = (tagId) => {
     height: 180px
 
 .detailed
+    font-size: 12px
+
     margin-top: 8px
     display: flex
     flex-flow: column wrap
@@ -76,7 +79,6 @@ const browseTag = (tagId) => {
     .stats
         display: flex
         flex-flow: row wrap
-        font-size: 12px
         gap: 10px
 
         span
@@ -96,16 +98,6 @@ const browseTag = (tagId) => {
         align-items: center
         gap: 8px
 
-
-        span
-            flex-shrink: 0
-            color: var(--primary-color)
-            font-size: 12px
-            font-weight: bold
-            cursor: pointer
-
-            &:hover
-                text-decoration: underline
 
     .desc
         max-height: 80px
