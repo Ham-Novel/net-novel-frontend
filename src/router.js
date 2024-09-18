@@ -26,8 +26,8 @@ import TipManageSection from './components/pages/studio/tip/TipManageSection.vue
 import WorkStatSection from './components/pages/studio/stat/WorkStatSection.vue';
 import SettlementSection from './components/pages/studio/settlement/SettlementSection.vue';
 
-import NovelCreatePage from './components/pages/studio/work/NovelCreatePage.vue';
-import EpisodeCreatePage from './components/pages/studio/work/EpisodeCreatePage.vue';
+import NovelCreatePage from './components/pages/create/NovelCreatePage.vue';
+import EpisodeCreatePage from './components/pages/create/EpisodeCreatePage.vue';
 
 import NotFoundPage from './components/pages/etc/NotFoundPage.vue';
 import Test from './components/Test.vue';
