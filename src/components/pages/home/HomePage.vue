@@ -1,14 +1,16 @@
 <template>
     <main>
-        <RankingSection class="section"></RankingSection>
+        <HomeRankingSection class="section"></HomeRankingSection>
+        <HomeTrendTagSection class="section"></HomeTrendTagSection>
     </main>
 </template>
 
 <script setup>
-import RankingSection from "./RankingSection.vue";
+import HomeRankingSection from "./HomeRankingSection.vue";
+import HomeTrendTagSection from "./HomeTrendTagSection.vue";
 </script>
 
 <style scoped lang="sass">
 .section
-    margin-top: 40px
+    margin-top: 50px
 </style>

@@ -25,7 +25,7 @@
 </style>
 
 <script setup>
-import BaseSection from "./BaseSection.vue";
+import BaseSection from "./BaseHomeSection.vue";
 
 import { ref } from "vue";
 import { ThumbsUp } from "lucide-vue-next";

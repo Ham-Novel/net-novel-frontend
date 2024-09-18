@@ -3,7 +3,7 @@
         <template #header>
             <h2>
                 <TrendingUp class="icon" />
-                <span>Weekly Top Ranking</span>
+                <span>Daily Ranking</span>
             </h2>
         </template>
         <template #default>

@@ -3,8 +3,8 @@
         <template #cover>
             <div class="rank">{{ rank }}</div>
         </template>
-        <!-- <p class="author">{{ props.novel.authorName }}</p>
-        <p class="description">
+        <p class="author">{{ props.novel.authorName }}</p>
+        <!-- <p class="description">
             {{ props.novel.desc }}
         </p> -->
     </CardItem>
@@ -24,8 +24,6 @@ const props = defineProps({
     },
 });
 
-console.log(props.novel);
-
 const itemProps = {
     brief: {
         title: props.novel.title,
@@ -44,6 +42,11 @@ const itemProps = {
         .title
             font-size: 20px
             overflow: hidden
+
+.author
+    font-size: 14px
+    font-weight: 700
+    color: gray
 
 .rank
     position: absolute
