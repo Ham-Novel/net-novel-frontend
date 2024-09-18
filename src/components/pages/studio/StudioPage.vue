@@ -1,6 +1,6 @@
 <template>
     <main>
-        <section class="studio-header base-distance">
+        <section class="studio-header">
             <div class="studio-navi base-wrapper">
                 <h1 class="studio-title">Work Studio</h1>
                 <TabRouter :tabs="tabs" v class="studio-menu"></TabRouter>

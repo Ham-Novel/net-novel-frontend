@@ -1,22 +1,22 @@
 <template>
     <article class="work-manage-article">
-        <NewbieGuideSection
+        <NewbieGuide
             v-if="works.list.length === 0"
             @create-novel-event="goToCreateNovelPage"
             class="base-wrapper"
-        ></NewbieGuideSection>
+        ></NewbieGuide>
         <template v-else>
             <button class="create-novel-button" @click="goToCreateNovelPage">
-                <SquarePen size="30" />
+                <SquarePen size="28" />
             </button>
-            <WorkListSection :novel-list="works.list"></WorkListSection>
+            <WorkList :novel-list="works.list"></WorkList>
         </template>
     </article>
 </template>
 
 <script setup>
-import NewbieGuideSection from "./NewbieGuideSection.vue";
-import WorkListSection from "./WorkListSection.vue";
+import NewbieGuide from "./NewbieGuide.vue";
+import WorkList from "./WorkList.vue";
 
 import { memberApi } from "@/hooks/backendApi";
 import { SquarePen } from "lucide-vue-next";
@@ -49,15 +49,19 @@ function goToCreateNovelPage() {
 <style scoped lang="sass">
 @use "@/assets/base.sass"
 
+article
+    position: relative
+    margin-top: 30px
+
 .create-novel-button
     position: fixed
     bottom: 50px
-    right: 100px
+    left: 50px
     z-index: 1
 
     width: 50px
     height: 50px
-    border-radius: 20px
+    border-radius: 12px
     background-color: black
     color: white
 
