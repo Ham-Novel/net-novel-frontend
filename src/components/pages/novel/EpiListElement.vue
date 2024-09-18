@@ -36,7 +36,7 @@ const episode = props.episode;
 
 //에피소드 업로드 날짜, 자동으로 formatting하는 computed 변수
 const uploadDateFommatted = computed(() => {
-    return formatUtil.formatDate(episode.uploadDate);
+    return formatUtil.formatRealTime(episode.uploadDate);
 });
 
 const router = useRouter();
