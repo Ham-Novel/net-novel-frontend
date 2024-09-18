@@ -24,10 +24,7 @@
                         <p>작품명</p>
                         <input type="text" v-model="title" />
                     </div>
-                    <div>
-                        <p>해시 태그</p>
-                        <input type="text" v-model="tags" />
-                    </div>
+                    <TagInput v-model="tags"></TagInput>
                     <div>
                         <p>작품 소개</p>
                         <textarea name="desc" v-model="desc"></textarea>
@@ -57,6 +54,7 @@
 
 <script setup>
 import CoverUpload from "./CoverUpload.vue";
+import TagInput from "./TagInput.vue";
 import CheckBox from "@/components/reusable/CheckBox.vue";
 import Radio from "@/components/reusable/Radio.vue";
 
@@ -74,6 +72,7 @@ async function submitNovel() {
     const resp = await novelApi.createNovel({
         title: title.value,
         description: desc.value,
+        tagNames: tags.value,
     });
     const createdId = await resp.json();
     await novelApi.setNovelThumbnail(createdId, imgFile.value);
@@ -114,6 +113,7 @@ const desc = ref("");
 
 .create-form
     margin-top: 30px
+    margin-bottom: 30px
     padding: 50px
     min-height: 300px
     border-radius: 20px

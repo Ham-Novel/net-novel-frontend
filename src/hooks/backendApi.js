@@ -108,6 +108,18 @@ export const novelApi = {
         }
     },
 
+    // async getBrowseNovels(view, page, size, tags) {
+    //     let url = `${API_URL}/novels/search?sortBy=${view}&pageNumber=${page}&pageSize=${size}`
+    //     if ((tags ?? false) && tags.length !== 0) {
+    //         url += `&tagId=${tags.join(",")}`
+    //     }
+    //     try {
+    //         const resp = await requestApi(url);
+    //         return resp.json();
+    //     } catch (error) {
+    //         console.error("Error fetching getBrowseNovels()", error);
+    //     }
+    // },
     async getBrowseNovels(view, page, size, tags) {
         let url = `${API_URL}/novels/search?sortBy=${view}&pageNumber=${page}&pageSize=${size}`
         if ((tags ?? false) && tags.length !== 0) {
