@@ -1,7 +1,7 @@
 <template>
     <section class="item">
         <div class="cover" @click="goLinkPage">
-            <img :src="props.coverImg" />
+            <CoverImg class="img" :img-url="props.coverImg"></CoverImg>
             <slot name="cover"></slot>
         </div>
         <div class="info">
@@ -14,6 +14,7 @@
 </template>
 
 <script setup>
+import CoverImg from "../CoverImg.vue";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -53,23 +54,13 @@ onMounted(() => {});
     gap: 10px
 
 .cover
-    aspect-ratio: 3 / 4
     position: relative
-    border-radius: 5px
-    background-color: gray
-    overflow: hidden
-    cursor: pointer
+    aspect-ratio: 3 / 4
     flex: 0 0 auto
 
-    img
+    .img
         width: 100%
         height: 100%
-        object-fit: cover
-        object-position: center
-        transition: transform 0.3s ease // 부드러운 확대 효과를 위한 전환
-
-        &:hover
-            transform: scale(1.1) // 마우스 오버 시 이미지 확대
 
 .info
     position: relative

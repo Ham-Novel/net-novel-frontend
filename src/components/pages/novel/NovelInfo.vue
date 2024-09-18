@@ -1,9 +1,7 @@
 <template>
     <section class="root">
         <div class="structure base-wrapper">
-            <figure class="cover">
-                <img :src="novel.thumbnailUrl" :alt="novel.title" />
-            </figure>
+            <CoverImg class="cover" :img-url="novel.thumbnailUrl" :alt="novel.title"></CoverImg>
             <div class="info">
                 <section class="detail">
                     <h1 class="title">{{ novel.title }}</h1>
@@ -48,6 +46,7 @@
 
 <script setup>
 import Tag from "@/components/reusable/Tag.vue";
+import CoverImg from "@/components/reusable/CoverImg.vue";
 
 import { ref, onMounted, computed, inject } from "vue";
 import { Eye, Heart, MessageCircleHeart } from "lucide-vue-next";
