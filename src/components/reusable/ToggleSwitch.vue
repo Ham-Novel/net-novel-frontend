@@ -67,7 +67,7 @@ button
     display: flex
     justify-content: center
     align-items: center
-    color: var(--accent-color)
+    color: var(--bg-main)
 
 .toggle-on-content
     position: absolute
@@ -76,4 +76,5 @@ button
     display: flex
     justify-content: center
     align-items: center
+    color: var(--bg-main)
 </style>

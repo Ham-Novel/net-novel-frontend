@@ -15,6 +15,7 @@
                 <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
                     <template #default="{ item }">
                         <BrowseListItem :novel="item"></BrowseListItem>
+                        <div class="line"></div>
                     </template>
                 </InfiniteScroll>
             </div>
@@ -97,13 +98,9 @@ const reloadBrowseList = () => {
     display: flex
     justify-content: flex-start
     flex-flow: row wrap
-    gap: 20px
-
-    .item
-        padding-bottom: 5px
-        border-bottom: 2px solid var(--line-color)
 
 .line
-  border-top: 1px solid #444444
-  margin: 10px 0px
+    border-top: 2px solid var(--line-color)
+    width: 100%
+    margin: 10px 0px
 </style>
