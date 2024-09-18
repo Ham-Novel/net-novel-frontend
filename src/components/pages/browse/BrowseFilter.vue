@@ -21,7 +21,7 @@
                 type="text"
                 placeholder="태그를 입력하고 enter를 누르십시오."
                 v-model="inputTag"
-                @keyup.enter="searchTag"
+                @keyup.enter="browseTag"
             />
         </div>
     </section>
@@ -29,7 +29,7 @@
 
 <script setup>
 import { tagApi } from "@/hooks/backendApi";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, toRef, watch } from "vue";
 
 const checkedTags = defineModel({ default: [] });
 const emits = defineEmits(["filter"]);
@@ -45,11 +45,18 @@ const tagMenuList = ref([
 
 const inputTag = ref("");
 
-const searchTag = async () => {
-    const targetTag = await loadInputTag();
+watch(checkedTags, (v) => {
+    console.log(v);
+});
 
+const browseTag = async () => {
+    const targetTag = await loadInputTag();
+    checkFilterItem(targetTag);
+};
+
+const checkFilterItem = (targetTag) => {
     //태그 메뉴에 없으면 추가
-    if (!existInMenu(targetTag.id)) {
+    if (!existInMenu(targetTag)) {
         tagMenuList.value.push(targetTag);
         checkedTags.value.push(targetTag.id);
         emits("filter");
@@ -57,7 +64,7 @@ const searchTag = async () => {
     }
 
     //태그 메뉴에 있지만 체크 상태가 아니면 체크
-    if (!existInChecked(targetTag.id)) {
+    if (!existInChecked(targetTag)) {
         checkedTags.value.push(targetTag.id);
         emits("filter");
         return;
@@ -67,6 +74,7 @@ const searchTag = async () => {
 };
 
 const loadInputTag = async () => {
+    //태그 검색 실패 시 예외 처리
     const browseName = inputTag.value;
     inputTag.value = "";
 
@@ -75,9 +83,9 @@ const loadInputTag = async () => {
     return loadTag;
 };
 
-const existInMenu = (tagId) => tagMenuList.value.some((menu) => menu.id === tagId);
+const existInMenu = (tag) => tagMenuList.value.some((menu) => menu.id === tag.id);
 
-const existInChecked = (tagId) => checkedTags.value.some((checkedId) => checkedId === tagId);
+const existInChecked = (tag) => checkedTags.value.some((checkedId) => checkedId === tag.id);
 </script>
 
 <style scoped lang="sass">

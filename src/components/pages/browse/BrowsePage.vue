@@ -29,23 +29,28 @@ import BrowseSort from "./BrowseSort.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { novelApi } from "@/hooks/backendApi";
-import { computed, onMounted, reactive, ref, toRaw } from "vue";
+import { computed, onMounted, reactive, ref, toRaw, watch } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
 
-const sort = ref("latest");
-
-const queryTags = (() => {
+//query string으로 받은 tag 데이터
+const queryTags = computed(() => {
     if (route.query.tags === null || route.query.tags === undefined) {
         return [];
     }
     if (Array.isArray(route.query.tags)) {
-        return route.query.tags;
+        return route.query.tags.map(Number);
     }
-    return [route.query.tags];
-})();
-const tags = ref(queryTags);
+    return [Number(route.query.tags)];
+});
+
+watch(queryTags, (newValue) => {
+    tags.value = newValue;
+});
+
+const tags = ref(queryTags.value);
+const sort = ref("latest");
 
 //스크롤 페이지 로드 설정
 const scrollProps = reactive({
