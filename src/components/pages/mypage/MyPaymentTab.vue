@@ -4,11 +4,11 @@
         <button class="coin-charge-button" @click="openCoinCharge">코인 충전</button>
     </div>
     <table class="charge-table base-wrapper">
-        <!-- <colgroup>
+        <colgroup>
             <col class="col-date" />
             <col class="col-coin" />
             <col class="col-payment" />
-        </colgroup> -->
+        </colgroup>
         <thead>
             <tr>
                 <th class="col-date">날짜</th>
@@ -17,7 +17,7 @@
             </tr>
         </thead>
         <tbody>
-            <InfiniteScroll v-bind="scrollProps">
+            <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
                 <template v-slot:default="{ item }">
                     <ChargeHistoryItem v-bind="item"></ChargeHistoryItem>
                 </template>
@@ -45,6 +45,11 @@ const scrollProps = reactive({
     loadingMessage: "History Loading...",
 });
 
+const scrollRef = ref(null);
+const reloadScroll = () => {
+    scrollRef.value.reset();
+};
+
 const ifcoinChargeDialog = ref(false);
 
 const openCoinCharge = () => {
@@ -52,6 +57,7 @@ const openCoinCharge = () => {
 };
 const closeCoinCharge = () => {
     ifcoinChargeDialog.value = false;
+    reloadScroll();
 };
 </script>
 
