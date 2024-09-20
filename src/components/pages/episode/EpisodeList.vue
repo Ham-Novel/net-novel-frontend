@@ -1,10 +1,13 @@
 <template>
-    <div class="episode-list-article">
-        <div
-            class="loader"
-            v-if="priorLoader.state === loadState.ok && mountLoader.state === loadState.ok"
-            :ref="(el) => priorDetect.observer.setTarget(el)"
-        ></div>
+    <div class="structure pages">
+        <div class="loader prior">
+            <div
+                class="is-loading"
+                v-if="priorLoader.state === loadState.ok && mountLoader.state === loadState.ok"
+                :ref="(el) => priorDetect.observer.setTarget(el)"
+            ></div>
+            <h3 v-else class="all-loaded">최초 회차입니다.</h3>
+        </div>
         <div id="contents" :ref="(el) => (scrollSynchro.contentRef = el)">
             <template v-for="(item, index) in episodeList.list" :key="item.episodeId">
                 <component
@@ -27,11 +30,14 @@
                 </component>
             </template>
         </div>
-        <div
-            class="loader"
-            v-if="nextLoader.state === loadState.ok && mountLoader.state === loadState.ok"
-            :ref="(el) => nextDetect.observer.setTarget(el)"
-        ></div>
+        <div class="loader next">
+            <div
+                class="is-loading"
+                v-if="nextLoader.state === loadState.ok && mountLoader.state === loadState.ok"
+                :ref="(el) => nextDetect.observer.setTarget(el)"
+            ></div>
+            <h3 v-else class="all-loaded">마지막 회차입니다.</h3>
+        </div>
     </div>
 </template>
 
@@ -293,30 +299,41 @@ watch(urlDetect.observer.intersection, urlDetect.handler);
 
 <style scoped lang="sass">
 
-.episode-list-article
+.structure
     position: relative
-    min-height: 900px
-    background-color: #f3f2f1
-    display: flow-root
+    width: 900px
+    margin: 0px auto
 
-    .loader
-        margin: 0 auto
-        width: 900px
-        height: 0px
-        background-color: white
+.pages
+    min-height: 1000px
+    // scroll-padding-top: 0px
+    box-shadow: 8px 0 6px -3px rgba(0, 0, 0, 0.2), -8px 0 6px -3px rgba(0, 0, 0, 0.2)
+    background-color: var(--bg-main)
 
-        display: flex
-        justify-content: center
-        align-items: center
+
+
+.loader
+    width: 100%
+    height: 50px
+
+    display: flex
+    justify-content: center
+    align-items: center
+
+    &.prior
+        position: relative
+
+    &.next
+        position: absolute
+        bottom: 0
+
+// .all-loaded
+//     width: 100%
+//     height: 50px
+
 
 #contents
-    width: 900px
-    min-height: 900px
-    margin: 0px auto
-    margin-top: 50px
-    min-height: 300px
-    scroll-padding-top: 0px
-    box-shadow: 8px 0 6px -3px rgba(0, 0, 0, 0.2), -8px 0 6px -3px rgba(0, 0, 0, 0.2)
+    margin: 100px 0
 
     .url-object-front
         position: absolute
