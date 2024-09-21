@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import CommentListElement from "./CommentListElement.vue";
+import CommentListElement from "./CommentListItem.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { ref, reactive, inject } from "vue";

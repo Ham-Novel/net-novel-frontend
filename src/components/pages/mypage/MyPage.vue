@@ -2,6 +2,7 @@
     <main>
         <section class="profile base-distance">
             <Profile
+                v-if="userData ?? false"
                 :nick-name="userData.nickName"
                 :email="userData.email"
                 :coins="userData.coinCount"
@@ -30,16 +31,15 @@ const tabs = [
     // { name: "친구관리", path: { name: "test" } },
 ];
 
-const userData = ref({
-    nickName: "",
-    email: "",
-    coinCount: 0,
-});
+const userData = ref(undefined);
 
 async function loadUserData() {
     const data = await memberApi.getMyPageData();
-    userData.value = data;
-    console.log(data);
+    userData.value = data ?? {
+        nickName: "unknown",
+        email: "unknown@unknown.com",
+        coinCount: 0,
+    };
 }
 onMounted(() => {
     loadUserData();

@@ -69,12 +69,11 @@ const imgFile = ref(); //제출할 multipart file 값
 const copyrightCheck = ref("non-select");
 
 async function submitNovel() {
-    const resp = await novelApi.createNovel({
+    const createdId = await novelApi.createNovel({
         title: title.value,
         description: desc.value,
         tagNames: tags.value,
     });
-    const createdId = await resp.json();
     await novelApi.setNovelThumbnail(createdId, imgFile.value);
 
     router.push({ name: "work-manage" });

@@ -14,8 +14,20 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
 import SearchBar from "./SearchBar.vue";
 import SearchResult from "./SearchResult.vue";
+
+import { novelApi } from "@/hooks/backendApi";
+
+const searchNovel = async (page, size) => {
+    const loadNovels = await novelApi.getSearchNovels("제목", "title", 0, 10);
+};
+
+onMounted(async () => {
+    const data = await searchNovel();
+    console.log(data);
+});
 </script>
 
 <style scoped lang="sass">

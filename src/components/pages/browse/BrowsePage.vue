@@ -62,7 +62,6 @@ const scrollProps = reactive({
     },
 });
 
-//댓글 리스트 초기화 메서드
 const scrollRef = ref(null);
 const reloadBrowseList = () => {
     console.debug("[BROWSE] realod: ", tags.value);

@@ -3,8 +3,8 @@
         <div class="content-container">
             <h1 class="title">{{ props.episode.title }}</h1>
             <p class="content">{{ props.episode.content }}</p>
-            <slot></slot>
         </div>
+        <slot></slot>
     </article>
 </template>
 
@@ -28,11 +28,11 @@ Voluptate voluptate aliquip ipsum magna aliquip consectetur excepteur et volupta
 @use "@/assets/base.sass"
 
 .episode-section
+    position: relative
 
     .content-container
         position: relative
         padding-bottom: 100px
-        background-color: white
 
         .title
             padding: 30px

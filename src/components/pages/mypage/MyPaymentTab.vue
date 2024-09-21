@@ -55,9 +55,11 @@ const ifcoinChargeDialog = ref(false);
 const openCoinCharge = () => {
     ifcoinChargeDialog.value = true;
 };
-const closeCoinCharge = () => {
+const closeCoinCharge = (payment) => {
+    if (payment ?? false) {
+        reloadScroll();
+    }
     ifcoinChargeDialog.value = false;
-    reloadScroll();
 };
 </script>
 

@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import EpiListElement from "./EpiListElement.vue";
+import EpiListElement from "./EpisodeListItem.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { onMounted, reactive } from "vue";

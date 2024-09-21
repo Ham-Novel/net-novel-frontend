@@ -55,7 +55,7 @@ const privateList = ref([
     {
         name: "studio",
         icon: toRaw(SquarePen),
-        link: { name: "studio" },
+        link: { name: "work-manage" },
     },
     {
         name: "library",

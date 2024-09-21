@@ -56,6 +56,8 @@ onMounted(() => {});
 .cover
     position: relative
     aspect-ratio: 3 / 4
+    overflow: hidden
+    border-radius: 5px
     flex: 0 0 auto
 
     .img

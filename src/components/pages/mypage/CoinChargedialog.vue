@@ -2,7 +2,7 @@
     <teleport to="#app">
         <div class="overlay"></div>
         <dialog open>
-            <button class="exit-button" @click="emits('closeDialog')">
+            <button class="exit-button" @click="emits('closeDialog', false)">
                 <X size="100%" color="white" />
             </button>
             <section class="header">
@@ -37,12 +37,11 @@
                 </ul>
             </section>
             <section class="payment">
-                <h2>결제</h2>
+                <h2>결제 금액</h2>
                 <p>
-                    <span>결제 금액</span>
+                    <span></span>
                     <span>{{ selectedGoods.payment }}<Banknote size="30" /></span>
                 </p>
-
                 <label for="condition-agree">
                     <input
                         type="checkbox"
@@ -53,6 +52,7 @@
                     <span>결제 약관에 동의합니다.</span>
                 </label>
                 <button @click="coinCharge">결제</button>
+                <h3 v-if="failMessage.length !== 0" class="payement-fail-msg">{{ failMessage }}</h3>
             </section>
         </dialog>
     </teleport>
@@ -67,6 +67,8 @@ import { computed, reactive, ref } from "vue";
 const emits = defineEmits(["closeDialog"]);
 
 const coinCount = ref(100);
+const selectedGoods = ref({ coinAmount: 0, payment: 0 });
+const failMessage = ref("");
 
 const goodsList = reactive([
     { id: 1, coinAmount: 1, payment: 1000 },
@@ -74,13 +76,16 @@ const goodsList = reactive([
     { id: 3, coinAmount: 100, payment: 100000 },
 ]);
 
-const selectedGoods = ref({ coinAmount: 0, payment: 0 });
-
 const coinCharge = async () => {
-    console.log(selectedGoods.value);
-    const resp = await coinApi.chargeCoins({ ...selectedGoods.value });
-    if (resp.ok) {
-        emits("closeDialog");
+    try {
+        const resp = await coinApi.chargeCoins({ ...selectedGoods.value });
+        emits("closeDialog", true);
+    } catch (error) {
+        if (error.response.status === 401) {
+            failMessage.value = "로그인 세션이 만료되었습니다.\n재로그인 하십시오.";
+        } else if (error.response.status === 400) {
+            failMessage.value = "결제를 실패하였습니다!\n누락한 입력이 없는지 확인하십시오.";
+        }
     }
 };
 </script>
@@ -163,7 +168,7 @@ dialog
     .payment
 
         p
-            margin-bottom: 30px
+            margin-bottom: 10px
             padding-bottom: 5px
             border-bottom: 2px solid black
             font-size: 16px
@@ -191,6 +196,13 @@ dialog
 
             &:hover
                 background-color: #2921ca
+
+.payement-fail-msg
+    margin: 5px 0
+    text-align: center
+    font-size: 16px
+    color: var(--error-color)
+    white-space: pre-line
 
 
 input

@@ -15,8 +15,8 @@ import Favorites from './components/pages/library/Favorites.vue';
 import Histories from './components/pages/library/Histories.vue';
 
 import NovelPage from './components/pages/novel/NovelPage.vue';
-import NovelEpiList from './components/pages/novel/NovelEpiList.vue';
-import NovelCommentList from './components/pages/novel/NovelCommentList.vue';
+import EpisodeListSection from './components/pages/novel/EpisodeListSection.vue';
+import CommandListSection from './components/pages/novel/CommandListSection.vue';
 
 import EpisodePage from './components/pages/episode/EpisodePage.vue';
 
@@ -68,11 +68,11 @@ const routes = [
         children: [
             {
                 name: 'novel-episode', path: 'episodes', props: true,
-                component: NovelEpiList,
+                component: EpisodeListSection,
             },
             {
                 name: 'novel-comment', path: 'comments', props: true,
-                component: NovelCommentList,
+                component: CommandListSection,
             },
         ]
     },

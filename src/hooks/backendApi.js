@@ -1,51 +1,73 @@
-import { AuthenticationError, BadRequestError, ServerError } from "./error";
+import router from "@/router";
+import axios from "axios";
 
-const API_URL = 'http://localhost:8081/api';
-const BAD_REQUEST_MSG = 'Network response was not ok'
+const BACKEND_URL = 'http://localhost:8081/api';
 
-async function requestApi(reqUrl, reqHeader = { method: 'GET' }) {
-    console.debug(reqUrl)
-    reqHeader.credentials = 'include'
-    console.debug(reqHeader)
-    const resp = await fetch(reqUrl, reqHeader);
-    if (resp.status === 400) {
-        throw new BadRequestError(`Bad Request!`);
+async function fetchApi({ method, url, params, data } = {}) {
+    const config = {
+        method,
+        url,
+        baseURL: BACKEND_URL,
+        withCredentials: true,
+        data,
+        params
     }
-    else if (resp.status === 401) {
-        const error = new AuthenticationError(`Authentication Not Allowed`);
-        error.handle();
-        throw error;
+    console.debug('[BACKEND_API]', config)
+
+    return await axios(config);
+}
+
+function handleError(error, auth = true) {
+
+    switch (error.response.status) {
+        case 400:
+            console.error('Bad Request: ', error.message);
+            break;
+        case 401:
+            if (!auth) return;
+            console.error('Authorized: ', error.message);
+            router.push({ name: 'login' })
+            break;
+        case 500:
+            console.error('Server Error: ', error.message);
+            break;
+        default:
+            console.error('Other Error: ', error.message);
     }
-    else if (resp.status === 500) {
-        throw new ServerError('Server Api Error');
-    }
-    return resp;
+
 }
 
 export const coinApi = {
     async getChargeHistory(page, size) {
         try {
-            const url = `${API_URL}/members/me/coin-charge-history?pageNumber=${page}&pageSize=${size}`;
-            const resp = await requestApi(url);
-            return await resp.json();
+            const response = await fetchApi({
+                method: 'get',
+                url: '/members/me/coin-charge-history',
+                params: {
+                    pageNumber: page,
+                    pageSize: size
+                }
+            });
+            return response.data;
         } catch (error) {
-            console.error("Error fetching getChargeHistory", error);
+            console.error("Failed to load coin charge history");
+            handleError(error)
+            throw error;
         }
     },
+
     async chargeCoins(createDto) {
         try {
-            const url = `${API_URL}/coin-charge-history`;
-            const header = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(createDto),
-            };
-            const resp = await requestApi(url, header);
-            return resp;
+            const response = await fetchApi({
+                method: 'post',
+                url: '/coin-charge-history',
+                data: createDto
+            });
+            return response.data;
         } catch (error) {
-            console.error("Error fetching chargeCoins()", error);
+            console.error("Failed to execute charge coins");
+            handleError(error, false)
+            throw error;
         }
     },
 
@@ -53,45 +75,35 @@ export const coinApi = {
 
 export const novelApi = {
     async getNovel(id) {
-        const url = `${API_URL}/novels/${id}`
-        const resp = await requestApi(url);
-        return resp.json();
+        try {
+            const response = await fetchApi({ method: 'get', url: `/novels/${id}` });
+            return response.data;
+        } catch (error) {
+            console.error("Failed to load novel info");
+            handleError(error, false);
+        }
     },
 
     async createNovel(createDto) {
         try {
-            const url = `${API_URL}/novels`
-            const header = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(createDto),
-            };
-            const resp = await requestApi(url, header);
-            return resp;
+            const response = await fetchApi({ method: 'post', url: '/novels', data: createDto })
+            console.log(response.data)
+            return response.data;
         } catch (error) {
-            console.error("backendApi.js createNovel() : ", error);
+            console.error("Failed to create novel");
+            handleError(error, false);
         }
     },
 
     async setNovelThumbnail(id, imgFile) {
         try {
-            //MultipartFile 변환
             const formData = new FormData();
             formData.append('file', imgFile);
-            console.log("form data: ", ...formData)
+            await fetchApi({ method: 'post', url: `/novels/${id}/thumbnail`, data: formData });
 
-            const url = `${API_URL}/novels/${id}/thumbnail`
-            const header = {
-                method: 'POST',
-                body: formData,
-            };
-
-            const resp = await requestApi(url, header);
-            return resp;
         } catch (error) {
-            console.error("backendApi.js setNovelThumbnail() : ", error);
+            console.error("Failed to upload thumbnail of novel")
+            handleError(error, false);
         }
     },
 
@@ -108,62 +120,97 @@ export const novelApi = {
         }
     },
 
-    // async getBrowseNovels(view, page, size, tags) {
-    //     let url = `${API_URL}/novels/search?sortBy=${view}&pageNumber=${page}&pageSize=${size}`
-    //     if ((tags ?? false) && tags.length !== 0) {
-    //         url += `&tagId=${tags.join(",")}`
-    //     }
-    //     try {
-    //         const resp = await requestApi(url);
-    //         return resp.json();
-    //     } catch (error) {
-    //         console.error("Error fetching getBrowseNovels()", error);
-    //     }
-    // },
-    async getBrowseNovels(view, page, size, tags) {
-        let url = `${API_URL}/novels/search?sortBy=${view}&pageNumber=${page}&pageSize=${size}`
-        if ((tags ?? false) && tags.length !== 0) {
-            url += `&tagId=${tags.join(",")}`
-        }
+    async getSearchNovels(word, type, page, size) {
         try {
-            const resp = await requestApi(url);
-            return resp.json();
+            const response = await fetchApi({
+                method: 'get',
+                url: "/novels/search",
+                params: {
+                    searchWord: word,
+                    searchType: type,
+                    pageNumber: page,
+                    pageSize: size,
+                }
+            })
+            return response.data;
         } catch (error) {
-            console.error("Error fetching getBrowseNovels()", error);
+            console.error("Failed to search novels: ", error.message);
+        }
+    },
+
+    async getBrowseNovels(view, page, size, tags) {
+        try {
+            if (!(tags ?? false)) {
+                throw TypeError("tags param is invalid");
+            }
+            const tagIds = (tags.length !== 0) && { tagId: tags.join(",") };
+            const response = await fetchApi({
+                method: 'get',
+                url: "/novels/browse",
+                params: {
+                    pageNumber: page,
+                    pageSize: size,
+                    sortBy: view,
+                    ...tagIds
+                }
+            })
+            return response.data;
+        } catch (error) {
+            if (error instanceof TypeError) {
+                console.error("", error.message)
+                return;
+            }
+            console.error("Failed to browse novels: ", error.message);
         }
     },
 
     async getRanking(page, size, period) {
-        const url = `${API_URL}/novels/ranking?pageNumber=${page}&pageSize=${size}&period=${period}`
         try {
-            const resp = await requestApi(url)
-            return resp.json();
+            const response = await fetchApi({
+                method: 'get',
+                url: `/novels/ranking`,
+                params: {
+                    pageNumber: page,
+                    pageSize: size,
+                    period,
+                }
+            })
+            return response.data;
         } catch (error) {
-            console.error(`Error fetching toggleNovelFavorite()`, error);
+            console.error("Failed to load ranking novels: ", error.response.data);
+            handleError(error, false)
         }
     }
 }
 
 export const tagApi = {
     async getTagsByNovel(id) {
+
         try {
-            const url = `${API_URL}/novels/${id}/tags`
-            const resp = await fetch(url);
-            if (!resp.ok) {
-                throw new Error(BAD_REQUEST_MSG);
-            }
-            return await resp.json();
+            const response = await fetchApi({
+                method: 'get',
+                url: `/novels/${id}/tags`,
+            })
+            return response.data;
         } catch (error) {
-            console.error("Error fetching getTagsByNovel()", error);
+            console.error("Failed to load tag by novel")
+            handleError(error, false)
         }
+
     },
     async getTagByName(name) {
         try {
-            const url = `${API_URL}/tags?tagName=${name}`
-            const resp = await requestApi(url)
-            return resp.json();
+            const response = await fetchApi({
+                method: 'get',
+                url: `/tags`,
+                params: {
+                    tagName: name
+                }
+            })
+            return response.data;
         } catch (error) {
-
+            console.error("Failed to load tag by name")
+            handleError(error, false)
         }
     }
 }
@@ -171,86 +218,88 @@ export const tagApi = {
 export const episodeApi = {
     async getEpisode(id) {
         try {
-            const url = `${API_URL}/episodes/${id}`;
-            const resp = await requestApi(url);
-            return resp;
+            const response = await fetchApi({
+                method: 'get',
+                url: `/episodes/${id}`,
+            })
+            return response.data;
         } catch (error) {
-            if (error instanceof AuthenticationError) {
-                error.handle();
-            }
-            console.error("Error fetching getEpisode()", error);
+            console.error("Failed to load episode content");
+            handleError(error);
+            throw error;
         }
     },
 
     async getEpisodeBeside(id, direction) {
         try {
-            const url = `${API_URL}/episodes/${id}/beside?direction=${direction}`;
-            const resp = await requestApi(url);
-            return resp;
+            const response = await fetchApi({
+                method: 'get',
+                url: `/episodes/${id}/beside?direction=${direction}`,
+            })
+            return response.data;
         } catch (error) {
-            if (error instanceof AuthenticationError) {
-                error.handle();
-            }
-            console.error("backendApi.js getEpisodeBeside() : ", error);
+            console.error("Failed to load next episode content");
+            handleError(error, false);
+            throw error;
         }
     },
 
     async createEpisode(novelId, createDto) {
         try {
-            const url = `${API_URL}/novels/${novelId}/episodes`
-            const header = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(createDto),
-            };
-            const resp = await requestApi(url, header);
-            return resp;
+            const response = await fetchApi({
+                method: 'post',
+                url: `/novels/${novelId}/episodes`,
+                data: createDto
+            })
+            return response.data;
         } catch (error) {
-            console.error("backendApi.js createEpisode() : ", error);
+            console.error("Failed to load tag by name")
+            handleError(error, false)
         }
     },
 
     async getEpisodesByNovel(id, sort, page, size) {
         try {
-            const reqUrl = `${API_URL}/novels/${id}/episodes?&sortBy=${sort}&pageNumber=${page}&pageSize=${size}`
-            const resp = await fetch(reqUrl);
-            if (!resp.ok) {
-                throw new Error(BAD_REQUEST_MSG);
-            }
-            return await resp.json();
+            const response = await fetchApi({
+                method: 'get',
+                url: `/novels/${id}/episodes`,
+                params: {
+                    sortBy: sort,
+                    pageNumber: page,
+                    pageSize: size
+                }
+            })
+            return response.data;
         } catch (error) {
-            console.error("Error fetching getEpisodesByNovel()", error);
+            console.error("Failed to load episodes in novel");
+            handleError(error, false)
         }
     },
     async getEpisodesInfoByNovel(id) {
         try {
-            const reqUrl = `${API_URL}/novels/${id}/episodes/info`;
-            const resp = await fetch(reqUrl);
-            if (!resp.ok) {
-                throw new Error(BAD_REQUEST_MSG);
-            }
-            return await resp.json();
+            const response = await fetchApi({
+                method: 'get',
+                url: `/novels/${id}/episodes/info`
+            })
+            return response.data;
         } catch (error) {
-            console.error("Error fetching getEpisodesCountByNovel()", error);
+            console.error("Failed to load episode info");
         }
     },
 
 
     async payForEpisode(paymentDto) {
-        const reqUrl = `${API_URL}/coin-use-histories`
-        const reqMeta = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(paymentDto)
-        }
         try {
-            return (await requestApi(reqUrl, reqMeta)).text();
+            const response = await fetchApi({
+                method: 'post',
+                url: '/coin-use-histories',
+                data: paymentDto
+            })
+            return response.data;
         } catch (error) {
-            console.error(`Error fetching toggleNovelFavorite()`, error);
+            console.error(`Failed to execute payment`);
+            handleError(error)
+            throw error;
         }
     },
 }
@@ -258,79 +307,93 @@ export const episodeApi = {
 export const commentApi = {
     async getCommentsByNovel(id, sort, page, size) {
         try {
-            const reqUrl = `${API_URL}/novels/${id}/comments?sortBy=${sort}&pageNumber=${page}&pageSize=${size}`
-            const resp = await fetch(reqUrl);
-            if (!resp.ok) {
-                throw new Error(BAD_REQUEST_MSG);
-            }
-            return await resp.json();
-
+            const response = await fetchApi({
+                method: 'get',
+                url: `/novels/${id}/comments`,
+                params: {
+                    sortBy: sort,
+                    pageNumber: page,
+                    pageSize: size
+                }
+            })
+            return response.data;
         } catch (error) {
-            console.error("Error fetching getCommentsByNovel()", error);
+            console.error("Failed to get comments in novel: ", error.response.data);
+            handleError(error, false)
         }
     },
 }
 
 export const memberApi = {
-    AuthenticationError,
-    //마이페이지 관련 api
     async getMyPageData() {
         try {
-            const url = `${API_URL}/members/me/mypage`
-            const header = {
-                method: 'GET',
-            }
-            const resp = await requestApi(url, header);
-            return await resp.json();
+            const response = await fetchApi({
+                method: 'get',
+                url: `/members/me/mypage`,
+            })
+            return response.data;
         } catch (error) {
-            console.error("Error fetching getMyPageData:", error);
+            console.error("Failed to load my page info")
+            handleError(error);
         }
     },
 
     async getWorks() {
         try {
-            const url = `${API_URL}/members/me/novels`
-            const header = {
-                method: 'GET',
-            }
-            const resp = await requestApi(url, header);
-            return resp;
+            const response = await fetchApi({
+                method: 'get',
+                url: `/members/me/novels`,
+            })
+            return response.data;
         } catch (error) {
-            console.error("backendApi getWorks() :", error);
+            console.error("Failed to load my works list");
+            handleError(error)
         }
     },
 
     //읽은 기록 관련 api
     async getRecentReadNovels(page, size) {
-        const url = `${API_URL}/members/me/recent-read?pageNumber=${page}&pageSize=${size}`
         try {
-            const resp = await requestApi(url);
-            return await resp.json();
+            const response = await fetchApi({
+                method: 'get',
+                url: `/members/me/recent-read`,
+                params: {
+                    pageNumber: page,
+                    pageSize: size
+                }
+            })
+            return response.data;
         } catch (error) {
-            console.error("Error fetching getRecentReadNovels() ", error);
+            console.error("Failed to load recent reads: ", error.message)
+            handleError(error);
         }
     },
 
     //선호작 관련 api
     async getCheckFavorite(id) {
-        const url = `${API_URL}/members/me/favorites/check?novelId=${id}`
-        const resp = await requestApi(url);
-        return resp;
+        try {
+            const response = await fetchApi({ method: 'get', url: `/members/me/favorites/check?novelId=${id}` })
+            return response.data;
+        } catch (error) {
+            handleError(error, false);
+            throw error;
+        }
     },
     async toggleNovelFavorite(id) {
-        const url = `${API_URL}/members/me/favorites/${id}`
-        const header = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+        try {
+            const response = await fetchApi({ method: 'post', url: `/members/me/favorites/${id}` })
+            return response.data;
+        } catch (error) {
+            handleError(error);
+            throw error;
         }
-        const resp = await requestApi(url, header);
-        return resp.json();
     },
     async getFavoriteNovels() {
-        const url = `${API_URL}/members/me/favorites`;
-        const resp = await requestApi(url);
-        return await resp.json();
+        try {
+            const response = await fetchApi({ method: 'get', url: `/members/me/favorites` })
+            return response.data;
+        } catch (error) {
+            handleError(error);
+        }
     },
 }

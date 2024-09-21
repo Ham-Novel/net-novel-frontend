@@ -1,7 +1,7 @@
 <template>
     <article class="work-manage-article">
         <NewbieGuide
-            v-if="works.list.length === 0"
+            v-if="works.length === 0"
             @create-novel-event="goToCreateNovelPage"
             class="base-wrapper"
         ></NewbieGuide>
@@ -9,7 +9,7 @@
             <button class="create-novel-button" @click="goToCreateNovelPage">
                 <SquarePen size="28" />
             </button>
-            <WorkList :novel-list="works.list"></WorkList>
+            <WorkList :novel-list="works"></WorkList>
         </template>
     </article>
 </template>
@@ -20,28 +20,27 @@ import WorkList from "./WorkList.vue";
 
 import { memberApi } from "@/hooks/backendApi";
 import { SquarePen } from "lucide-vue-next";
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 
-const works = reactive({
-    list: [],
-    load: async () => {
-        const resp = await memberApi.getWorks();
-        const data = await resp?.json();
-        if (data ?? false) {
-            works.list.push(...data);
-        }
-    },
-});
+const works = ref([]);
+
+const loadWorks = async () => {
+    const data = await memberApi.getWorks();
+    works.value.push(...data);
+};
 
 onMounted(() => {
-    works.load();
+    try {
+        loadWorks();
+    } catch (error) {
+        console.error("작품 리스트 생성 실패");
+    }
 });
 
 const router = useRouter();
 
 function goToCreateNovelPage() {
-    console.log("ddd");
     router.push({ name: "novel-create" });
 }
 </script>

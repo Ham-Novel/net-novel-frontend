@@ -1,12 +1,11 @@
 <template>
     <main class="episode-page">
-        <EpisodeList :novelId="props.novelId" :episodeId="props.episodeId"></EpisodeList>
+        <EpisodeSect :novelId="props.novelId" :episodeId="props.episodeId"></EpisodeSect>
     </main>
 </template>
 
 <script setup>
-// import PayCheckDialog from "./PayCheckDialog.vue";
-import EpisodeList from "./EpisodeList.vue";
+import EpisodeSect from "./EpisodeSect.vue";
 
 import { onMounted, onUnmounted, ref } from "vue";
 import { useStore } from "vuex";

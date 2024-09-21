@@ -24,10 +24,15 @@ const itemLoader = reactive({
     pageable: { ...props.pageProps } ?? { number: 0, size: 10 },
     state: { isLoading: false, allLoaded: false },
     async putItems() {
-        const loadItems = await props.loadMethod(this.pageable.number, this.pageable.size);
-        itemList.value.push(...loadItems);
-        this.pageable.number++;
-        return loadItems;
+        try {
+            const loadItems = await props.loadMethod(this.pageable.number, this.pageable.size);
+            itemList.value.push(...loadItems);
+            this.pageable.number++;
+            return loadItems;
+        } catch (error) {
+            console.error("Cannot put items in list");
+            itemLoader.state.allLoaded = true;
+        }
     },
     async progressLoading(method) {
         if (this.state.isLoading) {
@@ -40,7 +45,7 @@ const itemLoader = reactive({
 
         this.state.isLoading = false;
     },
-    load: (msg) => {
+    mountLoad: (msg) => {
         itemLoader.progressLoading(async () => {
             console.debug("[SCROLL] " + msg);
             if (itemLoader.state.allLoaded) return;
@@ -55,7 +60,7 @@ const itemLoader = reactive({
             itemLoader.state.allLoaded = false;
             console.debug("[SCROLL] reset", itemList.value);
         });
-        itemLoader.load("reload");
+        itemLoader.mountLoad("reload");
     },
 });
 
@@ -64,7 +69,7 @@ defineExpose({ reset: itemLoader.reset });
 
 //첫번째 페이지 값 먼저 불러오기
 onMounted(() => {
-    itemLoader.load("first");
+    itemLoader.mountLoad("first");
 });
 
 //페이지 최하단 도달시 이벤트 발생
@@ -72,7 +77,7 @@ const scrollDetect = reactive({
     loader: useObserver({ threshold: 0 }),
     handler(intersect) {
         if (intersect.state) {
-            itemLoader.load("put");
+            itemLoader.mountLoad("put");
         }
     },
 });

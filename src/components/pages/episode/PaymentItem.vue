@@ -1,16 +1,18 @@
 <template>
-    <article class="payment-section">
-        <div class="payment-container">
-            <h1 class="episode-title">{{ props.payment.title }}</h1>
-            <div class="pay-check-message">
-                <h2 class="payment-warning">미결제 상태입니다. 결제하시겠습니까?</h2>
-                <h3 class="payment-fail" v-if="ifPaymentFail">
-                    결제 실패! 보유한 코인을 재확인 하십시오!
-                </h3>
-            </div>
-            <div class="choice-list">
-                <!-- <button @click="goBackPage">돌아가기</button> -->
-                <button @click="executePayment">{{ props.payment.coinCost }} 코인 결제</button>
+    <article>
+        <div class="container">
+            <h1 class="title">{{ props.payment.title }}</h1>
+            <div class="content">
+                <div class="message">
+                    <h2 class="notice">미결제 상태입니다. 결제하시겠습니까?</h2>
+                    <h3 class="payment-fail" v-if="ifPaymentFail">
+                        결제 실패! 보유한 코인을 재확인 하십시오!
+                    </h3>
+                </div>
+                <div class="menu">
+                    <button @click="executePayment">{{ props.payment.coinCost }}코인 결제</button>
+                    <button @click="moveCoinChargePage">코인 충전</button>
+                </div>
             </div>
         </div>
         <slot></slot>
@@ -20,6 +22,7 @@
 <script setup>
 import { onMounted, reactive, ref } from "vue";
 import { episodeApi } from "@/hooks/backendApi";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
     payment: {
@@ -32,27 +35,40 @@ const props = defineProps({
 });
 const emits = defineEmits(["paymentAccepted"]);
 
-const ifPaymentFail = ref(false);
+//코인 충전 페이지 이동
+const router = useRouter();
+function moveCoinChargePage() {
+    router.push({ name: "my-payment" });
+}
 
 //결제 버튼 클릭
+const ifPaymentFail = ref(false);
+
 async function executePayment() {
     const result = await tryPayment();
-    console.log(result);
-    reloadContents(result);
+    if (result) {
+        reloadContents(result);
+    } else {
+        ifPaymentFail.value = true;
+    }
 }
 
 async function tryPayment() {
-    const result = await episodeApi.payForEpisode({
-        episodeId: props.payment.episodeId,
-        usedCoins: props.payment.coinCost,
-    });
-    return result;
+    try {
+        await episodeApi.payForEpisode({
+            episodeId: props.payment.episodeId,
+            usedCoins: props.payment.coinCost,
+        });
+        return true;
+    } catch (error) {
+        if (error.response.status === 409) {
+            console.error("Lack of the coins for payment of epiosde");
+        }
+        return false;
+    }
 }
 
 function reloadContents(paymentResult) {
-    if (paymentResult !== "ok") {
-        ifPaymentFail.value = true;
-    }
     emits("paymentAccepted", props.payment.episodeId);
 }
 </script>
@@ -60,35 +76,32 @@ function reloadContents(paymentResult) {
 <style scoped lang="sass">
 @use "@/assets/base.sass"
 
-.payment-section
 
-    .payment-container
+article
+    .container
         position: relative
-        width: 900px
-        min-height: 600px
-        margin: 0px auto
-        padding-top: 30px
         padding-bottom: 100px
-        background-color: white
-        border-radius: 15px
-        border-bottom: 5px solid #d0d0d0
-        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4)
 
-        display: flex
-        flex-flow: column wrap
-        gap: 50px
-        justify-content: baseline
-
-        .episode-title
-            padding: 0 30px
-            padding-bottom: 20px
-            margin-bottom: 20px
-            border-bottom: 5px solid #d0d0d0
+        .title
+            padding: 30px
             font-size: 35px
 
-        .pay-check-message
+        .content
+            padding: 50px 60px
+            min-height: 400px
+            font-size: 20px
+            line-height: 30px
+            white-space: pre-wrap
+            border-top: 5px solid #d0d0d0
+            border-bottom: 5px solid #d0d0d0
 
-            .payment-warning
+            display: flex
+            flex-flow: column wrap
+            justify-content: baseline
+            gap: 50px
+
+        .message
+            .notice
                 text-align: center
                 white-space: nowrap
                 font-size: 30px
@@ -97,10 +110,10 @@ function reloadContents(paymentResult) {
                 color: red
                 text-align: center
 
-        .choice-list
+        .menu
             display: flex
             flex-flow: row wrap
-            justify-content: center
+            justify-content: space-around
             gap: 10px
 
             button

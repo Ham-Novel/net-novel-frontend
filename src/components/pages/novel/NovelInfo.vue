@@ -48,7 +48,7 @@
 import Tag from "@/components/reusable/Tag.vue";
 import CoverImg from "@/components/reusable/CoverImg.vue";
 
-import { ref, onMounted, computed, inject } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { Eye, Heart, MessageCircleHeart } from "lucide-vue-next";
 import { novelApi, memberApi } from "@/hooks/backendApi";
 
@@ -62,25 +62,12 @@ const props = defineProps({
 });
 
 //default novel 데이터
-const novel = ref({
-    id: 0,
-    title: "",
-    authorName: "",
-    desc: ``,
-    views: 0,
-    averageRating: 0,
-    favoriteCount: 0,
-    episodeCount: 0,
-    tags: [],
-    status: "",
-    thumbnailUrl: "",
-});
+const novel = ref({});
 
 //선호작 여부
 const isFavorite = ref(false);
 
 const rootStyles = getComputedStyle(document.documentElement);
-
 const favoriteButtonStyle = computed(() => {
     if (isFavorite.value) {
         return {
@@ -89,8 +76,8 @@ const favoriteButtonStyle = computed(() => {
         };
     } else {
         return {
-            color: rootStyles.getPropertyValue("--accent-color"),
-            fill: "transparent",
+            color: "black",
+            fill: "white",
         };
     }
 });
@@ -117,6 +104,7 @@ async function checkFavorite() {
         isFavorite.value = checked;
     } catch (error) {
         console.error("Failed to confirm favorite state: ", error);
+        isFavorite.value = false;
     }
 }
 
@@ -126,6 +114,19 @@ async function loadNovel() {
         novel.value = data;
     } catch (erorr) {
         console.error("Failed to load novel info: ", error);
+        novel.value = {
+            id: 0,
+            title: "ERROR",
+            authorName: "ERROR",
+            desc: `ERROR`,
+            views: 0,
+            averageRating: 0,
+            favoriteCount: 0,
+            episodeCount: 0,
+            tags: [{ id: 0, name: "ERROR" }],
+            status: "",
+            thumbnailUrl: "",
+        };
     }
 }
 

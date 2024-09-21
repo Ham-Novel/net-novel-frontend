@@ -43,13 +43,12 @@ const content = ref("");
 async function submitEpisode() {
     console.log(title.value, content.value, props.novelId);
 
-    const resp = await episodeApi.createEpisode(props.novelId, {
+    const createdId = await episodeApi.createEpisode(props.novelId, {
         novelId: props.novelId,
         title: title.value,
         content: content.value,
         costPolicyId: 1,
     });
-    const createdId = await resp.json();
 
     router.push({ name: "episode", params: { episodeId: createdId } });
 }

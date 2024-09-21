@@ -25,6 +25,7 @@ import { useRoute } from "vue-router";
 const scrollProps = reactive({
     pageProps: { number: 0, size: 5 },
     loadMethod: async (page, size) => {
+        
         return loadData;
     },
 });
