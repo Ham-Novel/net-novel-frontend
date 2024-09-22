@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import ToggleSwitch from "@/components/reusable/ToggleSwitch.vue";
+import ToggleSwitch from "@/components/reusable/switch/ToggleSwitch.vue";
 import { computed, ref, watch } from "vue";
 
 const mode = defineModel();

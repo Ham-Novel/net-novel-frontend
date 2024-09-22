@@ -1,14 +1,14 @@
 <template>
-    <div class="container">
-        <input type="file" accept="image/*" ref="imgInputRef" @change="applyUpload" />
+    <div>
+        <SelectSwitch v-model:toggle-on="select"></SelectSwitch>
     </div>
 </template>
 
-<script></script>
+<script setup>
+import { ref } from "vue";
+import SelectSwitch from "./reusable/switch/SelectSwitch.vue";
 
-<style scoped lang="sass">
-input
-    width: 500px
-    height: 200px
-    background-color: #e0e0e0
-</style>
+const select = ref(false);
+</script>
+
+<style scoped lang="sass"></style>

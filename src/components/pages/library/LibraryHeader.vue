@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import TabRouter from "@/components/reusable/TabRouter.vue";
+import TabRouter from "@/components/reusable/tab/TabRouter.vue";
 import { ref } from "vue";
 
 //선택 가능한 탭 메뉴

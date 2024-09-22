@@ -10,8 +10,8 @@
 
 <script setup>
 import NovelInfo from "./NovelInfo.vue";
-import TabRouter from "@/components/reusable/TabRouter.vue";
-import TabView from "@/components/reusable/TabView.vue";
+import TabRouter from "@/components/reusable/tab/TabRouter.vue";
+import TabView from "@/components/reusable/tab/TabView.vue";
 
 import { provide, ref } from "vue";
 

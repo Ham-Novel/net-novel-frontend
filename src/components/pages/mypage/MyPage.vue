@@ -18,8 +18,8 @@
 
 <script setup>
 import Profile from "./Profile.vue";
-import TabView from "@/components/reusable/TabView.vue";
-import TabRouter from "@/components/reusable/TabRouter.vue";
+import TabView from "@/components/reusable/tab/TabView.vue";
+import TabRouter from "@/components/reusable/tab/TabRouter.vue";
 
 import { ref, onMounted, reactive } from "vue";
 import { memberApi } from "@/hooks/backendApi";

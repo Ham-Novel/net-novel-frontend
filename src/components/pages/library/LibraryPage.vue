@@ -7,7 +7,7 @@
 
 <script setup>
 import LibraryHeader from "./LibraryHeader.vue";
-import TabView from "@/components/reusable/TabView.vue";
+import TabView from "@/components/reusable/tab/TabView.vue";
 import { ref } from "vue";
 </script>
 

@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import ToggleSwitch from "../reusable/ToggleSwitch.vue";
+import ToggleSwitch from "../reusable/switch/ToggleSwitch.vue";
 import { Sun, Moon } from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
 import { useDarkModeStore } from "@/stores/darkModeStore";
