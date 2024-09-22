@@ -1,5 +1,5 @@
 <template>
-    <ToggleSwitch v-model:toggle-on="darkMode">
+    <ToggleSwitch v-model:toggle-on="isDarkMode">
         <template #default> <Sun size="18" /> </template>
         <template #toggle-on> <Moon size="18" /> </template>
     </ToggleSwitch>
@@ -8,17 +8,22 @@
 <script setup>
 import ToggleSwitch from "../reusable/ToggleSwitch.vue";
 import { Sun, Moon } from "lucide-vue-next";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
+import { useDarkModeStore } from "@/stores/darkModeStore";
 
-const darkMode = ref(false);
+const darkModeStore = useDarkModeStore();
 
-const toggleDarkMode = watch(darkMode, (newValue) => {
-    setDarkMode(newValue);
+const isDarkMode = computed({
+    get: () => darkModeStore.isActivate,
+    set: (value) => darkModeStore.set(value),
 });
 
-function setDarkMode(state) {
-    darkMode.value = state;
-    if (state) {
+watch(isDarkMode, (newMode) => {
+    setDarkMode(newMode);
+});
+
+function setDarkMode(mode) {
+    if (mode) {
         document.body.classList.add("dark-mode");
     } else {
         document.body.classList.remove("dark-mode");

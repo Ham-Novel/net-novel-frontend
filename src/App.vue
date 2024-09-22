@@ -1,5 +1,5 @@
 <template>
-    <Nav v-if="navActivate"></Nav>
+    <Nav></Nav>
     <router-view></router-view>
     <Footer></Footer>
 </template>
@@ -7,15 +7,7 @@
 <script setup>
 import Nav from "./components/header/Nav.vue";
 import Footer from "./components/footer/Footer.vue";
-import { useStore } from "vuex";
 import { computed, onMounted } from "vue";
-
-const store = useStore();
-
-const navActivate = computed(() => {
-    // console.log(store.state.navi.naviState);
-    return store.state.navi.naviState;
-});
 </script>
 
 <style lang="sass">

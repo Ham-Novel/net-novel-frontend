@@ -8,16 +8,16 @@
 import EpisodeSect from "./EpisodeSect.vue";
 
 import { onMounted, onUnmounted, ref } from "vue";
-import { useStore } from "vuex";
+import { useNavBarStore } from "@/stores/navBarStore";
 
 //에피소드 페이지에서는 네비게이션 비활성화
-const store = useStore();
+const navBarStore = useNavBarStore();
 onMounted(() => {
-    store.commit("navi/off");
+    navBarStore.off();
 });
 
 onUnmounted(() => {
-    store.commit("navi/on");
+    navBarStore.on();
 });
 
 //url에서 에피소드 id 데이터 가져오기

@@ -1,10 +1,10 @@
 <template>
-    <nav>
+    <nav v-if="navBarStore.isDisplayed">
         <MenuGroup class="menu-group" :menu-list="publicList"></MenuGroup>
         <DarkModeSwitch></DarkModeSwitch>
         <MenuGroup class="menu-group" :menu-list="privateList"></MenuGroup>
     </nav>
-    <div class="nav-margin"></div>
+    <div v-if="navBarStore.isDisplayed" class="nav-margin"></div>
 </template>
 
 <script setup>
@@ -22,6 +22,9 @@ import {
 } from "lucide-vue-next";
 
 import { ref, toRaw } from "vue";
+import { useNavBarStore } from "@/stores/navBarStore";
+
+const navBarStore = useNavBarStore();
 
 const publicList = ref([
     {
