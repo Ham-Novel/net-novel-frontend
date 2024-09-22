@@ -1,15 +1,11 @@
 <template>
     <div>
-        <template v-for="item in [1, 2, 3]">
-            <SearchNovelItem></SearchNovelItem>
-            <div class="line"></div>
-        </template>
-        <!-- <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
+        <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
             <template #default="{ item }">
                 <SearchNovelItem :novel="item"></SearchNovelItem>
                 <div class="line"></div>
             </template>
-        </InfiniteScroll> -->
+        </InfiniteScroll>
     </div>
 </template>
 
@@ -18,24 +14,37 @@ import SearchNovelItem from "./SearchNovelItem.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { novelApi } from "@/hooks/backendApi";
-import { computed, reactive, ref, toRaw, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useSearchStore } from "@/stores/searchStore";
+import { computed, reactive, ref } from "vue";
+
+const searchStore = useSearchStore();
+const didSearch = ref(false);
 
 //스크롤 페이지 로드 설정
 const scrollProps = reactive({
-    pageProps: { number: 0, size: 5 },
+    pageProps: { number: 0, size: 3 },
     loadMethod: async (page, size) => {
-        
-        return loadData;
+        const loadNovels = await novelApi.getSearchNovels(
+            searchStore.getWord,
+            searchStore.getType,
+            page,
+            size
+        );
+        return loadNovels;
     },
 });
 
-//댓글 리스트 초기화 메서드
+//스크롤 리부팅 메서드
 const scrollRef = ref(null);
-const reloadBrowseList = () => {
-    console.debug("[BROWSE] realod: ", tags.value);
+const reloadSearchResult = () => {
+    console.debug("[SEARCH] realod: ");
     scrollRef.value.reset();
 };
+
+searchStore.setSearchMethod(() => {
+    didSearch.value = true;
+    reloadSearchResult();
+});
 </script>
 
 <style lang="sass" scoped>

@@ -1,5 +1,5 @@
 <template>
-    <ToggleSwitch v-model:toggle-on="mode">
+    <ToggleSwitch v-model:toggle-on="state">
         <template #default> <span>작품</span> </template>
         <template #toggle-on> <span>작가</span> </template>
     </ToggleSwitch>
@@ -7,9 +7,15 @@
 
 <script setup>
 import ToggleSwitch from "@/components/reusable/ToggleSwitch.vue";
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
 
-const mode = ref(false);
+const mode = defineModel();
+
+const state = ref(false);
+
+watch(state, (changed) => {
+    mode.value = changed ? "author" : "title";
+});
 </script>
 
 <style scoped lang="sass">

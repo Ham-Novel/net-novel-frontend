@@ -1,15 +1,38 @@
 <template>
     <div class="search-bar">
-        <SearchSwitch class="mode-switch"></SearchSwitch>
-        <input type="text" placeholder="작품명, 작가명 검색" />
-        <Search />
-        <List />
+        <SearchSwitch class="mode-switch" v-model="type"></SearchSwitch>
+        <input
+            @keyup.enter="searchEvent"
+            type="text"
+            placeholder="작품명, 작가명 검색"
+            v-model="word"
+        />
+        <Search class="execute-search button" @click="searchEvent" stroke-width="2.5" size="28" />
+        <List class="detail-search button" stroke-width="2.5" size="30" />
     </div>
 </template>
 
 <script setup>
 import SearchSwitch from "./SearchSwitch.vue";
 import { Search, List } from "lucide-vue-next";
+import { computed, ref } from "vue";
+import { useSearchStore } from "@/stores/searchStore";
+
+const searchStore = useSearchStore();
+
+const type = computed({
+    get: () => searchStore.getType,
+    set: (value) => (searchStore.type = value),
+});
+
+const word = computed({
+    get: () => searchStore.getWord,
+    set: (value) => (searchStore.word = value),
+});
+
+function searchEvent() {
+    searchStore.triggerSearch();
+}
 </script>
 
 <style scoped lang="sass">
@@ -31,4 +54,9 @@ import { Search, List } from "lucide-vue-next";
         height: 30px
         border: none
         font-size: 16px
+
+.button
+    cursor: pointer
+    &:hover
+        color: var(--primary-color)
 </style>
