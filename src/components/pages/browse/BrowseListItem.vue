@@ -1,6 +1,6 @@
 <template>
     <ListItem
-        class="brows-item"
+        class="browse-item"
         :brief="{
             title: props.novel.title,
             coverImg: props.novel.thumbnailUrl,
@@ -56,7 +56,7 @@ const browseTag = (tagId) => {
 </script>
 
 <style scoped lang="sass">
-.brows-item
+.browse-item
     height: 180px
 
 .detailed

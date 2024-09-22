@@ -50,7 +50,7 @@ const itemLoader = reactive({
             console.debug("[SCROLL] " + msg);
             if (itemLoader.state.allLoaded) return;
             const loadedItems = await itemLoader.putItems();
-            if (loadedItems.length < itemLoader.pageable.size) itemLoader.state.allLoaded = true;
+            if (loadedItems?.length < itemLoader.pageable.size) itemLoader.state.allLoaded = true;
         });
     },
     reset: async () => {

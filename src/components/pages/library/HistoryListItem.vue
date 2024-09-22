@@ -1,5 +1,11 @@
 <template>
-    <ListItem v-bind="itemProps">
+    <ListItem
+        :brief="{
+            title: props.novel.novelTitle,
+            coverImg: props.novel.thumbnailUrl,
+        }"
+        :link="{ name: 'novel', params: { id: props.novel.novelId } }"
+    >
         <template #cover>
             <p class="type">{{ novelType }}</p>
         </template>
@@ -17,8 +23,9 @@
                 </div>
             </div>
             <div class="feature">
-                <button class="continue-read">{{ props.novel.episodeTitle }} >></button>
-                <!-- <button class="add-library">+선호작</button> -->
+                <button class="continue-read" @click="goToRead(props.novel.episodeId)">
+                    {{ props.novel.episodeTitle }} >>
+                </button>
             </div>
             <p class="time">
                 <Clock8 size="17" stroke-width="2.3" />
@@ -33,7 +40,8 @@ import ListItem from "@/components/reusable/novel/ListItem.vue";
 import { PencilLine, Clock8 } from "lucide-vue-next";
 
 import { formatUtil } from "@/hooks/format";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
     novel: {
@@ -42,13 +50,6 @@ const props = defineProps({
     },
 });
 
-const itemProps = {
-    brief: {
-        title: props.novel.novelTitle,
-        coverImg: props.novel.thumbnailUrl,
-    },
-    link: { name: "novel", params: { id: props.novel.novelId } },
-};
 const novelType = computed(() => {
     switch (props.novel.novelType) {
         case "ONGOING":
@@ -61,6 +62,11 @@ const novelType = computed(() => {
             return "알 수 없음";
     }
 });
+
+const router = useRouter();
+function goToRead(episodeId) {
+    router.push({ name: "episode", params: { episodeId } });
+}
 </script>
 
 <style scoped lang="sass">

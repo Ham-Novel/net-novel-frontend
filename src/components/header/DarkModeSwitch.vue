@@ -18,9 +18,10 @@ const isDarkMode = computed({
     set: (value) => darkModeStore.set(value),
 });
 
-watch(isDarkMode, (newMode) => {
-    setDarkMode(newMode);
-});
+watch(
+    () => darkModeStore.isActivate,
+    (newMode) => setDarkMode(newMode)
+);
 
 function setDarkMode(mode) {
     if (mode) {
