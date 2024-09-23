@@ -11,7 +11,7 @@ import { computed, onMounted } from "vue";
 </script>
 
 <style lang="sass">
-@use "@/assets/theme.sass"
+@use "@picocss/pico"
 
 *
     margin: 0
