@@ -7,7 +7,9 @@
 <script setup>
 import Nav from "./components/header/Nav.vue";
 import Footer from "./components/footer/Footer.vue";
-import { computed, onMounted } from "vue";
+import { useDarkMode } from "./hooks/darkMode";
+
+useDarkMode(); //다크 모드 자동화 전역 설정
 </script>
 
 <style lang="sass">
@@ -23,8 +25,8 @@ html
 
 
 body
-    background-color: var(--bg-main)
-    color: var(--text-basic)
+    // background-color: var(--bg-main)
+    // color: var(--text-basic)
     overflow-y: scroll
 
 

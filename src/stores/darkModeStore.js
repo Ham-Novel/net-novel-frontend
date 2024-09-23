@@ -2,35 +2,15 @@ import { defineStore } from "pinia"
 
 export const useDarkModeStore = defineStore('dark-mode', {
     state: () => ({
-        darkMode: false
+        isDarkMode: false,
     }),
     actions: {
-        set(mode) {
-            this.darkMode = mode;
+        toggleMode() {
+            this.isDarkMode = !this.isDarkMode
         },
     },
-    getters: {
-        isActivate: (state) => state.darkMode
+    persist: {
+        key: 'net-novel-theme',
+        storage: localStorage,
     }
 })
-
-// export default {
-//     namespaced: true,
-//     state: () => ({
-//         darkMode: false
-//     }),
-//     mutations: {
-//         toggle(state) {
-//             state.naviState = !state.naviState
-//         },
-//         off(state) {
-//             state.naviState = false
-//         },
-//         on(state) {
-//             state.naviState = true
-//         }
-//     },
-//     getters: {
-//         isActivate: (state) => state.naviState
-//     }
-// }
