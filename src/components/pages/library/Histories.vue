@@ -32,7 +32,7 @@ const scrollProps = reactive({
 </script>
 
 <style scoped lang="sass">
-@use "@/assets/base.sass"
+
 
 .histories
     padding-top: 30px

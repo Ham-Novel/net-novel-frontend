@@ -40,7 +40,6 @@ function toggleTab(path) {
 </script>
 
 <style lang="sass" scoped>
-@use "@/assets/base.sass"
 
 .tab-menu
     display: flex

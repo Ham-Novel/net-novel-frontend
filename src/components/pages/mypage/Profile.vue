@@ -31,7 +31,7 @@ const props = defineProps({
 </script>
 
 <style lang="sass" scoped>
-@use "@/assets/base.sass"
+
 
 .profile-header
     position: relative

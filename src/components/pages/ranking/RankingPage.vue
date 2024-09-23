@@ -36,7 +36,6 @@ const scrollProps = reactive({
 </script>
 
 <style scoped lang="sass">
-@use '@/assets/base.sass'
 
 .top200
     margin-top:50px

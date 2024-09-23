@@ -19,7 +19,6 @@ const emits = defineEmits(["createNovelEvent"]);
 </script>
 
 <style scoped lang="sass">
-@use "@/assets/base.sass"
 
 .guide-sign
     display: flex

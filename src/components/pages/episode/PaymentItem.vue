@@ -74,7 +74,6 @@ function reloadContents(paymentResult) {
 </script>
 
 <style scoped lang="sass">
-@use "@/assets/base.sass"
 
 
 article

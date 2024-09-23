@@ -31,7 +31,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="sass">
-@use "@/assets/base.sass"
+
 
 .favorites
     padding-top: 30px

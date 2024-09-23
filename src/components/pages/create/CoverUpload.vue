@@ -23,7 +23,7 @@ import { Upload } from "lucide-vue-next";
 import { ref } from "vue";
 
 const imgFile = defineModel(); //업로드할 이미지 file 변수
-const coverSrc = ref(""); //img 태그에 적용할 src 값
+const coverSrc = ref("src"); //img 태그에 적용할 src 값
 const inputRef = ref(null); // input file DOM 요소
 
 //img 태그 클릭 시 input file 이벤트 실행
@@ -70,7 +70,7 @@ function displayImg(file) {
 </script>
 
 <style scoped lang="sass">
-@use "@/assets/base.sass"
+
 
 .uploader
     width: 300px

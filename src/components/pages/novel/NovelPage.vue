@@ -37,5 +37,4 @@ const tabs = ref([
 </script>
 
 <style scoped lang="sass">
-@use '@/assets/base.sass'
 </style>

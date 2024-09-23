@@ -14,7 +14,6 @@ import { ref } from "vue";
 </script>
 
 <style scoped lang="sass">
-@use "@/assets/base.sass"
 
 .header
     padding-bottom: 15px

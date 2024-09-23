@@ -25,7 +25,6 @@ Voluptate voluptate aliquip ipsum magna aliquip consectetur excepteur et volupta
 </script>
 
 <style scoped lang="sass">
-@use "@/assets/base.sass"
 
 .episode-section
     position: relative

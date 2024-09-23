@@ -77,7 +77,6 @@ const sortSelected = ref("recent");
 </script>
 
 <style lang="sass" scoped>
-@use '@/assets/base.sass'
 
 .comment-list-section
     .list-info

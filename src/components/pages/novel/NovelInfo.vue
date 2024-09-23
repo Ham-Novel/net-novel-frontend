@@ -138,7 +138,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="sass">
-@use "@/assets/base.sass"
+
 
 .root
     padding-top: 40px

@@ -12,5 +12,5 @@ import { ref } from "vue";
 </script>
 
 <style lang="sass" scoped>
-@use "@/assets/base.sass"
+
 </style>

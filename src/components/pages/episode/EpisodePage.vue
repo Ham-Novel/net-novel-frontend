@@ -36,7 +36,7 @@ const props = defineProps({
 </script>
 
 <style scoped lang="sass">
-@use "@/assets/base.sass"
+
 
 .episode-page
     // background-color: var(--line-color)

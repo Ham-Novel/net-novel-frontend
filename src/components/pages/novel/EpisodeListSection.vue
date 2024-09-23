@@ -60,7 +60,6 @@ onMounted(() => {
 </script>
 
 <style lang="sass" scoped>
-@use '@/assets/base.sass'
 
 .episode-list-section
 

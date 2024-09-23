@@ -55,7 +55,7 @@ async function submitEpisode() {
 </script>
 
 <style scoped lang="sass">
-@use "@/assets/base.sass"
+
 
 .create-form
     margin-top: 30px

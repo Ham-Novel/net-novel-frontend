@@ -64,7 +64,6 @@ const closeCoinCharge = (payment) => {
 </script>
 
 <style lang="sass" scoped>
-@use '@/assets/base.sass'
 
 .list-info
     padding: 0px 10px

@@ -19,7 +19,6 @@ import SearchResult from "./SearchResult.vue";
 </script>
 
 <style scoped lang="sass">
-@use '@/assets/base.sass'
 
 .search-input
     > div

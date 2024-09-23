@@ -16,7 +16,7 @@
 </template>
 
 <style lang="sass" scoped>
-@use "@/assets/base.sass"
+
 .user-stats
     display: flex
     justify-content: space-around

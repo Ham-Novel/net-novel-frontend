@@ -19,7 +19,7 @@ const tabs = ref([
 </script>
 
 <style lang="sass" scoped>
-@use "@/assets/base.sass"
+
 .library-header
     display: relative
     background-color: var(--bg-sub)

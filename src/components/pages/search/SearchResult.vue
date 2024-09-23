@@ -48,7 +48,6 @@ searchStore.setSearchMethod(() => {
 </script>
 
 <style lang="sass" scoped>
-@use "@/assets/base.sass"
 
 .browse-feature
     position: relative

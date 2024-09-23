@@ -47,7 +47,7 @@ onMounted(() => {
 </script>
 
 <style lang="sass" scoped>
-@use "@/assets/base.sass"
+
 .profile
     position: relative
     background-color: var(--bg-sub)

@@ -15,13 +15,13 @@ useDarkMode(); //다크 모드 자동화 전역 설정
 <style lang="sass">
 @use "@picocss/pico"
 
-*
-    margin: 0
-    padding: 0
-    box-sizing: border-box
+// *
+//     margin: 0
+//     padding: 0
+//     box-sizing: border-box
 
-html
-    font-family: 'Nanum Gothic', sans-serif
+// html
+//     font-family: 'Nanum Gothic', sans-serif
 
 
 body
