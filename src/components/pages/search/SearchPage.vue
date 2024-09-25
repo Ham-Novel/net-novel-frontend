@@ -1,6 +1,6 @@
 <template>
     <main>
-        <section class="search-input">
+        <section class="search-header">
             <div class="base-wrapper">
                 <SearchBar></SearchBar>
             </div>
@@ -19,8 +19,7 @@ import SearchResult from "./SearchResult.vue";
 </script>
 
 <style scoped lang="sass">
-
-.search-input
+.search-header
     > div
         padding-top: 30px
         padding-bottom: 30px

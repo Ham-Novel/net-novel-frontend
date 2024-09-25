@@ -77,6 +77,9 @@ function reloadContents(paymentResult) {
 
 
 article
+    position: relative
+    box-shadow: none
+
     .container
         position: relative
         padding-bottom: 100px

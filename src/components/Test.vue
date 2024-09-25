@@ -1,13 +1,11 @@
 <template>
-    <div>
-        <SelectSwitch v-model:toggle-on="select"></SelectSwitch>
-    </div>
+    <main class="container">
+        <h1>hello</h1>
+    </main>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import SelectSwitch from "./reusable/switch/SelectSwitch.vue";
-
 const select = ref(false);
 </script>
 

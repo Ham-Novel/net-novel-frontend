@@ -4,7 +4,6 @@
         <DarkModeSwitch></DarkModeSwitch>
         <MenuGroup class="menu-group" :menu-list="privateList"></MenuGroup>
     </nav>
-    <div v-if="navBarStore.isDisplayed" class="nav-margin"></div>
 </template>
 
 <script setup>
@@ -74,24 +73,22 @@ const privateList = ref([
 </script>
 
 <style scoped lang="sass">
-
-.nav-margin
-    height: 70px
-
 nav
+    position: sticky
+    top: 0
+    left: 0
+    -webkit-transform: translateZ(0)
+    z-index: 100
+
+    width: 100%
     height: 70px
     padding: 0 20px
 
-    background-color: var(--bg-sub)
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+    background-color: var(--pico-background-color)
+    border-bottom: 1px solid var(--pico-muted-border-color)
+    box-shadow: var(--pico-box-shadow)
 
     display: flex
     justify-content: space-between
     align-items: center
-
-    position: fixed
-    top: 0
-    left: 0
-    width: 100%
-    z-index: 1000
 </style>

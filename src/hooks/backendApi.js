@@ -21,7 +21,7 @@ function handleError(error, auth = true) {
 
     switch (error.response.status) {
         case 400:
-            console.error('Bad Request: ', error.message);
+            console.error('Bad Request: ', error.response.data);
             break;
         case 401:
             if (!auth) return;
@@ -87,10 +87,28 @@ export const novelApi = {
     async createNovel(createDto) {
         try {
             const response = await fetchApi({ method: 'post', url: '/novels', data: createDto })
-            console.log(response.data)
             return response.data;
         } catch (error) {
             console.error("Failed to create novel");
+            handleError(error, false);
+        }
+    },
+
+    async updateNovel(id, updateDto) {
+        try {
+            const response = await fetchApi({ method: 'put', url: `/novels/${id}`, data: updateDto })
+            return response.data;
+        } catch (error) {
+            console.error("Failed to update novel");
+            handleError(error, false);
+        }
+    },
+
+    async deleteNovel(id, deleteDto) {
+        try {
+            const response = await fetchApi({ method: 'delete', url: `/novels/${id}`, data: deleteDto })
+        } catch (error) {
+            console.error("Failed to update novel");
             handleError(error, false);
         }
     },

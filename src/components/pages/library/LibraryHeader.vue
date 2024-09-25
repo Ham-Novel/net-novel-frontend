@@ -2,7 +2,7 @@
     <section class="library-header">
         <div class="header-info base-wrapper">
             <h1 class="title">Library</h1>
-            <TabRouter :tabs="tabs"></TabRouter>
+            <h3><TabRouter :tabs="tabs"></TabRouter></h3>
         </div>
     </section>
 </template>

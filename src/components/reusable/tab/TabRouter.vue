@@ -1,13 +1,11 @@
 <template>
-    <section>
-        <form class="tab-menu">
-            <template v-for="(tab, index) in props.tabs" :key="index">
-                <router-link class="tab-item" :to="toggleTab(tab.path) ?? {}">
-                    {{ tab.name }}
-                </router-link>
-                <div class="tab-divider" v-if="index < props.tabs.length - 1"></div>
-            </template>
-        </form>
+    <section class="tab-menu">
+        <template v-for="(tab, index) in props.tabs" :key="index">
+            <router-link class="tab-item" :to="toggleTab(tab.path) ?? {}">
+                {{ tab.name }}
+            </router-link>
+            <div class="tab-divider" v-if="index < props.tabs.length - 1"></div>
+        </template>
     </section>
 </template>
 
@@ -45,20 +43,18 @@ function toggleTab(path) {
     display: flex
     align-items: center
     list-style-type: none
-    font-size: 25px
+
 
     .tab-item
         text-decoration: none
-        color: var(--text-basic)
         padding: 10px
         cursor: pointer
         font-weight: bold
-        transition: all 0.2s ease
         &:hover
             transform: translate(0, -5px)
 
-    .router-link-active
-        color: var(--primary-color)
+    // .router-link-active
+    //     // color: var(--pico-primary)
 
     .tab-divider
         height: 0.8em

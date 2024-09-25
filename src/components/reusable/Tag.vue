@@ -1,10 +1,10 @@
 <template>
-    <span
+    <button
         @click="browseTag(tag.id)"
-        :class="{ 'block-style': blockStyle, 'text-style': !blockStyle }"
+        :class="{ outline: !blockStyle, 'block-style': blockStyle, 'text-style': !blockStyle }"
     >
         {{ tagName }}
-    </span>
+    </button>
 </template>
 
 <script setup>
@@ -35,19 +35,16 @@ const browseTag = (tagId) => {
 </script>
 
 <style scoped lang="sass">
-span
-    font-weight: 700
-    flex-shrink: 0
-
 .block-style
     padding: 0.3em 0.6em
-    border-radius: 5px
-    background-color: var(--primary-color)
-    color: var(--text-reverse)
+    // border-radius: 5px
+    // background-color: var(--pico-primary)
     cursor: pointer
 
 .text-style
-    color: var(--primary-color)
+    padding: 0.2em 0.4em
+    font-size: 14px
+    border: none
     cursor: pointer
 
     &:hover

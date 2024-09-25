@@ -1,16 +1,14 @@
 <template>
     <section class="work-list base-wrapper">
         <template v-for="novel in props.novelList">
-            <WorkListItem
-                :novel="novel"
-                @create-episode-event="goToEpisodeCreatePage"
-            ></WorkListItem>
+            <WorkListItem :novel="novel"></WorkListItem>
+            <div class="line"></div>
         </template>
     </section>
 </template>
 
 <script setup>
-import WorkListItem from "./WorkListItem.vue";
+import WorkListItem from "./item/WorkListItem.vue";
 
 import { useRouter } from "vue-router";
 
@@ -20,20 +18,17 @@ const props = defineProps({
         requierd: true,
     },
 });
-
-const router = useRouter();
-
-function goToEpisodeCreatePage(novelId) {
-    router.push({ name: "episode-create", params: { id: novelId } });
-}
 </script>
 
 <style scoped lang="sass">
-@use "@/assets/base.sass"
 
 .work-list
     position: relative
     display: flex
     flex-flow: column wrap
-    gap: 10px
+
+.line
+    border-top: 2px solid var(--line-color)
+    width: 100%
+    margin: 10px 0px
 </style>

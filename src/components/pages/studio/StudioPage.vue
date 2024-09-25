@@ -3,7 +3,7 @@
         <section class="studio-header">
             <div class="studio-navi base-wrapper">
                 <h1 class="studio-title">Work Studio</h1>
-                <TabRouter :tabs="tabs" v class="studio-menu"></TabRouter>
+                <h3><TabRouter :tabs="tabs" v class="studio-menu"></TabRouter></h3>
             </div>
         </section>
         <TabView></TabView>

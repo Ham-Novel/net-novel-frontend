@@ -28,9 +28,9 @@
                     <Tag :tag="tag"></Tag>
                 </template>
             </div>
-            <p class="desc">
+            <blockquote class="desc">
                 {{ props.novel.desc }}
-            </p>
+            </blockquote>
         </div>
     </ListItem>
 </template>
@@ -57,12 +57,12 @@ const browseTag = (tagId) => {
 
 <style scoped lang="sass">
 .browse-item
-    height: 180px
+    height: auto
 
 .detailed
-    font-size: 12px
+    font-size: 14px
 
-    margin-top: 8px
+    margin-top: 10px
     display: flex
     flex-flow: column wrap
     gap: 6px
@@ -70,7 +70,6 @@ const browseTag = (tagId) => {
     .author
         font-size: 13px
         font-weight: 700
-        color: var(--bg-dark)
         display: flex
         align-items: center
         gap: 2px
@@ -89,7 +88,6 @@ const browseTag = (tagId) => {
 
     .tag
         width: 500px
-        height: 20px
 
         overflow: hidden
 
@@ -98,15 +96,24 @@ const browseTag = (tagId) => {
         align-items: center
         gap: 8px
 
+        button
+            font-size: 12px
+
 
     .desc
-        max-height: 80px
-        font-size: 14px
-        overflow: hidden
+        max-width: 80%
+        margin: 0
+        padding: 0
+        padding: 0.2em 0.6em
+
+        white-space: normal
+        word-wrap: break-word
         overflow-wrap: break-word
+
+        height: 70px
+        overflow: hidden
         text-overflow: ellipsis
         display: -webkit-box
         -webkit-line-clamp: 3 /* 표시할 줄 수 */
         -webkit-box-orient: vertical
-        color: gray
 </style>

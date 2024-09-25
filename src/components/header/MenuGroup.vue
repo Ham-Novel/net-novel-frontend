@@ -16,20 +16,12 @@ const props = defineProps(["menuList"]);
 
 <style scoped lang="sass">
 ul
-    margin-top: 5px
-
     display: inline-flex
     justify-content: center
     list-style-type: none
     gap: 20px
 
 .menu
-    color: var(--text-basic)
-    cursor: pointer
-    text-decoration: none
-
+    font-size: 25px
     transition: all 0.3s
-
-    &:hover
-        color: var(--primary-color)
 </style>

@@ -2,7 +2,7 @@
     <main>
         <NovelInfo class="novel-info" :novel-id="props.novelId"></NovelInfo>
         <section>
-            <TabRouter :tabs="tabs" class="base-wrapper"> </TabRouter>
+            <h2><TabRouter :tabs="tabs" class="base-wrapper"> </TabRouter></h2>
             <TabView class="base-wrapper" :novel-id="props.novelId"></TabView>
         </section>
     </main>
@@ -36,5 +36,4 @@ const tabs = ref([
 ]);
 </script>
 
-<style scoped lang="sass">
-</style>
+<style scoped lang="sass"></style>

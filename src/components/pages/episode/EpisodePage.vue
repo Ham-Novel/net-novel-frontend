@@ -38,10 +38,6 @@ const props = defineProps({
 <style scoped lang="sass">
 
 
-.episode-page
-    // background-color: var(--line-color)
-    background-color: #f3f2f1
-
 .episode-nav
     position: fixed
     bottom: 0

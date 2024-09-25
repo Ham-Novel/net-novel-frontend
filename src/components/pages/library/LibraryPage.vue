@@ -11,6 +11,4 @@ import TabView from "@/components/reusable/tab/TabView.vue";
 import { ref } from "vue";
 </script>
 
-<style lang="sass" scoped>
-
-</style>
+<style lang="sass" scoped></style>

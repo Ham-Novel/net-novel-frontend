@@ -1,5 +1,5 @@
 <template>
-    <article class="episode-section">
+    <article>
         <div class="content-container">
             <h1 class="title">{{ props.episode.title }}</h1>
             <p class="content">{{ props.episode.content }}</p>
@@ -26,8 +26,9 @@ Voluptate voluptate aliquip ipsum magna aliquip consectetur excepteur et volupta
 
 <style scoped lang="sass">
 
-.episode-section
+article
     position: relative
+    box-shadow: none
 
     .content-container
         position: relative

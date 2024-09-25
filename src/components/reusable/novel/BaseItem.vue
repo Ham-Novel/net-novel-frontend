@@ -1,5 +1,5 @@
 <template>
-    <section class="item">
+    <article class="item">
         <div class="cover" @click="goLinkPage">
             <CoverImg class="img" :img-url="props.coverImg"></CoverImg>
             <slot name="cover"></slot>
@@ -10,12 +10,11 @@
             </h3>
             <slot></slot>
         </div>
-    </section>
+    </article>
 </template>
 
 <script setup>
 import CoverImg from "../CoverImg.vue";
-import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const props = defineProps({
@@ -33,23 +32,24 @@ const props = defineProps({
     },
 });
 
-//클릭하면 해당 id 값의 NovelPage로 이동
+//클릭하면 해당 id 값의 Page로 이동
 const router = useRouter();
 function goLinkPage() {
-    console.log(props.link);
     router.push(props.link);
 }
-
-onMounted(() => {});
 </script>
 
 <style scoped lang="sass">
+
+article
+    padding: 0
+
 .item
     width: 200px
-    height: 100px
+    height: auto
     position: relative
     display: flex
-    flex-flow: row nowrap
+    flex-flow: column nowrap
     align-items: stretch
     gap: 10px
 
@@ -65,8 +65,10 @@ onMounted(() => {});
         height: 100%
 
 .info
-    position: relative
     flex: 1
+    position: relative
+    overflow: hidden
+    white-space: nowrap
 
     .title
         display: inline-block

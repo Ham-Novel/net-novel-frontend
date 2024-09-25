@@ -1,22 +1,21 @@
 <template>
-    <BaseItem
-        v-bind="{
-            title: props.brief?.title,
-            coverImg: props.brief?.coverImg,
-            link: props.link,
-        }"
-    >
-        <template #cover>
+    <article class="item">
+        <div class="cover" @click="goLinkPage">
+            <CoverImg class="img" :img-url="props.brief?.coverImg"></CoverImg>
             <slot name="cover"></slot>
-        </template>
-        <template #default>
+        </div>
+        <div class="info">
+            <h4 class="title" @click="goLinkPage">
+                {{ props.brief?.title }}
+            </h4>
             <slot></slot>
-        </template>
-    </BaseItem>
+        </div>
+    </article>
 </template>
 
 <script setup>
-import BaseItem from "./BaseItem.vue";
+import CoverImg from "../CoverImg.vue";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
     brief: {
@@ -28,11 +27,51 @@ const props = defineProps({
         required: true,
     },
 });
+
+//클릭하면 해당 id 값의 Page로 이동
+const router = useRouter();
+function goLinkPage() {
+    router.push(props.link);
+}
 </script>
 
 <style scoped lang="sass">
+
+article
+    padding: 0.5em
+
 .item
     width: 100%
-    height: 200px
+    height: 250px
+    position: relative
+    display: flex
+    flex-flow: row nowrap
+    align-items: stretch
     gap: 20px
+
+    .info
+        flex: 1
+        position: relative
+        overflow: hidden
+        white-space: nowrap
+
+        .title
+            // display: inline-block
+            // font-size: 22px
+            font-weight: bold
+            cursor: pointer
+
+            &:hover
+                text-decoration: underline
+
+.cover
+    position: relative
+    aspect-ratio: 3 / 4
+    overflow: hidden
+    border-radius: 5px
+    flex: 0 0 auto
+
+    .img
+        width: 100%
+        height: 100%
 </style>

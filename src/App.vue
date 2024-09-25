@@ -15,24 +15,21 @@ useDarkMode(); //다크 모드 자동화 전역 설정
 <style lang="sass">
 @use "@picocss/pico"
 
-// *
-//     margin: 0
-//     padding: 0
-//     box-sizing: border-box
+*
+    // margin: 0
+    // padding: 0
+    box-sizing: border-box
 
-// html
-//     font-family: 'Nanum Gothic', sans-serif
+h1, h2, h3, h4, h5, p
+    margin: 0
 
-
-body
-    // background-color: var(--bg-main)
-    // color: var(--text-basic)
-    overflow-y: scroll
+// body
+    // overflow-y: scroll
 
 
 main
     min-height: 800px
 
-span
-    display: inline-block
+// span
+//     display: inline-block
 </style>

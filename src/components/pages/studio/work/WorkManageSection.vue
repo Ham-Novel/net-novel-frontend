@@ -1,5 +1,5 @@
 <template>
-    <article class="work-manage-article">
+    <section class="work-manage-section">
         <NewbieGuide
             v-if="works.length === 0"
             @create-novel-event="goToCreateNovelPage"
@@ -11,7 +11,7 @@
             </button>
             <WorkList :novel-list="works"></WorkList>
         </template>
-    </article>
+    </section>
 </template>
 
 <script setup>
@@ -46,9 +46,8 @@ function goToCreateNovelPage() {
 </script>
 
 <style scoped lang="sass">
-@use "@/assets/base.sass"
 
-article
+section
     position: relative
     margin-top: 30px
 

@@ -71,13 +71,13 @@ const rootStyles = getComputedStyle(document.documentElement);
 const favoriteButtonStyle = computed(() => {
     if (isFavorite.value) {
         return {
-            color: rootStyles.getPropertyValue("--accent-color"),
-            fill: rootStyles.getPropertyValue("--accent-color"),
+            color: rootStyles.getPropertyValue("--pico-primary-background"),
+            fill: rootStyles.getPropertyValue("--pico-primary-background"),
         };
     } else {
         return {
-            color: "black",
-            fill: "white",
+            color: "currentColor",
+            fill: "transparent",
         };
     }
 });
@@ -226,9 +226,6 @@ onMounted(() => {
             transition: all 0.3s ease
             &:hover
                 transform: scale(1.2)
-            &:active
-                transform: scale(0.8)
-                box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1)
 
     .tag-list
         display: flex

@@ -253,7 +253,7 @@ watch(urlDetect.observer.intersection, urlDetect.handler);
     min-height: 1000px
     scroll-padding-top: 0px
     box-shadow: 8px 0 6px -3px rgba(0, 0, 0, 0.2), -8px 0 6px -3px rgba(0, 0, 0, 0.2)
-    background-color: var(--bg-main)
+    background-color: white
 
 
 
