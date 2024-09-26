@@ -1,16 +1,19 @@
 <template>
-    <div class="stat">
-        <span> <ScrollText size="20" /> {{ novel.episodeCount }} </span>
-        <span> <Eye size="20" /> {{ novel.views }} </span>
-        <span>
-            <Heart size="20" />
-            {{ novel.favoriteCount }}
-        </span>
-        <span>
-            <Star size="20" />
-            {{ novel.averageRating }}
-        </span>
-    </div>
+    <section>
+        <h6>작품 정보</h6>
+        <div class="stat">
+            <span> <ScrollText size="20" /> {{ novel.episodeCount }} </span>
+            <span> <Eye size="20" /> {{ novel.views }} </span>
+            <span>
+                <Heart size="20" />
+                {{ novel.favoriteCount }}
+            </span>
+            <span>
+                <Star size="20" />
+                {{ novel.averageRating }}
+            </span>
+        </div>
+    </section>
 </template>
 
 <script setup>
@@ -21,6 +24,10 @@ const novel = inject("novel");
 </script>
 
 <style scoped lang="sass">
+
+h6
+    margin-bottom: 15px
+
 span
     font-size: 15px
 
@@ -34,6 +41,5 @@ span
 
     display: flex
     flex-flow: column wrap
-    justify-content: center
     gap: 10px
 </style>

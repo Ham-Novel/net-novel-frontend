@@ -37,8 +37,6 @@ const browseTag = (tagId) => {
 <style scoped lang="sass">
 .block-style
     padding: 0.3em 0.6em
-    // border-radius: 5px
-    // background-color: var(--pico-primary)
     cursor: pointer
 
 .text-style

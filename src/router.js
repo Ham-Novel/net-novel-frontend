@@ -77,6 +77,19 @@ const routes = [
                 name: 'novel-comment', path: 'comments', props: true,
                 component: CommandListSection,
             },
+            // { name: 'novel-create', path: 'create', component: NovelCreatePage },
+            // {
+            //     name: 'novel-update', path: 'update', component: NovelUpdatePage,
+            //     props: (route) => ({
+            //         novelId: Number(route.params.id)
+            //     }),
+            // },
+            // {
+            //     name: 'novel-delete', path: 'delete', component: NovelDeletePage,
+            //     props: (route) => ({
+            //         novelId: Number(route.params.id)
+            //     }),
+            // },
         ]
     },
     {

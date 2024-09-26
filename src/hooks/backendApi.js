@@ -81,6 +81,7 @@ export const novelApi = {
         } catch (error) {
             console.error("Failed to load novel info");
             handleError(error, false);
+            return error;
         }
     },
 

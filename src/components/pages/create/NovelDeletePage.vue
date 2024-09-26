@@ -1,7 +1,11 @@
 <template>
     <main>
         <article class="base-wrapper">
-            <NovelEditSect v-model="novelData" @submit-novel="submit"></NovelEditSect>
+            <NovelEditSect
+                v-model="formInput"
+                @submit-novel="submit"
+                :disabled="true"
+            ></NovelEditSect>
         </article>
     </main>
 </template>
@@ -9,7 +13,7 @@
 <script setup>
 import NovelEditSect from "./NovelEditSect.vue";
 
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, computed } from "vue";
 import { useRouter } from "vue-router";
 import { novelApi } from "@/hooks/backendApi";
 
@@ -24,18 +28,25 @@ const props = defineProps({
 });
 
 //삭제할 작품 정보
-const novelData = reactive({});
+const novelOrigin = reactive({});
+
+//reactive는 v-model로 설정 불가
+//computed 변수를 v-model로 설정하여 novelOrigin 값 변경
+const formInput = computed({
+    get: () => novelOrigin,
+    set: (value) => (novelOrigin = value),
+});
 
 //페이지 로드 시 삭제할 작품 정보 불러오기
-onMounted(() => {
-    const data = loadNovel();
-    novelData = {
-        title: data.id,
+onMounted(async () => {
+    const data = await loadNovel();
+    Object.assign(novelOrigin, {
+        title: data.title,
         tagNames: data.tags.map((tag) => tag.name),
         description: data.desc,
         imgFile: data.thumbnailUrl,
         copyright: "can-commercial",
-    };
+    });
 });
 
 async function loadNovel() {
@@ -59,8 +70,8 @@ async function submit() {
 
 async function deleteNovel() {
     // 작품명과  row 생성 및 저장
-    const deletedId = await novelApi.deleteNovel({
-        // dto 입력
+    const deletedId = await novelApi.deleteNovel(props.novelId, {
+        novelId: props.novelId,
     });
 
     //작품 썸네일 DB에서 삭제?

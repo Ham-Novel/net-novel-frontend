@@ -16,7 +16,7 @@ import { novelApi } from "@/hooks/backendApi";
 const router = useRouter();
 
 //유저가 입력한 작품 정보 데이터
-const novelFormData = reactive({});
+const novelFormData = reactive({ copyright: "" });
 
 async function submit() {
     try {

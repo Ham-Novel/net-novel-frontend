@@ -23,6 +23,12 @@ useDarkMode(); //다크 모드 자동화 전역 설정
 h1, h2, h3, h4, h5, p
     margin: 0
 
+button
+    padding: 0.2em 0.5em
+    font-size: 14px
+    font-weight: 700
+    border-width: 2px
+
 // body
     // overflow-y: scroll
 

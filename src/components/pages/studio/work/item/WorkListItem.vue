@@ -1,15 +1,9 @@
 <template>
     <ListItem v-bind="itemProps">
         <div class="composition">
-            <section class="zone">
-                <StatSect></StatSect>
-            </section>
-            <section class="zone">
-                <NovelSect></NovelSect>
-            </section>
-            <section class="zone">
-                <EpisodeSect></EpisodeSect>
-            </section>
+            <StatSect class="zone"></StatSect>
+            <NovelSect class="zone"></NovelSect>
+            <EpisodeSect class="zone"></EpisodeSect>
         </div>
     </ListItem>
 </template>
@@ -28,8 +22,11 @@ const props = defineProps({
     },
 });
 
+//각 Sect에 작품 정보 전달
+//props는 번거로우니 provide 사용
 provide("novel", props.novel);
 
+//ListItem에 작품 데이터 전달
 const itemProps = {
     brief: {
         title: props.novel.title,
@@ -51,7 +48,5 @@ const itemProps = {
 
     .zone
         flex: 1
-        padding: 15px
         border-radius: 10px
-        background-color: var(--bg-sub)
 </style>

@@ -2,7 +2,11 @@
     <form class="section-structure" @submit.prevent="submitNovel">
         <section class="cover-form">
             <h3>북커버 표지</h3>
-            <CoverUpload class="cover-img" v-model="novelFormData.imgFile"></CoverUpload>
+            <CoverUpload
+                class="cover-img"
+                v-model="novelFormData.imgFile"
+                :disabled="props.disabled"
+            ></CoverUpload>
             <select
                 id="cover-copyright-check"
                 name="cover-copyright-check"
@@ -46,7 +50,6 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
 import CoverUpload from "./CoverUpload.vue";
 import TagInput from "./TagInput.vue";
 
@@ -75,14 +78,12 @@ const novelFormData = defineModel({
 });
 
 //v-model에 copyright default 값 설정하기
-onMounted(() => {
-    if (novelFormData.value.copyright ?? false) {
-        return;
-    }
-    const data = novelFormData.value;
-    data.copyright = "";
-    emits("update:modelValue", data);
-});
+// onMounted(() => {
+//     if (novelFormData.value.copyright ?? false) {
+//         return;
+//     }
+//     novelFormData.value.copyright = "";
+// });
 
 //form 입력값 제출 메서드
 async function submitNovel() {
@@ -93,7 +94,7 @@ async function submitNovel() {
 <style scoped lang="sass">
 
 article
-    // position: relative
+    position: relative
     width: 800px
     margin: 0
 

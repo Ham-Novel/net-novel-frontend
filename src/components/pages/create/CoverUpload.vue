@@ -1,27 +1,37 @@
 <template>
-    <div
-        class="uploader"
-        :class="{ 'drag-and-drop': isDragging }"
-        v-bind="$attrs"
-        @click="clickUpload"
-        @drop.prevent="handleDrop"
-        @dragover.prevent="setDrag(true)"
-        @dragleave.prevent="setDrag(false)"
-    >
-        <div v-if="coverSrc.length == 0" class="preview empty-upload">
-            <div><Upload size="50" /></div>
-            <p>이미지를 드래그하거나 클릭하여 업로드</p>
-            <p>지원 파일 형식: JPG, PNG</p>
+    <div>
+        <div
+            v-if="disabled === false"
+            class="uploader"
+            :class="{ 'drag-and-drop': isDragging }"
+            @click="clickUpload"
+            @drop.prevent="handleDrop"
+            @dragover.prevent="setDrag(true)"
+            @dragleave.prevent="setDrag(false)"
+        >
+            <div v-if="coverSrc.length === 0" class="preview empty-upload">
+                <div><Upload size="50" /></div>
+                <p>이미지를 드래그하거나 클릭하여 업로드</p>
+                <p>지원 파일 형식: JPG, PNG</p>
+            </div>
+            <CoverImg v-else class="preview full-upload" :img-url="coverSrc"></CoverImg>
         </div>
-        <CoverImg v-else class="preview full-upload" :img-url="coverSrc"></CoverImg>
+        <CoverImg v-else class="uploader" :img-url="coverSrc"></CoverImg>
+        <input type="file" accept="image/*" ref="inputRef" @change.prevent="uploadCover" />
     </div>
-    <input type="file" accept="image/*" ref="inputRef" @change.prevent="uploadCover" />
 </template>
 
 <script setup>
 import CoverImg from "@/components/reusable/CoverImg.vue";
 import { Upload } from "lucide-vue-next";
 import { ref } from "vue";
+
+const props = defineProps({
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
+});
 
 const imgFile = defineModel(); //업로드할 이미지 file 변수
 const coverSrc = ref(""); //img 태그에 적용할 src 값

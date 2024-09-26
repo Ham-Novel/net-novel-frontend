@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 
 const props = defineProps({
     //true이면 모든 input을 read only 설정
@@ -21,11 +21,13 @@ const props = defineProps({
         default: false,
     },
 });
-const tags = defineModel();
+const tags = defineModel({
+    default: [],
+});
 
-const tagText = ref("");
-watch(tagText, (newText) => {
-    tags.value = newText.split(" ");
+const tagText = computed({
+    get: () => tags.value.join(" "),
+    set: (value) => (tags.value = value.split(" ")),
 });
 </script>
 
