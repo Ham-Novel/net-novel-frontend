@@ -1,7 +1,7 @@
 <template>
     <main>
         <article class="base-wrapper">
-            <NovelEditSect v-model="novelFormData" @submit-novel="submit"></NovelEditSect>
+            <NovelEditSect v-model="novelData" @submit-novel="submit"></NovelEditSect>
         </article>
     </main>
 </template>
@@ -23,20 +23,17 @@ const props = defineProps({
     },
 });
 
-//업데이트할 작품 정보
+//삭제할 작품 정보
 const novelData = reactive({});
 
-//유저가 입력한 작품 정보 수정사항
-const novelFormData = reactive({});
-
-//페이지 로드 시 업데이트할 작품 정보 불러오기
+//페이지 로드 시 삭제할 작품 정보 불러오기
 onMounted(() => {
-    novelData = loadNovel();
-    novelFormData = {
-        title: novelData.id,
-        tagNames: novelData.tags.map((tag) => tag.name),
-        description: novelData.desc,
-        imgFile: novelData.thumbnailUrl,
+    const data = loadNovel();
+    novelData = {
+        title: data.id,
+        tagNames: data.tags.map((tag) => tag.name),
+        description: data.desc,
+        imgFile: data.thumbnailUrl,
         copyright: "can-commercial",
     };
 });
@@ -50,28 +47,23 @@ async function loadNovel() {
     }
 }
 
-//업데이트 버튼 이벤트 로직
-//작품 업데이트 및 에러 처리
+//삭제 버튼 이벤트 로직
+//에러 처리
 async function submit() {
     try {
-        await updateNovel();
+        await deleteNovel();
     } catch (error) {
         console.error("작품 업데이트 실패");
     }
 }
 
-async function updateNovel() {
+async function deleteNovel() {
     // 작품명과  row 생성 및 저장
-    const updatedId = await novelApi.updateNovel({
-        title: novelFormData.title,
-        description: novelFormData.description,
-        tagNames: novelFormData.tagNames,
+    const deletedId = await novelApi.deleteNovel({
+        // dto 입력
     });
 
-    //작품 썸네일이 변경되었으면 DB에 저장
-    if (novelFormData.imgFile !== novelData.thumbnailUrl) {
-        await novelApi.setNovelThumbnail(updatedId, novelFormData.imgFile);
-    }
+    //작품 썸네일 DB에서 삭제?
 
     //작품 관리 페이지로 이동
     router.push({ name: "work-manage" });

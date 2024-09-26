@@ -2,6 +2,7 @@
     <div
         class="uploader"
         :class="{ 'drag-and-drop': isDragging }"
+        v-bind="$attrs"
         @click="clickUpload"
         @drop.prevent="handleDrop"
         @dragover.prevent="setDrag(true)"
@@ -23,7 +24,7 @@ import { Upload } from "lucide-vue-next";
 import { ref } from "vue";
 
 const imgFile = defineModel(); //업로드할 이미지 file 변수
-const coverSrc = ref("src"); //img 태그에 적용할 src 값
+const coverSrc = ref(""); //img 태그에 적용할 src 값
 const inputRef = ref(null); // input file DOM 요소
 
 //img 태그 클릭 시 input file 이벤트 실행
@@ -70,28 +71,22 @@ function displayImg(file) {
 </script>
 
 <style scoped lang="sass">
-
-
 .uploader
     width: 300px
-    height: 400px
-    margin-bottom: 10px
+    position: relative
+    aspect-ratio: 3 / 4
     padding: 5px
-    border-radius: 10px
-    border: 2px dashed var(--line-color)
-    overflow: hidden
     cursor: pointer
     transition: all 0.3s
-
-
+    border-radius: 10px
+    border: 2px dashed var(--pico-secondary-border)
     &:hover
-        border: 3px dashed var(--primary-color)
-        background-color: var(--bg-sub)
+        border: 3px dashed var(--pico-primary-border)
+        color: var(--pico-primary)
 
 .preview
     width: 100%
     height: 100%
-
 
 .empty-upload
     display: flex
@@ -112,6 +107,6 @@ input
     display: none
 
 .drag-and-drop
-    border: 3px dashed var(--primary-color)
-    background-color: var(--bg-sub)
+    border: 3px dashed var(--pico-primary-border)
+    color: var(--pico-primary)
 </style>

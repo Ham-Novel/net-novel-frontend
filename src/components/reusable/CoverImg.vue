@@ -24,6 +24,7 @@ const props = defineProps({
         object-fit: cover
         object-position: center
         transition: transform 0.6s ease // 부드러운 확대 효과를 위한 전환
+        border: none
 
         &:hover
             transform: scale(1.1) // 마우스 오버 시 이미지 확대

@@ -27,6 +27,9 @@ import WorkStatSection from './components/pages/studio/stat/WorkStatSection.vue'
 import SettlementSection from './components/pages/studio/settlement/SettlementSection.vue';
 
 import NovelCreatePage from './components/pages/create/NovelCreatePage.vue';
+import NovelUpdatePage from './components/pages/create/NovelUpdatePage.vue';
+import NovelDeletePage from './components/pages/create/NovelDeletePage.vue';
+
 import EpisodeCreatePage from './components/pages/create/EpisodeCreatePage.vue';
 
 import NotFoundPage from './components/pages/etc/NotFoundPage.vue';
@@ -103,7 +106,21 @@ const routes = [
             { name: 'settlement', path: 'settlements', component: SettlementSection },
         ]
     },
-    { name: 'novel-create', path: '/novels/new', component: NovelCreatePage },
+
+    { name: 'novel-create', path: '/novels/create', component: NovelCreatePage },
+    {
+        name: 'novel-update', path: '/novels/update/:id', component: NovelUpdatePage,
+        props: (route) => ({
+            novelId: Number(route.params.id)
+        }),
+    },
+    {
+        name: 'novel-delete', path: '/novels/delete/:id', component: NovelDeletePage,
+        props: (route) => ({
+            novelId: Number(route.params.id)
+        }),
+    },
+
     {
         name: 'episode-create',
         path: '/novels/:id/episodes/new',

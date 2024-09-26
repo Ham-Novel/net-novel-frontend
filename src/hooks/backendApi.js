@@ -91,6 +91,7 @@ export const novelApi = {
         } catch (error) {
             console.error("Failed to create novel");
             handleError(error, false);
+            return error;
         }
     },
 
@@ -101,6 +102,7 @@ export const novelApi = {
         } catch (error) {
             console.error("Failed to update novel");
             handleError(error, false);
+            return error;
         }
     },
 
@@ -110,6 +112,7 @@ export const novelApi = {
         } catch (error) {
             console.error("Failed to update novel");
             handleError(error, false);
+            return error;
         }
     },
 
