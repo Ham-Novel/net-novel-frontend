@@ -1,6 +1,6 @@
 <template>
     <article class="novel-create-page">
-        <form @submit.prevent class="create-form base-wrapper">
+        <form @submit.prevent="submitEpisode" class="create-form base-wrapper">
             <section class="info-form">
                 <h3>에피소드 작성</h3>
                 <div class="novel-info">
@@ -14,7 +14,7 @@
                     </div>
                 </div>
             </section>
-            <button class="create-button" @click="submitEpisode">에피소드 등록</button>
+            <input type="submit" />
         </form>
     </article>
 </template>
@@ -47,10 +47,10 @@ async function submitEpisode() {
         novelId: props.novelId,
         title: title.value,
         content: content.value,
-        costPolicyId: 1,
+        costPolicyId: 2,
     });
 
-    router.push({ name: "episode", params: { episodeId: createdId } });
+    router.push({ name: "work-manage" });
 }
 </script>
 
@@ -70,7 +70,7 @@ async function submitEpisode() {
     display: flex
     flex-flow: column wrap
     justify-content: center
-    gap: 60px
+    gap: 20px
 
     h3
         margin-bottom: 10px

@@ -360,6 +360,45 @@ export const memberApi = {
         }
     },
 
+    async getWorksSettlement() {
+        try {
+            const response = await fetchApi({
+                method: 'get',
+                url: `/settlements`
+            })
+            return response.data;
+        } catch (error) {
+            console.error("Failed to load coin use history in works")
+            handleError(error);
+        }
+    },
+
+    async requestSettlement() {
+        try {
+            const response = await fetchApi({
+                method: 'post',
+                url: `/settlements`
+            })
+            return response.data;
+        } catch (error) {
+            console.error("Failed to request the settlement")
+            handleError(error);
+        }
+    },
+
+    async getSettlementResult() {
+        try {
+            const response = await fetchApi({
+                method: 'get',
+                url: `/settlements`
+            })
+            return response.data;
+        } catch (error) {
+            console.error("Failed to get settlement result")
+            handleError(error);
+        }
+    },
+
     async getWorks() {
         try {
             const response = await fetchApi({
