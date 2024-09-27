@@ -48,6 +48,7 @@ const queryTags = computed(() => {
 
 watch(queryTags, (newValue) => {
     tags.value = newValue;
+    scrollRef.value.reset();
 });
 
 const tags = ref(queryTags.value);
