@@ -3,16 +3,17 @@
         <section class="cover-form">
             <h3>북커버 표지</h3>
             <CoverUpload
+                v-if="formInput.setupImg !== undefined"
                 class="cover-img"
-                v-model="novelFormData.imgFile"
+                v-model="formInput.imgFile"
+                :setup-img="formInput.setupImg"
                 :disabled="props.disabled"
             ></CoverUpload>
             <select
                 id="cover-copyright-check"
                 name="cover-copyright-check"
-                v-model="novelFormData.copyright"
-                required
-                :disabled="props.disabled"
+                value="can-commercial"
+                disabled
             >
                 <option value="" disabled>표지 사용 규정</option>
                 <option value="own-copyright">표지 저작권 소유</option>
@@ -26,18 +27,18 @@
                     <p>작품명</p>
                     <input
                         type="text"
-                        v-model="novelFormData.title"
+                        v-model="formInput.title"
                         required
                         @keydown.enter.prevent
                         :disabled="props.disabled"
                     />
                 </div>
-                <TagInput v-model="novelFormData.tagNames" :disabled="props.disabled"></TagInput>
+                <TagInput v-model="formInput.tagNames" :disabled="props.disabled"></TagInput>
                 <div>
                     <p>작품 소개</p>
                     <textarea
                         name="description"
-                        v-model="novelFormData.description"
+                        v-model="formInput.description"
                         @keydown.enter.prevent
                         required
                         :disabled="props.disabled"
@@ -50,6 +51,7 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
 import CoverUpload from "./CoverUpload.vue";
 import TagInput from "./TagInput.vue";
 
@@ -67,23 +69,16 @@ const props = defineProps({
 const emits = defineEmits(["submit-novel"]); //부모로부터 받은 제출 로직
 
 //작품 정보 입력 데이터
-const novelFormData = defineModel({
+const formInput = defineModel({
     default: {
         title: "", //작품명
         tagNames: [], //태그 이름 리스트
         description: "", //작품 소개
-        imgFile: null, //이미지 파일
+        imgFile: undefined, //이미지 파일
+        setupImg: undefined, //이미지 url
         copyright: "", //이미 저작권 상태
     },
 });
-
-//v-model에 copyright default 값 설정하기
-// onMounted(() => {
-//     if (novelFormData.value.copyright ?? false) {
-//         return;
-//     }
-//     novelFormData.value.copyright = "";
-// });
 
 //form 입력값 제출 메서드
 async function submitNovel() {

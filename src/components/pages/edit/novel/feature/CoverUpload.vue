@@ -24,9 +24,13 @@
 <script setup>
 import CoverImg from "@/components/reusable/CoverImg.vue";
 import { Upload } from "lucide-vue-next";
-import { ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const props = defineProps({
+    setupImg: {
+        type: String,
+        // default: "",
+    },
     disabled: {
         type: Boolean,
         default: false,
@@ -34,7 +38,7 @@ const props = defineProps({
 });
 
 const imgFile = defineModel(); //업로드할 이미지 file 변수
-const coverSrc = ref(""); //img 태그에 적용할 src 값
+const coverSrc = ref(props.setupImg); //img 태그에 적용할 src 값
 const inputRef = ref(null); // input file DOM 요소
 
 //img 태그 클릭 시 input file 이벤트 실행
@@ -53,14 +57,12 @@ const handleDrop = (event) => {
     const file = event.dataTransfer.files[0];
     console.log("Dropped files:", file);
     saveFile(file);
-    displayImg(file);
 };
 
 //input file에 change 이벤트 발생 시
 function uploadCover(event) {
     const file = event.target.files[0];
     saveFile(file);
-    displayImg(file);
 }
 
 function saveFile(file) {
@@ -78,6 +80,14 @@ function displayImg(file) {
         reader.readAsDataURL(file);
     }
 }
+
+watch(
+    imgFile,
+    (value) => {
+        displayImg(value);
+    },
+    { immediate: true }
+);
 </script>
 
 <style scoped lang="sass">

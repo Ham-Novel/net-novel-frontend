@@ -266,20 +266,6 @@ export const episodeApi = {
         }
     },
 
-    async createEpisode(novelId, createDto) {
-        try {
-            const response = await fetchApi({
-                method: 'post',
-                url: `/novels/${novelId}/episodes`,
-                data: createDto
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load tag by name")
-            handleError(error, false)
-        }
-    },
-
     async getEpisodesByNovel(id, sort, page, size) {
         try {
             const response = await fetchApi({
@@ -309,7 +295,6 @@ export const episodeApi = {
         }
     },
 
-
     async payForEpisode(paymentDto) {
         try {
             const response = await fetchApi({
@@ -322,6 +307,48 @@ export const episodeApi = {
             console.error(`Failed to execute payment`);
             handleError(error)
             throw error;
+        }
+    },
+
+    async createEpisode(novelId, createDto) {
+        try {
+            const response = await fetchApi({
+                method: 'post',
+                url: `/novels/${novelId}/episodes`,
+                data: createDto
+            })
+            return response.data;
+        } catch (error) {
+            console.error("Failed to create episode of novel")
+            handleError(error, true)
+        }
+    },
+
+    async updateEpisode(updateDto) {
+        try {
+            const response = await fetchApi({
+                method: 'post',
+                url: `/episodes/${updateDto.episodeId}`,
+                data: updateDto
+            })
+            return response.data;
+        } catch (error) {
+            console.error("Failed to update episode")
+            handleError(error, true)
+        }
+    },
+
+    async deleteEpisode(episodeId) {
+        try {
+            const response = await fetchApi({
+                method: 'delete',
+                url: `/episodes/${episodeId}`,
+                data: deleteDto
+            })
+            return response.data;
+        } catch (error) {
+            console.error("Failed to delete episode")
+            handleError(error, true)
         }
     },
 }

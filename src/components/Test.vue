@@ -1,11 +1,7 @@
 <template>
-    <main>
-        <NovelEditSect></NovelEditSect>
-    </main>
+    <main></main>
 </template>
 
-<script setup>
-import NovelEditSect from "./pages/create/NovelEditSect.vue";
-</script>
+<script setup></script>
 
 <style scoped lang="sass"></style>

@@ -3,7 +3,7 @@
         <article class="base-wrapper">
             <NovelEditSect
                 v-model="formInput"
-                @submit-novel="submit"
+                @submit-novel="deleteNovel"
                 :disabled="true"
             ></NovelEditSect>
         </article>
@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import NovelEditSect from "./NovelEditSect.vue";
+import NovelEditSect from "./feature/NovelEditSect.vue";
 
 import { onMounted, reactive, computed } from "vue";
 import { useRouter } from "vue-router";
@@ -34,7 +34,7 @@ const novelOrigin = reactive({});
 //computed 변수를 v-model로 설정하여 novelOrigin 값 변경
 const formInput = computed({
     get: () => novelOrigin,
-    set: (value) => (novelOrigin = value),
+    set: (value) => novelOrigin, //novelOrigin 값은 변경 불가능
 });
 
 //페이지 로드 시 삭제할 작품 정보 불러오기
@@ -44,8 +44,7 @@ onMounted(async () => {
         title: data.title,
         tagNames: data.tags.map((tag) => tag.name),
         description: data.desc,
-        imgFile: data.thumbnailUrl,
-        copyright: "can-commercial",
+        setupUrl: data.thumbnailUrl,
     });
 });
 
@@ -59,22 +58,11 @@ async function loadNovel() {
 }
 
 //삭제 버튼 이벤트 로직
-//에러 처리
-async function submit() {
-    try {
-        await deleteNovel();
-    } catch (error) {
-        console.error("작품 업데이트 실패");
-    }
-}
-
 async function deleteNovel() {
     // 작품명과  row 생성 및 저장
     const deletedId = await novelApi.deleteNovel(props.novelId, {
         novelId: props.novelId,
     });
-
-    //작품 썸네일 DB에서 삭제?
 
     //작품 관리 페이지로 이동
     router.push({ name: "work-manage" });

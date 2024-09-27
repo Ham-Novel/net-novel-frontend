@@ -22,6 +22,7 @@ useDarkMode(); //다크 모드 자동화 전역 설정
 
 h1, h2, h3, h4, h5, h6, p
     margin: 0
+    --pico-color: var(--pico-h1-color)
 
 button
     padding: 0.2em 0.5em
@@ -29,8 +30,9 @@ button
     font-weight: 700
     border-width: 2px
 
-// body
-    // overflow-y: scroll
+body
+    overflow-x: hidden
+    overflow-y: scroll
 
 
 main

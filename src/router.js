@@ -26,11 +26,11 @@ import TipManageSection from './components/pages/studio/tip/TipManageSection.vue
 import WorkStatSection from './components/pages/studio/stat/WorkStatSection.vue';
 import SettlementSection from './components/pages/studio/settlement/SettlementSection.vue';
 
-import NovelCreatePage from './components/pages/create/NovelCreatePage.vue';
-import NovelUpdatePage from './components/pages/create/NovelUpdatePage.vue';
-import NovelDeletePage from './components/pages/create/NovelDeletePage.vue';
+import NovelCreatePage from './components/pages/edit/novel/NovelCreatePage.vue';
+import NovelUpdatePage from './components/pages/edit/novel/NovelUpdatePage.vue';
+import NovelDeletePage from './components/pages/edit/novel/NovelDeletePage.vue';
 
-import EpisodeCreatePage from './components/pages/create/EpisodeCreatePage.vue';
+import EpisodeCreatePage from './components/pages/edit/episode/EpisodeCreatePage.vue';
 
 import NotFoundPage from './components/pages/etc/NotFoundPage.vue';
 import Test from './components/Test.vue';
