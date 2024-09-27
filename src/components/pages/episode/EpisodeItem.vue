@@ -28,6 +28,7 @@ Voluptate voluptate aliquip ipsum magna aliquip consectetur excepteur et volupta
 
 article
     position: relative
+    min-height: 800px
     box-shadow: none
 
     .content-container
