@@ -41,6 +41,7 @@ import Tag from "@/components/reusable/Tag.vue";
 import { Eye, Heart, Clock8, PencilLine } from "lucide-vue-next";
 import { useRouter } from "vue-router";
 import { formatUtil } from "@/hooks/format";
+import { onMounted } from "vue";
 
 const props = defineProps({
     novel: {
@@ -88,6 +89,7 @@ const browseTag = (tagId) => {
 
     .tag
         width: 500px
+        height: 30px
 
         overflow: hidden
 
