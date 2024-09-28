@@ -2,8 +2,8 @@
     <aside>
         <nav>
             <ul>
-                <li><List size="30" /></li>
-                <li><MessageSquareMore size="30" /></li>
+                <li @click="toggleModal(CommentListModal)"><List size="30" /></li>
+                <li @click="toggleModal(EpisodeListModal)"><MessageSquareMore size="30" /></li>
                 <li><Info size="30" /></li>
             </ul>
         </nav>
@@ -11,7 +11,30 @@
 </template>
 
 <script setup>
+import CommentListModal from "./modal/CommentListModal.vue";
+import EpisodeListModal from "./modal/EpisodeListModal.vue";
+
 import { List, MessageSquareMore, Info } from "lucide-vue-next";
+import { useEpisodePageStore } from "./episodePageStore";
+import { markRaw, watch } from "vue";
+
+//에피소드 페이지 전역 변수
+const episodeStore = useEpisodePageStore();
+
+watch(
+    () => episodeStore.currentMenu,
+    (value) => {
+        // event.target.classList.add("checked");
+    }
+);
+
+function toggleModal(modal) {
+    if (episodeStore.currentMenu === modal) {
+        episodeStore.currentMenu = null;
+        return;
+    }
+    episodeStore.currentMenu = markRaw(modal);
+}
 </script>
 
 <style scoped lang="sass">
@@ -20,7 +43,7 @@ aside
     top: 0
     right: 0
     -webkit-transform: translateZ(0)
-    z-index: 100
+    z-index: 1000
 
     width: 80px
     height: 100%
@@ -39,17 +62,12 @@ ul
     justify-content: center
     gap: 10%
 
-//     ul
-//         height: 100%
-//         display: flex
-//         flex-direction: column
-//         justify-content: space-around
-//         align-items: center
-//         list-style-type: none
-//         padding: 0
+    li
+        cursor: pointer
 
-//         li
-//             font-size: 15px
-//             color: white
-//             cursor: pointer
+        &:hover
+            color: var(--pico-secondary)
+
+.checked
+    color: var(--pico-primary)
 </style>

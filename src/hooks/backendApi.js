@@ -366,8 +366,69 @@ export const commentApi = {
             })
             return response.data;
         } catch (error) {
-            console.error("Failed to get comments in novel: ", error.response.data);
+            console.error("Failed to get comments in novel: ");
             handleError(error, false)
+        }
+    },
+
+    async getCommentsByEpisode(id, sort, page, size) {
+        try {
+            const response = await fetchApi({
+                method: 'get',
+                url: `/episodes/${id}/comments`,
+                params: {
+                    sortBy: sort,
+                    pageNumber: page,
+                    pageSize: size
+                }
+            })
+            return response.data;
+        } catch (error) {
+            console.error("Failed to get comments in episode: ");
+            handleError(error, false)
+        }
+    },
+
+    async createComment(createDto) {
+        try {
+            const response = await fetchApi({
+                method: 'post',
+                url: `/comments`,
+                data: createDto
+            })
+            return response.data;
+        } catch (error) {
+            console.error("Failed to create comment");
+            handleError(error)
+        }
+    },
+
+
+    async updateComment(updateDto) {
+        try {
+            const response = await fetchApi({
+                method: 'patch',
+                url: `/comments/${updateDto.commentId}`,
+                data: updateDto
+            })
+            return response.data;
+        } catch (error) {
+            console.error("Failed to update comment");
+            handleError(error)
+        }
+    },
+
+    async deleteComment(deleteDto) {
+        try {
+            const response = await fetchApi({
+                method: 'delete',
+                url: `/comments/${deleteDto.commentId}`,
+                data: deleteDto
+            })
+            return response.data;
+        } catch (error) {
+            console.error("Failed to delete comment");
+            handleError(error)
         }
     },
 }
