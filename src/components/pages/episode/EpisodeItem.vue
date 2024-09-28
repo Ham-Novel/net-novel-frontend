@@ -30,6 +30,7 @@ article
     position: relative
     min-height: 800px
     box-shadow: none
+    border-radius: 0
 
     .content-container
         position: relative

@@ -1,57 +1,55 @@
 <template>
-    <nav>
-        <ul>
-            <li>최근 기록</li>
-            <li>별점</li>
-            <li>댓글</li>
-        </ul>
-    </nav>
+    <aside>
+        <nav>
+            <ul>
+                <li><List size="30" /></li>
+                <li><MessageSquareMore size="30" /></li>
+                <li><Info size="30" /></li>
+            </ul>
+        </nav>
+    </aside>
 </template>
 
-<script setup></script>
+<script setup>
+import { List, MessageSquareMore, Info } from "lucide-vue-next";
+</script>
 
 <style scoped lang="sass">
-nav
-    background-color: #6159f7
-    padding: 0 10px
-    width: 60px
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
-
+aside
     position: fixed
     top: 0
     right: 0
+    -webkit-transform: translateZ(0)
+    z-index: 100
+
+    width: 80px
     height: 100%
-    z-index: 1000
 
-    ul
+    background-color: var(--pico-background-color)
+    border-left: 1px solid var(--pico-muted-border-color)
+    box-shadow: var(--pico-box-shadow)
+
+    nav
         height: 100%
-        display: flex
-        flex-direction: column
-        justify-content: space-around
-        align-items: center
-        list-style-type: none
-        padding: 0
 
-        li
-            font-size: 15px
-            color: white
-            cursor: pointer
+ul
+    height: 100%
+    display: flex
+    flex-flow: column wrap
+    justify-content: center
+    gap: 10%
 
-// nav > * {
-//     color: white;
-//     text-decoration: none;
-//     transition: color 0.3s;
-//     cursor: pointer;
-// }
+//     ul
+//         height: 100%
+//         display: flex
+//         flex-direction: column
+//         justify-content: space-around
+//         align-items: center
+//         list-style-type: none
+//         padding: 0
 
-// nav a:hover {
-//     color: #818cf8;
-// }
-
-// /*
-// li {
-//     margin: 0 2rem;
-//     color: white;
-// }
-//  */
+//         li
+//             font-size: 15px
+//             color: white
+//             cursor: pointer
 </style>

@@ -1,11 +1,13 @@
 <template>
     <main class="episode-page">
         <EpisodeSect :novelId="props.novelId" :episodeId="props.episodeId"></EpisodeSect>
+        <NavigationSect></NavigationSect>
     </main>
 </template>
 
 <script setup>
 import EpisodeSect from "./EpisodeSect.vue";
+import NavigationSect from "./NavigationSect.vue";
 
 import { onMounted, onUnmounted, ref } from "vue";
 import { useNavBarStore } from "@/stores/navBarStore";
@@ -36,14 +38,6 @@ const props = defineProps({
 </script>
 
 <style scoped lang="sass">
-
-
-.episode-nav
-    position: fixed
-    bottom: 0
-    left: 0
-    width: 100%
-    z-index: 1000
-    background-color: white
-    border-top: 3px solid black
+main
+    position: relative
 </style>
