@@ -5,9 +5,7 @@
             <slot name="cover"></slot>
         </div>
         <div class="info">
-            <h4 class="title" @click="goLinkPage">
-                {{ props.brief?.title }}
-            </h4>
+            <h4 class="title" @click="goLinkPage">{{ props.brief?.title }}</h4>
             <div class="detail">
                 <slot></slot>
             </div>
@@ -68,7 +66,7 @@ article
     white-space: nowrap
 
     display: flex
-    flex-flow: row nowrap
+    flex-flow: column nowrap
 
     .title
         display: inline-block
