@@ -1,10 +1,8 @@
 <template>
     <ListItem
         class="browse-item"
-        :brief="{
-            title: props.novel.title,
-            coverImg: props.novel.thumbnailUrl,
-        }"
+        :title="novel.title"
+        :cover-img="novel.thumbnailUrl"
         :link="{ name: 'novel', params: { id: props.novel.id } }"
     >
         <div class="detailed">

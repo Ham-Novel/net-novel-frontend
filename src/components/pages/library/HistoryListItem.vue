@@ -1,10 +1,9 @@
 <template>
     <ListItem
-        :brief="{
-            title: props.novel.novelTitle,
-            coverImg: props.novel.thumbnailUrl,
-        }"
-        :link="{ name: 'novel', params: { id: props.novel.novelId } }"
+        class="browse-item"
+        :title="novel.title"
+        :cover-img="novel.thumbnailUrl"
+        :link="{ name: 'novel', params: { id: novel.novelId } }"
     >
         <template #cover>
             <p class="type">{{ novelType }}</p>
@@ -49,7 +48,6 @@ const props = defineProps({
         required: true,
     },
 });
-
 const novelType = computed(() => {
     switch (props.novel.novelType) {
         case "ONGOING":

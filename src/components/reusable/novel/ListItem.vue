@@ -1,14 +1,16 @@
 <template>
     <article class="item">
         <div class="cover" @click="goLinkPage">
-            <CoverImg class="img" :img-url="props.brief?.coverImg"></CoverImg>
+            <CoverImg class="img" :img-url="coverImg"></CoverImg>
             <slot name="cover"></slot>
         </div>
         <div class="info">
-            <h4 class="title" @click="goLinkPage">
-                {{ props.brief?.title }}
+            <h4 v-if="title.length !== 0" class="title" @click="goLinkPage">
+                {{ title }}
             </h4>
-            <slot></slot>
+            <div class="detail">
+                <slot></slot>
+            </div>
         </div>
     </article>
 </template>
@@ -18,9 +20,13 @@ import CoverImg from "../CoverImg.vue";
 import { useRouter } from "vue-router";
 
 const props = defineProps({
-    brief: {
-        type: Object,
-        required: true,
+    title: {
+        type: String,
+        default: "",
+    },
+    coverImg: {
+        type: String,
+        default: "",
     },
     link: {
         type: Object,
@@ -55,14 +61,18 @@ article
         overflow: hidden
         white-space: nowrap
 
+        display: flex
+        flex-flow: column nowrap
+
         .title
-            // display: inline-block
-            // font-size: 22px
             font-weight: bold
             cursor: pointer
 
             &:hover
                 text-decoration: underline
+
+        .detail
+            flex: 1
 
 .cover
     position: relative

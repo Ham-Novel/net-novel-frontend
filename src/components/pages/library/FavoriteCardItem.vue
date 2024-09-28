@@ -22,7 +22,7 @@
 <script setup>
 import CardItem from "@/components/reusable/novel/CardItem.vue";
 import { Eye, Heart, Layers } from "lucide-vue-next";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 
 const props = defineProps({
     novel: {
@@ -38,6 +38,10 @@ const itemProps = {
     },
     link: { name: "novel", params: { id: props.novel.novelId } },
 };
+
+onMounted(() => {
+    console.log(props.novel);
+});
 
 const novelStatus = computed(() => {
     switch (props.novel.status) {

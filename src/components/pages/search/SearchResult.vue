@@ -22,7 +22,7 @@ const didSearch = ref(false);
 
 //스크롤 페이지 로드 설정
 const scrollProps = reactive({
-    pageProps: { number: 0, size: 3 },
+    pageProps: { number: 0, size: 10 },
     loadMethod: async (page, size) => {
         const loadNovels = await novelApi.getSearchNovels(
             searchStore.getWord,

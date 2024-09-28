@@ -1,11 +1,9 @@
 <template>
     <ListItem
         class="item"
-        :brief="{
-            title: props.novel.title,
-            coverImg: props.novel.thumbnailUrl,
-        }"
-        :link="{ name: 'novel', params: { id: props.novel.id } }"
+        :title="novel.title"
+        :cover-img="novel.thumbnailUrl"
+        :link="{ name: 'novel', params: { id: novel.id } }"
     >
         <div class="detailed">
             <p class="author">

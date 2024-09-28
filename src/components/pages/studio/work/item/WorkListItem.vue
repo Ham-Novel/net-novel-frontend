@@ -1,5 +1,9 @@
 <template>
-    <ListItem v-bind="itemProps">
+    <ListItem
+        :title="novel.title"
+        :cover-img="novel.thumbnailUrl"
+        :link="{ name: 'novel', params: { id: props.novel.id } }"
+    >
         <div class="composition">
             <StatSect class="zone"></StatSect>
             <NovelSect class="zone"></NovelSect>

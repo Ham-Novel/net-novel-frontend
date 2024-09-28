@@ -8,7 +8,9 @@
             <h4 class="title" @click="goLinkPage">
                 {{ props.brief?.title }}
             </h4>
-            <slot></slot>
+            <div class="detail">
+                <slot></slot>
+            </div>
         </div>
     </article>
 </template>
@@ -65,12 +67,19 @@ article
     overflow: hidden
     white-space: nowrap
 
+    display: flex
+    flex-flow: row nowrap
+
     .title
         display: inline-block
         font-size: 22px
         font-weight: bold
         cursor: pointer
+        overflow: hidden
 
         &:hover
             text-decoration: underline
+
+    .detail
+        flex: 1
 </style>

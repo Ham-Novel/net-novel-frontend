@@ -36,7 +36,6 @@ const loadRanking = async () => {
     const loadNovels = await novelApi.getRanking(0, 9, "daily");
     rankingFirst.value = loadNovels.shift();
     rankingList.value.push(...loadNovels);
-    console.log(rankingFirst.value);
 };
 
 onMounted(() => {
@@ -55,7 +54,6 @@ h2
 .ranking-grid
     position: relative
     display: grid
-    margin: 0 10px
     grid-template-rows: repeat(2, 1fr)
     grid-template-columns: repeat(6, 1fr)
     gap: 20px 20px
@@ -64,10 +62,10 @@ h2
 
 
 .item
+    margin-bottom: 0
     width: 100%
 
     &:nth-child(1)
-        width: 80%
         grid-column: 1 / 3
         grid-row: 1 / 3
 
