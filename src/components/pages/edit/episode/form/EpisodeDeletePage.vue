@@ -2,9 +2,9 @@
     <article class="base-wrapper">
         <template v-if="episodeOrigin ?? false">
             <EpisodeEditForm
-                @submit="updateEpisode"
-                @form-input="getFormData"
+                @submit="deleteEpisode"
                 :initial-input="episodeOrigin"
+                :disabled="true"
             ></EpisodeEditForm>
         </template>
     </article>
@@ -30,7 +30,7 @@ const props = defineProps({
 
 const router = useRouter();
 
-//업데이트할 에피소드 데이터 가져오기
+//삭제할 에피소드 데이터 가져오기
 const episodeOrigin = ref(undefined);
 
 async function loadEpisodeData() {
@@ -42,25 +42,10 @@ onMounted(async () => {
     episodeOrigin.value = await loadEpisodeData();
 });
 
-//유저가 입력한 작품 정보 데이터
-let episodeToUpdate = reactive({});
-
-//edit form에서 값 가져오기
-function getFormData(data) {
-    episodeToUpdate = data;
-}
-
 //submit 클릭 이벤트
-//에피소드 DB 수정
-async function updateEpisode() {
-    console.log(episodeToUpdate);
-    await episodeApi.updateEpisode({
-        episodeId: props.episodeId,
-        title: episodeToUpdate.title,
-        content: episodeToUpdate.content,
-        costPolicyId: episodeToUpdate.policyId,
-    });
-
+//에피소드 삭제
+async function deleteEpisode() {
+    await episodeApi.deleteEpisode(props.episodeId);
     router.push({ name: "episode-edit", params: { id: props.novelId } });
 }
 </script>

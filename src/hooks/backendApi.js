@@ -343,7 +343,6 @@ export const episodeApi = {
             const response = await fetchApi({
                 method: 'delete',
                 url: `/episodes/${episodeId}`,
-                data: deleteDto
             })
             return response.data;
         } catch (error) {

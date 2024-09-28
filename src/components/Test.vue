@@ -1,7 +1,9 @@
 <template>
-    <main></main>
+    <main><EpisodeEditForm></EpisodeEditForm></main>
 </template>
 
-<script setup></script>
+<script setup>
+import EpisodeEditForm from "./pages/edit/episode/form/EpisodeEditForm.vue";
+</script>
 
 <style scoped lang="sass"></style>

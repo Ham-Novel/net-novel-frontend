@@ -29,12 +29,17 @@
                 <tbody>
                     <tr>
                         <th colspan="7">
-                            <button class="create-button" @click="goToCreate">
-                                새 에피소드 작성
+                            <button class="button" @click="goToCreate">새 에피소드 작성</button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="7">
+                            <button class="button contrast" @click="goToDelete">
+                                최신 에피소드 삭제
                             </button>
                         </th>
                     </tr>
-                    <InfiniteScroll v-bind="scrollProps">
+                    <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
                         <template v-slot:default="{ item }">
                             <EpisodeEditListItem
                                 :novelId="novelId"
@@ -67,7 +72,7 @@ const props = defineProps({
 
 const router = useRouter();
 
-//에피소드 리스트 무한 스크롤
+//에피소드 리스트 무한 스크롤 로드
 const scrollProps = reactive({
     pageProps: { number: 0, size: 30 },
     loadMethod: async (page, size) => {
@@ -76,6 +81,9 @@ const scrollProps = reactive({
     },
     loadingMessage: "Episode Loading...",
 });
+
+//스크롤 메서드, 변수 가져오기
+const scrollRef = ref(null);
 
 //작품 정보 불러오기
 const novelInfo = ref(undefined);
@@ -93,9 +101,21 @@ onMounted(() => {
     loadNovel();
 });
 
-//작품 생성 페이지 이동
+//에피소드 생성 페이지 이동
 function goToCreate() {
     router.push({ name: "episode-create", params: { id: props.novelId } });
+}
+
+//에피소드 삭제 페이지 이동
+function goToDelete() {
+    //최신화 에피소드 id 가져오기
+    const itemList = scrollRef.value.itemList;
+    const upToDateEpisodeId = itemList.shift().episodeId;
+
+    router.push({
+        name: "episode-delete",
+        params: { novelId: props.novelId, episodeId: upToDateEpisodeId },
+    });
 }
 </script>
 
@@ -106,7 +126,7 @@ function goToCreate() {
     flex-flow: column nowrap
     justify-content: space-evenly
 
-.create-button
+.button
     width: 100%
     height: 100%
 </style>

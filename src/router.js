@@ -33,6 +33,7 @@ import NovelDeletePage from './components/pages/edit/novel/NovelDeletePage.vue';
 import EpisodeEditPage from './components/pages/edit/episode/EpisodeEditPage.vue';
 import EpisodeCreatePage from './components/pages/edit/episode/form/EpisodeCreatePage.vue';
 import EpisodeUpdatePage from './components/pages/edit/episode/form/EpisodeUpdatePage.vue';
+import EpisodeDeletePage from './components/pages/edit/episode/form/EpisodeDeletePage.vue';
 
 import NotFoundPage from './components/pages/etc/NotFoundPage.vue';
 import Test from './components/Test.vue';
@@ -143,6 +144,15 @@ const routes = [
         name: 'episode-update',
         path: '/novels/:novelId/episodes/:episodeId/update',
         component: EpisodeUpdatePage,
+        props: (route) => ({
+            novelId: Number(route.params.novelId),
+            episodeId: Number(route.params.episodeId)
+        }),
+    },
+    {
+        name: 'episode-delete',
+        path: '/novels/:novelId/episodes/:episodeId/delete',
+        component: EpisodeDeletePage,
         props: (route) => ({
             novelId: Number(route.params.novelId),
             episodeId: Number(route.params.episodeId)

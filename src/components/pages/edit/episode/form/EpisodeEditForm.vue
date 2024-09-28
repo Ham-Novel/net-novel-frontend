@@ -1,14 +1,14 @@
 <template>
-    <form @submit.prevent="submitEpisode" class="create-form">
+    <form @submit.prevent="submit" class="create-form">
         <input type="submit" value="에피소드 제출" />
         <div class="novel-info">
             <section>
                 <h4>에피소드 제목</h4>
-                <input type="text" v-model="title" @keydown.enter.prevent />
+                <input type="text" v-model="title" @keydown.enter.prevent :disabled="disabled" />
             </section>
             <section>
                 <h4>구매가</h4>
-                <select id="coin-cost-policy" v-model="policyId">
+                <select id="coin-cost-policy" v-model="policyId" :disabled="disabled">
                     <option v-for="policy in costPolicyList" :key="policy.id" :value="policy.id">
                         {{ policy.name }}
                     </option>
@@ -16,7 +16,12 @@
             </section>
             <section>
                 <h4>내용</h4>
-                <textarea name="content" v-model="content" ref="contentRef"></textarea>
+                <textarea
+                    name="content"
+                    v-model="content"
+                    :disabled="disabled"
+                    ref="contentRef"
+                ></textarea>
             </section>
         </div>
     </form>
@@ -35,6 +40,10 @@ const props = defineProps({
             content: "",
             policyId: 1,
         },
+    },
+    disabled: {
+        type: Boolean,
+        default: false,
     },
 });
 
@@ -70,13 +79,15 @@ onMounted(() => {
     resizeTextarea();
 });
 
+//가격 정책 불러오기 (나중에 가격 정책 가져오는 api 필요)
 const costPolicyList = ref([
     { id: 1, name: "무료" },
     { id: 2, name: "유료" },
     { id: 3, name: "특전" },
 ]);
 
-function submitEpisode() {
+//form 제출 이벤트 신호를 emits로 전달
+function submit() {
     emits("submit");
 }
 </script>

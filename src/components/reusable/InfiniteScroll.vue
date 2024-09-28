@@ -64,9 +64,6 @@ const itemLoader = reactive({
     },
 });
 
-//부모 컴포넌트에 메서드 노출
-defineExpose({ reset: itemLoader.reset });
-
 //첫번째 페이지 값 먼저 불러오기
 onMounted(() => {
     itemLoader.mountLoad("first");
@@ -83,6 +80,9 @@ const scrollDetect = reactive({
 });
 //이벤트 핸들러 적용
 watch(scrollDetect.loader.intersection, scrollDetect.handler);
+
+//부모 컴포넌트에 메서드 노출
+defineExpose({ reset: itemLoader.reset, itemList });
 </script>
 
 <style lang="sass" scoped>
