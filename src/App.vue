@@ -24,6 +24,9 @@ h1, h2, h3, h4, h5, h6, p
     margin: 0
     --pico-color: var(--pico-h1-color)
 
+article
+    margin-bottom: 0
+
 button
     padding: 0.2em 0.5em
     font-size: 16px

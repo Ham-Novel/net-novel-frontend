@@ -44,7 +44,7 @@ onMounted(async () => {
         title: data.title,
         tagNames: data.tags.map((tag) => tag.name),
         description: data.desc,
-        setupUrl: data.thumbnailUrl,
+        setupImg: data.thumbnailUrl,
     });
 });
 

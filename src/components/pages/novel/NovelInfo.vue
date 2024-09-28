@@ -112,7 +112,7 @@ async function loadNovel() {
     try {
         const data = await novelApi.getNovel(props.novelId);
         novel.value = data;
-    } catch (erorr) {
+    } catch (error) {
         console.error("Failed to load novel info: ", error);
         novel.value = {
             id: 0,

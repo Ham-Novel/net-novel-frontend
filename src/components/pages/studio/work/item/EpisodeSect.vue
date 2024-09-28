@@ -2,9 +2,7 @@
     <section>
         <h6>에피소드 관리</h6>
         <div class="menu-list">
-            <button class="outline" @click="goToEpisodeCreatePage">에피소드 추가</button>
-            <button class="outline" @click="goToEpisodeCreatePage">에피소드 수정</button>
-            <button class="outline" @click="goToEpisodeCreatePage">에피소드 삭제</button>
+            <button class="outline" @click="goToEpisodeEditPage">에피소드 관리</button>
         </div>
     </section>
 </template>
@@ -16,8 +14,8 @@ import { useRouter } from "vue-router";
 const novel = inject("novel");
 
 const router = useRouter();
-function goToEpisodeCreatePage() {
-    router.push({ name: "episode-create", params: { id: novel.id } });
+function goToEpisodeEditPage() {
+    router.push({ name: "episode-edit", params: { id: novel.id } });
 }
 </script>
 

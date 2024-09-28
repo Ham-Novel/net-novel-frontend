@@ -30,7 +30,9 @@ import NovelCreatePage from './components/pages/edit/novel/NovelCreatePage.vue';
 import NovelUpdatePage from './components/pages/edit/novel/NovelUpdatePage.vue';
 import NovelDeletePage from './components/pages/edit/novel/NovelDeletePage.vue';
 
-import EpisodeCreatePage from './components/pages/edit/episode/EpisodeCreatePage.vue';
+import EpisodeEditPage from './components/pages/edit/episode/EpisodeEditPage.vue';
+import EpisodeCreatePage from './components/pages/edit/episode/form/EpisodeCreatePage.vue';
+import EpisodeUpdatePage from './components/pages/edit/episode/form/EpisodeUpdatePage.vue';
 
 import NotFoundPage from './components/pages/etc/NotFoundPage.vue';
 import Test from './components/Test.vue';
@@ -77,19 +79,6 @@ const routes = [
                 name: 'novel-comment', path: 'comments', props: true,
                 component: CommandListSection,
             },
-            // { name: 'novel-create', path: 'create', component: NovelCreatePage },
-            // {
-            //     name: 'novel-update', path: 'update', component: NovelUpdatePage,
-            //     props: (route) => ({
-            //         novelId: Number(route.params.id)
-            //     }),
-            // },
-            // {
-            //     name: 'novel-delete', path: 'delete', component: NovelDeletePage,
-            //     props: (route) => ({
-            //         novelId: Number(route.params.id)
-            //     }),
-            // },
         ]
     },
     {
@@ -135,6 +124,14 @@ const routes = [
     },
 
     {
+        name: 'episode-edit',
+        path: '/novels/:id/episodes/edit',
+        component: EpisodeEditPage,
+        props: (route) => ({
+            novelId: Number(route.params.id)
+        }),
+    },
+    {
         name: 'episode-create',
         path: '/novels/:id/episodes/new',
         component: EpisodeCreatePage,
@@ -142,6 +139,16 @@ const routes = [
             novelId: Number(route.params.id)
         }),
     },
+    {
+        name: 'episode-update',
+        path: '/novels/:novelId/episodes/:episodeId/update',
+        component: EpisodeUpdatePage,
+        props: (route) => ({
+            novelId: Number(route.params.novelId),
+            episodeId: Number(route.params.episodeId)
+        }),
+    },
+
     { name: 'test', path: '/test', component: Test },
     { path: '/:notFound(.*)', component: NotFoundPage }
 ];
