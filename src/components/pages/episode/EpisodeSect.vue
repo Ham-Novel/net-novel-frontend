@@ -282,8 +282,8 @@ watch(urlDetect.observer.intersection, urlDetect.handler);
         position: absolute
         width: 100%
         height: 80vh
-        z-index: -1
-        // border: 5px solid blue
+        // z-index: -1
+        border: 5px solid blues
 
         &.front
             top: 0

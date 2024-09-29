@@ -1,20 +1,21 @@
 <template>
-    <dialog open class="list-view">
-        <article>
-            <h1>댓글</h1>
-            <p>댓글</p>
-            <p>댓글</p>
+    <dialog open>
+        <article class="modal">
+            <CommentItem></CommentItem>
+            <div class="comment-list">
+                <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
+                    <template v-slot:default="{ item }">
+                        <CommentItem :comment="item"></CommentItem>
+                    </template>
+                </InfiniteScroll>
+            </div>
         </article>
-        <!-- <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
-            <template v-slot:default="{ item }">
-                <CommentListElement :comment="item"></CommentListElement>
-            </template>
-        </InfiniteScroll> -->
     </dialog>
 </template>
 
 <script setup>
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
+import CommentItem from "@/components/reusable/item/CommentItem.vue";
 import { ref, reactive, onMounted, onUnmounted } from "vue";
 import { commentApi } from "@/hooks/backendApi";
 import { useEpisodePageStore } from "../episodePageStore";
@@ -26,13 +27,13 @@ const episodeStore = useEpisodePageStore();
 const scrollProps = reactive({
     pageProps: { number: 0, size: 10 },
     loadMethod: async (page, size) => {
-        console.log(sortSelected.value);
         const loadItems = await commentApi.getCommentsByEpisode(
             episodeStore.episodeId,
             "recent",
             page,
             size
         );
+        console.log(loadItems);
         return loadItems;
     },
     loadingMessage: "Episode Loading...",
@@ -54,7 +55,15 @@ onUnmounted(() => {
 </script>
 
 <style lang="sass" scoped>
-article
+article.modal
     max-height: 90%
+    min-height: 50%
+    width: 900px
     overflow-y: scroll
+    overflow-x: none
+
+.comment-list
+    display: flex
+    flex-flow: column wrap
+    gap: 10px
 </style>
