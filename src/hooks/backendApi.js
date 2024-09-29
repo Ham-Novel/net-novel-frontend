@@ -17,24 +17,37 @@ async function fetchApi({ method, url, params, data } = {}) {
     return await axios(config);
 }
 
-function handleError(error, auth = true) {
-
+function handleError(error, mode = 'ALERT') {
     switch (error.response.status) {
         case 400:
             console.error('Bad Request: ', error.response.data);
             break;
         case 401:
-            if (!auth) return;
-            console.error('Authorized: ', error.message);
-            router.push({ name: 'login' })
+            console.error('Authorized: ', error.response.data);
+            handleAuth(mode);
             break;
         case 500:
-            console.error('Server Error: ', error.message);
+            console.error('Server Error: ', error.response.data);
             break;
         default:
-            console.error('Other Error: ', error.message);
+            console.error('Other Error: ', error.response.data);
     }
+}
 
+function handleAuth(mode) {
+    switch (mode) {
+        case 'INACTION':
+            break
+        case 'ALERT':
+            alert("로그인이 필요한 서비스입니다.");
+            break;
+        case 'LOGIN':
+            const result = confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까");
+            if (result) {
+                router.push({ name: 'login' })
+            }
+            break;
+    }
 }
 
 export const coinApi = {
@@ -51,7 +64,7 @@ export const coinApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to load coin charge history");
-            handleError(error)
+            handleError(error, "LOGIN")
             throw error;
         }
     },
@@ -66,7 +79,7 @@ export const coinApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to execute charge coins");
-            handleError(error, false)
+            handleError(error, "LOGIN")
             throw error;
         }
     },
@@ -80,7 +93,7 @@ export const novelApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to load novel info");
-            handleError(error, false);
+            handleError(error, 'INACTION');
             return error;
         }
     },
@@ -91,7 +104,7 @@ export const novelApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to create novel");
-            handleError(error, false);
+            handleError(error, 'INACTION');
             return error;
         }
     },
@@ -102,7 +115,7 @@ export const novelApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to update novel");
-            handleError(error, false);
+            handleError(error, 'INACTION');
             return error;
         }
     },
@@ -112,7 +125,7 @@ export const novelApi = {
             const response = await fetchApi({ method: 'delete', url: `/novels/${id}`, data: deleteDto })
         } catch (error) {
             console.error("Failed to update novel");
-            handleError(error, false);
+            handleError(error, 'INACTION');
             return error;
         }
     },
@@ -125,7 +138,7 @@ export const novelApi = {
 
         } catch (error) {
             console.error("Failed to upload thumbnail of novel")
-            handleError(error, false);
+            handleError(error, 'INACTION');
         }
     },
 
@@ -200,7 +213,7 @@ export const novelApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to load ranking novels: ", error.response.data);
-            handleError(error, false)
+            handleError(error, 'INACTION')
         }
     }
 }
@@ -216,7 +229,7 @@ export const tagApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to load tag by novel")
-            handleError(error, false)
+            handleError(error, 'INACTION')
         }
 
     },
@@ -232,7 +245,7 @@ export const tagApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to load tag by name")
-            handleError(error, false)
+            handleError(error, 'INACTION')
         }
     }
 }
@@ -247,7 +260,7 @@ export const episodeApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to load episode content");
-            handleError(error);
+            handleError(error, "LOGIN");
             throw error;
         }
     },
@@ -261,7 +274,7 @@ export const episodeApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to load next episode content");
-            handleError(error, false);
+            handleError(error, 'INACTION');
             throw error;
         }
     },
@@ -280,7 +293,7 @@ export const episodeApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to load episodes in novel");
-            handleError(error, false)
+            handleError(error, 'INACTION')
         }
     },
     async getEpisodesInfoByNovel(id) {
@@ -305,7 +318,7 @@ export const episodeApi = {
             return response.data;
         } catch (error) {
             console.error(`Failed to execute payment`);
-            handleError(error)
+            handleError(error, "LOGIN")
             throw error;
         }
     },
@@ -320,7 +333,7 @@ export const episodeApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to create episode of novel")
-            handleError(error, true)
+            handleError(error, "LOGIN")
         }
     },
 
@@ -334,7 +347,7 @@ export const episodeApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to update episode")
-            handleError(error, true)
+            handleError(error, "LOGIN")
         }
     },
 
@@ -347,7 +360,7 @@ export const episodeApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to delete episode")
-            handleError(error, true)
+            handleError(error, "LOGIN")
         }
     },
 }
@@ -367,7 +380,7 @@ export const commentApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to get comments in novel: ");
-            handleError(error, false)
+            handleError(error, 'INACTION')
         }
     },
 
@@ -385,7 +398,7 @@ export const commentApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to get comments in episode: ");
-            handleError(error, false)
+            handleError(error, 'INACTION')
         }
     },
 
@@ -399,7 +412,7 @@ export const commentApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to create comment");
-            handleError(error)
+            handleError(error, "LOGIN")
         }
     },
 
@@ -414,7 +427,7 @@ export const commentApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to update comment");
-            handleError(error)
+            handleError(error, "LOGIN")
         }
     },
 
@@ -428,9 +441,26 @@ export const commentApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to delete comment");
-            handleError(error)
+            handleError(error, "LOGIN")
         }
     },
+
+    async toggleLike(dto) {
+        try {
+            const response = await fetchApi({
+                method: 'post',
+                url: `/comments/${dto.commentId}/comment-likes`,
+                data: dto
+            })
+            return response.data;
+        } catch (error) {
+            console.error("Failed to toggle comment like");
+            handleError(error, "ALERT");
+            throw error;
+        }
+    },
+
+
 }
 
 export const memberApi = {
@@ -469,7 +499,7 @@ export const memberApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to request the settlement")
-            handleError(error);
+            handleError(error, "LOGIN");
         }
     },
 
@@ -482,7 +512,7 @@ export const memberApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to get settlement result")
-            handleError(error);
+            handleError(error, "LOGIN");
         }
     },
 
@@ -513,7 +543,7 @@ export const memberApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to load recent reads: ", error.message)
-            handleError(error);
+            handleError(error, "LOGIN");
         }
     },
 
@@ -523,7 +553,7 @@ export const memberApi = {
             const response = await fetchApi({ method: 'get', url: `/members/me/favorites/check?novelId=${id}` })
             return response.data;
         } catch (error) {
-            handleError(error, false);
+            handleError(error, 'INACTION');
             throw error;
         }
     },
@@ -532,7 +562,7 @@ export const memberApi = {
             const response = await fetchApi({ method: 'post', url: `/members/me/favorites/${id}` })
             return response.data;
         } catch (error) {
-            handleError(error);
+            handleError(error, "ALERT");
             throw error;
         }
     },
@@ -541,7 +571,7 @@ export const memberApi = {
             const response = await fetchApi({ method: 'get', url: `/members/me/favorites` })
             return response.data;
         } catch (error) {
-            handleError(error);
+            handleError(error, "LOGIN");
         }
     },
 }
