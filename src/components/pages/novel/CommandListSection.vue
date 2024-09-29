@@ -23,7 +23,7 @@
         <section class="list-view">
             <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
                 <template v-slot:default="{ item }">
-                    <CommentListElement :comment="item"></CommentListElement>
+                    <CommentItem :comment="item"></CommentItem>
                 </template>
             </InfiniteScroll>
         </section>
@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import CommentListElement from "./CommentListItem.vue";
+import CommentItem from "@/components/reusable/item/CommentItem.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { ref, reactive, inject } from "vue";
@@ -103,4 +103,9 @@ const sortSelected = ref("recent");
                 &:checked + span
                     font-weight: bold
                     color: var(--primary-color)
+
+.list-view
+    display: flex
+    flex-flow: column wrap
+    gap: 15px
 </style>
