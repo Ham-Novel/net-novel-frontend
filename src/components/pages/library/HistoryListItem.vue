@@ -1,7 +1,6 @@
 <template>
     <ListItem
         class="browse-item"
-        :title="novel.title"
         :cover-img="novel.thumbnailUrl"
         :link="{ name: 'novel', params: { id: novel.novelId } }"
     >
@@ -10,26 +9,21 @@
         </template>
         <template #default>
             <div class="detail">
+                <h4>{{ novel.novelTitle }}</h4>
                 <p class="author">
                     <PencilLine size="17" stroke-width="2.3" />
                     {{ props.novel.authorName }}
                 </p>
-                <p class="desc">{{ props.novel.novelDesc }}</p>
-                <div class="tag">
-                    <span v-for="tag in props.novel.tags" :key="tag.id" @click="browseTag(tag.id)"
-                        >#{{ tag.name }}</span
-                    >
-                </div>
-            </div>
-            <div class="feature">
-                <button class="continue-read" @click="goToRead(props.novel.episodeId)">
-                    {{ props.novel.episodeTitle }} >>
-                </button>
             </div>
             <p class="time">
                 <Clock8 size="17" stroke-width="2.3" />
                 {{ formatUtil.formatRealTime(props.novel.updatedAt) }}
             </p>
+            <div class="feature">
+                <button class="secondary" @click="goToRead(props.novel.episodeId)">
+                    이어 읽기 >> {{ props.novel.episodeTitle }}
+                </button>
+            </div>
         </template>
     </ListItem>
 </template>
@@ -61,6 +55,10 @@ const novelType = computed(() => {
     }
 });
 
+onMounted(() => {
+    console.log(props.novel);
+});
+
 const router = useRouter();
 function goToRead(episodeId) {
     router.push({ name: "episode", params: { episodeId } });
@@ -70,13 +68,6 @@ function goToRead(episodeId) {
 <style scoped lang="sass">
 .item
     height: 150px
-    gap: 15px
-
-    :deep(.info)
-        .title
-            margin-bottom: 10px
-            font-size: 24px
-            font-weight: 700
 
 .detail
     width: 70%
@@ -84,32 +75,8 @@ function goToRead(episodeId) {
     flex-flow: column wrap
     gap: 10px
 
-    > *
-        font-size: 14px
-        margin-left: 10px
-        display: flex
-        align-items: center
-        gap: 5px
-
-    .desc
-        display: -webkit-box
-        -webkit-line-clamp: 3
-        -webkit-box-orient: vertical
-        overflow: hidden
-        text-overflow: ellipsis
-
-    .tag
-        overflow-x: hidden
-        gap: 8px
-
-        span
-            flex-shrink: 0
-            color: var(--primary-color)
-            font-weight: 700
-            cursor: pointer
-
-            &:hover
-                text-decoration: underline
+    p
+        font-size: 0.8rem
 
 .feature
     position: absolute
@@ -119,29 +86,14 @@ function goToRead(episodeId) {
     flex-flow: row wrap
     gap: 30px
 
-    .continue-read
-        padding: 5px 10px
-        border-radius: 15px
-        border: none
-        background-color: var(--bg-sub)
-        cursor: pointer
-
-    .add-library
-        background: none
-        border: none
-        height: 35px
-        padding: 0 25px
-        border-radius: 20px
-        background-color: #e6e6fa
-        cursor: pointer
+    button
+        font-size: 0.8rem
 
 .time
     position: absolute
     top: 5px
     right: 10px
 
-    font-size: 14px
-    margin-left: 10px
     display: flex
     align-items: center
     gap: 5px
@@ -154,9 +106,9 @@ function goToRead(episodeId) {
 
     display: inline-block
     padding: 2px 5px
-    border-radius: 3px
+    border-bottom-right-radius: 5px
 
-    font-size: 12px
+    font-size: 0.6rem
     color: white
     background-color: green
 </style>

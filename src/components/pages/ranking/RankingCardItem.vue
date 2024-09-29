@@ -1,12 +1,21 @@
 <template>
-    <div class="ranking-item">
-        <h1 class="rank">{{ props.index }}</h1>
-        <CardItem class="item" v-bind="itemProps"></CardItem>
-    </div>
+    <CardItem class="item" v-bind="itemProps">
+        <template #cover>
+            <h1 class="rank">{{ index }}</h1>
+        </template>
+        <template #default>
+            <div class="tag-list" v-if="novel.tags.length !== 0">
+                <template v-for="tag in novel.tags" :key="tag.id">
+                    <Tag class="tag" :tag="tag"></Tag>
+                </template>
+            </div>
+        </template>
+    </CardItem>
 </template>
 
 <script setup>
 import CardItem from "@/components/reusable/novel/CardItem.vue";
+import Tag from "@/components/reusable/Tag.vue";
 
 const props = defineProps({
     novel: {
@@ -30,20 +39,16 @@ const itemProps = {
 
 <style scoped lang="sass">
 
-.ranking-item
-    position: relative
-
 .rank
     position: absolute
-    top: -3%
-    left: -3%
+    top: 0
+    left: 0
     z-index: 1
 
-    width: 30px
-    height: 30px
-    border-radius: 15px
+    padding: 0.15rem 0.5rem
+    border-bottom-right-radius: 5px
 
-    background-color: #6159f7
+    background-color: var(--pico-primary)
     color: white
     font-size: 20px
     text-align: center
@@ -52,12 +57,19 @@ const itemProps = {
     justify-content: center
     align-items: center
 
+.tag-list
+    margin-top: 0.3rem
+    height: 2.5rem
+
+    display: flex
+    flex-flow: row wrap
+    align-items: baseline
+    overflow: hidden
+
+    .tag
+        font-size: 0.6rem
+
 .item
     width: 150px
-    gap: 5px
-
-    :deep(.info)
-        .title
-            font-size: 20px
-            overflow: hidden
+    gap: 10px
 </style>

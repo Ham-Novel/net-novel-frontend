@@ -41,7 +41,7 @@ const browseTag = (tagId) => {
 
 .text-style
     padding: 0.2em 0.4em
-    font-size: 14px
+    font-size: 0.7rem
     border: none
     cursor: pointer
 

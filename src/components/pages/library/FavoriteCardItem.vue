@@ -3,25 +3,12 @@
         <template #cover>
             <p class="status">{{ novelStatus }}</p>
         </template>
-        <template #default>
-            <p class="stats">
-                <span> <Eye size="14" /> {{ novel.views }} </span>
-                <span>
-                    <Heart size="14" />
-                    {{ novel.favoriteCount }}
-                </span>
-                <span>
-                    <Layers size="14" />
-                    {{ novel.episodeCount }}
-                </span>
-            </p>
-        </template>
     </CardItem>
 </template>
 
 <script setup>
 import CardItem from "@/components/reusable/novel/CardItem.vue";
-import { Eye, Heart, Layers } from "lucide-vue-next";
+import Tag from "@/components/reusable/Tag.vue";
 import { computed, onMounted } from "vue";
 
 const props = defineProps({
@@ -39,10 +26,6 @@ const itemProps = {
     link: { name: "novel", params: { id: props.novel.novelId } },
 };
 
-onMounted(() => {
-    console.log(props.novel);
-});
-
 const novelStatus = computed(() => {
     switch (props.novel.status) {
         case "ONGOING":
@@ -59,13 +42,8 @@ const novelStatus = computed(() => {
 
 <style scoped lang="sass">
 .item
-    width: 140px
-    gap: 2px
-
-    :deep(.info)
-        .title
-            font-size: 20px
-            font-weight: 700
+    width: 130px
+    gap: 5px
 
 
 .status
@@ -75,20 +53,9 @@ const novelStatus = computed(() => {
 
     display: inline-block
     padding: 2px 5px
-    border-radius: 3px
+    border-bottom-right-radius: 5px
 
-    font-size: 12px
+    font-size: 0.7rem
     color: white
     background-color: green
-
-.stats
-    margin-top: 4px
-    display: flex
-    flex-flow: row wrap
-    font-size: 12px
-
-    span
-        flex: 1
-        display: flex
-        align-items: center
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <template v-for="(item, index) in itemList">
+    <template v-for="(item, index) in itemList" :key="index">
         <slot :item="item" :index="index"></slot>
     </template>
     <teleport defer to="main">
@@ -30,7 +30,7 @@ const itemLoader = reactive({
             this.pageable.number++;
             return loadItems;
         } catch (error) {
-            console.error("Cannot put items in list");
+            console.error("Cannot put items in list", error.message);
             itemLoader.state.allLoaded = true;
         }
     },
