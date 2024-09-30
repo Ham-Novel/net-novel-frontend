@@ -15,7 +15,6 @@
                 <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
                     <template #default="{ item }">
                         <BrowseListItem :novel="item"></BrowseListItem>
-                        <div class="line"></div>
                     </template>
                 </InfiniteScroll>
             </div>
@@ -76,7 +75,6 @@ const reloadBrowseList = () => {
     position: relative
 
 .feature-divider
-    height: 200px
     display: flex
     flex-flow: row wrap
     align-items: stretch
@@ -97,9 +95,5 @@ const reloadBrowseList = () => {
     display: flex
     justify-content: flex-start
     flex-flow: row wrap
-
-.line
-    border-top: 2px solid var(--line-color)
-    width: 100%
-    margin: 10px 0px
+    gap: 10px
 </style>

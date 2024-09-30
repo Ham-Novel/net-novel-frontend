@@ -247,6 +247,23 @@ export const tagApi = {
             console.error("Failed to load tag by name")
             handleError(error, 'INACTION')
         }
+    },
+
+    async searchTag(searchWord) {
+        try {
+            const response = await fetchApi({
+                method: 'get',
+                url: `/tags`,
+                params: {
+                    searchWord
+                }
+            })
+            return response.data;
+        } catch (error) {
+            console.error("Failed to load tag by name")
+            handleError(error, 'INACTION')
+            throw error;
+        }
     }
 }
 

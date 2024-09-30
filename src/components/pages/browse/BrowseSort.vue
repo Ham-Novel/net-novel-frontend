@@ -1,10 +1,12 @@
 <template>
-    <section class="novel-sort">
-        <div class="sort-header">
-            <h1>Sort By</h1>
-            <div class="line"></div>
-        </div>
-        <div class="sort-item-list">
+    <article>
+        <section class="novel-sort">
+            <div class="sort-header">
+                <h3>Sort By</h3>
+                <div class="line"></div>
+            </div>
+        </section>
+        <section class="sort-item-list">
             <template v-for="sort in sortList">
                 <label class="sort-item" :for="`sort-${sort.value}`" @change="emits('sort')">
                     <input
@@ -16,8 +18,8 @@
                     <span>{{ sort.name }}</span>
                 </label>
             </template>
-        </div>
-    </section>
+        </section>
+    </article>
 </template>
 
 <script setup>
@@ -34,17 +36,15 @@ const sortList = ref([
 </script>
 
 <style scoped lang="sass">
-
-.novel-sort
-    border-radius: 30px
-    border: 5px solid var(--bg-sub)
-
 .sort-header
     margin-bottom: 20px
+    margin-bottom: 20px
 
-    h1
-        font-size: 18px
-        font-weight: 700
+    .line
+        border-top: 5px solid var(--pico-secondary)
+        border-radius: 5px
+        margin: 10px 0px
+        width: 10rem
 
 .sort-item-list
     margin: 0 10px
@@ -53,25 +53,21 @@ const sortList = ref([
     gap: 10px
 
     .sort-item
-        border: 2px solid var(--line-color)
-        border-radius: 12px
         cursor: pointer
+        border-radius: 0.5rem
+        border: 2px solid var(--pico-secondary)
+
+        display: flex
+        align-items: center
 
         input
             display: none
 
         span
             padding: 4px 8px
-            font-size: 12px
-
-        &:hover
-            background-color: var(--bg-sub)
+            font-size: 0.6rem
+            font-weight: bold
 
         &:has(input:checked)
-            background-color: var(--bg-sub)
-
-.line
-    border-top: 5px solid var(--primary-color)
-    border-radius: 5px
-    margin: 10px 0px
+            background-color: var(--pico-contrast-focus)
 </style>

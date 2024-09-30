@@ -1,10 +1,10 @@
 <template>
-    <section class="novel-filter">
-        <div class="filter-header">
-            <h1>Filter By</h1>
+    <article>
+        <section class="filter-header">
+            <h3>Filter By</h3>
             <div class="line"></div>
-        </div>
-        <div class="filter-item-list">
+        </section>
+        <section class="filter-item-list">
             <template v-for="tagMenu in tagMenuList">
                 <label class="filter-item" :for="`filter-${tagMenu.id}`" @change="emits('filter')">
                     <input
@@ -16,20 +16,30 @@
                     <span>{{ tagMenu.name }}</span>
                 </label>
             </template>
+        </section>
+        <section>
             <input
                 class="filter-input"
                 type="text"
                 placeholder="태그를 입력하고 enter를 누르십시오."
                 v-model="inputTag"
                 @keyup.enter="browseTag"
+                @keydown.tab.prevent="suggestTags"
+                @input="suggestTags"
+                @blur="resetSuggest"
             />
-        </div>
-    </section>
+            <ul v-if="suggestions.length !== 0" class="input-suggestion">
+                <li v-for="suggestion in suggestions" @mousedown="selectSuggestion(suggestion)">
+                    {{ suggestion }}
+                </li>
+            </ul>
+        </section>
+    </article>
 </template>
 
 <script setup>
 import { tagApi } from "@/hooks/backendApi";
-import { computed, onMounted, ref, toRef, watch } from "vue";
+import { ref, watch } from "vue";
 
 const checkedTags = defineModel({ default: [] });
 const emits = defineEmits(["filter"]);
@@ -50,8 +60,24 @@ watch(checkedTags, (v) => {
 });
 
 const browseTag = async () => {
-    const targetTag = await loadInputTag();
-    checkFilterItem(targetTag);
+    try {
+        const targetTag = await loadInputTag();
+        checkFilterItem(targetTag);
+    } catch (error) {
+        console.error("Cannot Browse Tag", error.message);
+        alert("태그 검색 실패");
+    }
+};
+
+//태그 검색
+const loadInputTag = async () => {
+    //태그 검색 실패 시 예외 처리
+    const browseName = inputTag.value;
+    inputTag.value = "";
+
+    const loadTag = await tagApi.getTagByName(browseName);
+    console.debug("[BROWSE] load tag: ", loadTag);
+    return loadTag;
 };
 
 const checkFilterItem = (targetTag) => {
@@ -73,65 +99,97 @@ const checkFilterItem = (targetTag) => {
     //이미 태그 메뉴가 있고 체크까지 되어 있으면 아무것도 안함
 };
 
-const loadInputTag = async () => {
-    //태그 검색 실패 시 예외 처리
-    const browseName = inputTag.value;
-    inputTag.value = "";
-
-    const loadTag = await tagApi.getTagByName(browseName);
-    console.debug("[BROWSE] load tag: ", loadTag);
-    return loadTag;
-};
-
 const existInMenu = (tag) => tagMenuList.value.some((menu) => menu.id === tag.id);
 
 const existInChecked = (tag) => checkedTags.value.some((checkedId) => checkedId === tag.id);
+
+//태그 검색바 자동완성 기능
+const suggestions = ref([]);
+
+const suggestTags = async () => {
+    const tags = await tagApi.searchTag(inputTag.value);
+    suggestions.value = tags;
+};
+
+const resetSuggest = () => {
+    suggestions.value = [];
+};
+
+const selectSuggestion = (suggestion) => {
+    inputTag.value = suggestion;
+    resetSuggest();
+};
 </script>
 
 <style scoped lang="sass">
-.novel-filter
-    border-radius: 30px
-    border: 5px solid var(--bg-sub)
+
+section
+    position: relative
 
 .filter-header
     margin-bottom: 20px
 
+    .line
+        border-top: 5px solid var(--pico-secondary)
+        border-radius: 5px
+        margin: 10px 0px
+        width: 10rem
+
 .filter-item-list
-    margin: 0 10px
+    margin: 10px
     display: flex
     flex-flow: row wrap
     gap: 10px
 
     .filter-item
-        border: 2px solid var(--line-color)
-        border-radius: 12px
         cursor: pointer
+        border-radius: 0.5rem
+        border: 2px solid var(--pico-secondary)
+
+        display: flex
+        align-items: center
+
+        span
+            margin: 0
+            padding: 4px 8px
+            border-radius: 0.5rem
+            font-size: 0.6rem
+            font-weight: bold
 
         input
             display: none
 
-        span
-            padding: 4px 8px
-            font-size: 12px
-
-        &:hover
-            background-color: var(--bg-sub)
-
         &:has(input:checked)
-            background-color: var(--bg-sub)
+            background-color: var(--pico-contrast-focus)
 
 
 
 .filter-input
+    height: 40px
     display: inline-block
-    width: 250px
-    padding: 4px 8px
-    border: 2px solid var(--line-color)
-    border-radius: 12px
-    font-size: 12px
+    font-size: 0.7rem
+    margin: 0
 
-.line
-    border-top: 5px solid var(--primary-color)
-    border-radius: 5px
-    margin: 10px 0px
+ul.input-suggestion
+    position: absolute
+    width: 100%
+    background-color: var(--pico-background-color)
+    padding: 0
+
+    border: 1px solid var(--pico-form-element-border-color)
+    border-bottom-left-radius: 5px
+    border-bottom-right-radius: 5px
+    z-index: 1
+
+    display: flex
+    flex-flow: column wrap
+
+    li
+        padding: 10px 0 10px 20px
+        list-style: none
+        font-size: 0.7rem
+        cursor: pointer
+
+        &:hover
+            background-color: var(--pico-form-element-background-color)
 </style>
