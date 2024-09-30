@@ -21,6 +21,7 @@ function handleError(error, mode = 'ALERT') {
     switch (error.response.status) {
         case 400:
             console.error('Bad Request: ', error.response.data);
+            handleBadRequest(error.response.data);
             break;
         case 401:
             console.error('Authorized: ', error.response.data);
@@ -28,12 +29,28 @@ function handleError(error, mode = 'ALERT') {
             break;
         case 500:
             console.error('Server Error: ', error.response.data);
+            alert("서버에서 에러가 발생하였습니다. 잠시 후에 다시 실행하여 주시길 바랍니다. 현상이 지속된다면 고객센터로 문의 바랍니다.");
             break;
         default:
             console.error('Other Error: ', error.response.data);
     }
 }
 
+//400 예외 처리
+function handleBadRequest(data) {
+    if (!(data ?? false)) {
+        alert(
+            "오류가 발생하였습니다. 현상이 지속된다면 고객센터로 문의 바랍니다."
+        );
+        return;
+    }
+    const messages = data.split(",");
+    messages.forEach((msg) => {
+        alert(msg);
+    });
+}
+
+//401 예외 처리
 function handleAuth(mode) {
     switch (mode) {
         case 'INACTION':
@@ -353,6 +370,7 @@ export const episodeApi = {
         } catch (error) {
             console.error("Failed to create episode of novel")
             handleError(error, "LOGIN")
+            throw error;
         }
     },
 
@@ -367,6 +385,7 @@ export const episodeApi = {
         } catch (error) {
             console.error("Failed to update episode")
             handleError(error, "LOGIN")
+            throw error;
         }
     },
 
@@ -380,6 +399,7 @@ export const episodeApi = {
         } catch (error) {
             console.error("Failed to delete episode")
             handleError(error, "LOGIN")
+            throw error;
         }
     },
 }

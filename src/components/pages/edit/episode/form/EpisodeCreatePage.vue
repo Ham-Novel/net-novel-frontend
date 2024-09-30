@@ -1,6 +1,6 @@
 <template>
     <article class="base-wrapper">
-        <EpisodeEditForm @submit="createEpisode" @form-input="getFormData"></EpisodeEditForm>
+        <EpisodeEditForm @submit="submit" @form-input="getFormData"></EpisodeEditForm>
     </article>
 </template>
 
@@ -29,9 +29,20 @@ function getFormData(data) {
 }
 
 //submit 클릭 이벤트
+async function submit() {
+    try {
+        await createEpisode();
+    } catch (error) {
+        if (error.response.status === 500) {
+            alert(
+                "작품 생성에 오류가 발생하였습니다. 현상이 지속된다면 고객센터로 문의 부탁드립니다."
+            );
+        }
+    }
+}
+
 //에피소드 DB 생성
 async function createEpisode() {
-    console.log(episodeToCreate);
     const createdId = await episodeApi.createEpisode(props.novelId, {
         novelId: props.novelId,
         title: episodeToCreate.title,

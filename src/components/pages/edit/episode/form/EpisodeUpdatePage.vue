@@ -2,7 +2,7 @@
     <article class="base-wrapper">
         <template v-if="episodeOrigin ?? false">
             <EpisodeEditForm
-                @submit="updateEpisode"
+                @submit="submit"
                 @form-input="getFormData"
                 :initial-input="episodeOrigin"
             ></EpisodeEditForm>
@@ -51,9 +51,20 @@ function getFormData(data) {
 }
 
 //submit 클릭 이벤트
+async function submit() {
+    try {
+        await updateEpisode();
+    } catch (error) {
+        if (error.response.status === 500) {
+            alert(
+                "작품 수정에 오류가 발생하였습니다. 현상이 지속된다면 고객센터로 문의 부탁드립니다."
+            );
+        }
+    }
+}
+
 //에피소드 DB 수정
 async function updateEpisode() {
-    console.log(episodeToUpdate);
     await episodeApi.updateEpisode({
         episodeId: props.episodeId,
         title: episodeToUpdate.title,

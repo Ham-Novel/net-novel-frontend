@@ -43,6 +43,18 @@ onMounted(async () => {
 });
 
 //submit 클릭 이벤트
+async function submit() {
+    try {
+        await deleteEpisode();
+    } catch (error) {
+        if (error.response.status === 500) {
+            alert(
+                "작품 삭제에 오류가 발생하였습니다. 현상이 지속된다면 고객센터로 문의 부탁드립니다."
+            );
+        }
+    }
+}
+
 //에피소드 삭제
 async function deleteEpisode() {
     await episodeApi.deleteEpisode(props.episodeId);
