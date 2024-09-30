@@ -1,13 +1,33 @@
 <template>
     <div class="container">
-        <img :src="props.imgUrl" :alt="props.alt" />
+        <img :src="cover" :alt="alt" />
     </div>
 </template>
 
 <script setup>
+import { computed } from "vue";
+
 const props = defineProps({
     imgUrl: String,
     alt: String,
+});
+
+const cover = computed(() => {
+    if (props.imgUrl === undefined) {
+        return "/cover/default.jpeg";
+    }
+
+    try {
+        const s3Url = props.imgUrl.split("/").pop();
+        console.log(s3Url);
+    } catch (error) {
+        return "/cover/default.jpeg";
+    }
+
+    if (props.imgUrl.includes("null")) {
+        return "/cover/default.jpeg";
+    }
+    return props.imgUrl;
 });
 </script>
 

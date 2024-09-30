@@ -27,7 +27,7 @@
                 </template>
             </div>
             <blockquote class="desc">
-                {{ props.novel.desc }}
+                {{ props.novel.description }}
             </blockquote>
         </div>
     </ListItem>
@@ -48,6 +48,8 @@ const props = defineProps({
     },
 });
 
+console.log(props.novel);
+
 const router = useRouter();
 const browseTag = (tagId) => {
     router.push({ name: "browse", query: { tags: tagId } });
@@ -56,7 +58,7 @@ const browseTag = (tagId) => {
 
 <style scoped lang="sass">
 .browse-item
-    height: auto
+    height: 180px
 
 .detailed
     font-size: 14px
@@ -103,8 +105,7 @@ const browseTag = (tagId) => {
     .desc
         max-width: 80%
         margin: 0
-        padding: 0
-        padding: 0.2em 0.6em
+        padding: 0.3em 0.6em
 
         white-space: normal
         word-wrap: break-word
