@@ -27,9 +27,9 @@
             <button class="action-button outline" @click="clickLike">
                 <ThumbsUp :size="13" /> {{ commentLikes }}
             </button>
-            <!-- <button class="action-button outline" @click="clickDislike">
+            <button class="action-button outline" @click="clickDislike">
                 <ThumbsDown :size="13" /> {{ commentDislikes }}
-            </button> -->
+            </button>
             <button class="action-button outline">신고</button>
         </section>
     </article>
@@ -66,13 +66,13 @@ const commentLikes = computed(() => {
     return props.comment.likes + likeDelta.value;
 });
 
-// const commentDislikes = computed(() => {
-//     return props.comment.disLikes + dislikeDelta.value;
-// });
+const commentDislikes = computed(() => {
+    return props.comment.disLikes + dislikeDelta.value;
+});
 
 const likeDelta = ref(0);
 
-// const dislikeDelta = ref(0);
+const dislikeDelta = ref(0);
 
 //좋아요 버튼 클릭 이벤트
 async function clickLike() {
@@ -90,20 +90,20 @@ async function clickLike() {
     }
 }
 
-// //싫어요 버튼 클릭 이벤트
-// async function clickDislike() {
-//     const data = await commentApi.toggleLike({
-//         likeType: "DISLIKE",
-//         commentId: props.comment.commentId,
-//     });
-//     if (data === "좋아요 등록 완료") {
-//         dislikeDelta.value++;
-//         console.log("+");
-//     } else {
-//         dislikeDelta.value--;
-//         console.log("-");
-//     }
-// }
+//싫어요 버튼 클릭 이벤트
+async function clickDislike() {
+    const data = await commentApi.toggleLike({
+        likeType: "DISLIKE",
+        commentId: props.comment.commentId,
+    });
+    if (data === "좋아요 등록 완료") {
+        dislikeDelta.value++;
+        console.log("+");
+    } else {
+        dislikeDelta.value--;
+        console.log("-");
+    }
+}
 
 //대댓글 작성 textarea 열기
 const isOpenForm = ref(false);
