@@ -481,6 +481,21 @@ export const commentApi = {
     },
 
 
+    async createRecomment(createDto) {
+        try {
+            const response = await fetchApi({
+                method: 'post',
+                url: `/recomment`,
+                data: createDto
+            })
+            return response.data;
+        } catch (error) {
+            console.error("Failed to create recomment of the comment");
+            handleError(error, "ALERT")
+            throw error;
+        }
+    },
+
 }
 
 export const memberApi = {

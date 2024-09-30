@@ -1,15 +1,15 @@
 <template>
-    <article>
-        <form class="form" @submit.prevent="submitComment">
-            <textarea class="content" v-model="content" ref="contentRef"></textarea>
-            <input type="submit" class="submit" value="댓글 작성" />
-        </form>
-    </article>
+    <form class="form" @submit.prevent="submitComment">
+        <TextArea v-model="content"></TextArea>
+        <input type="submit" class="submit" value="댓글 작성" />
+    </form>
 </template>
 
 <script setup>
+import TextArea from "@/components/reusable/TextArea.vue";
+
 import { onMounted, ref, watch } from "vue";
-import { commentApi, episodeApi } from "@/hooks/backendApi";
+import { commentApi } from "@/hooks/backendApi";
 import { useEpisodePageStore } from "../episodePageStore";
 
 //에피소드 페이지 전역 변수
@@ -33,29 +33,9 @@ async function submitComment() {
 
 //textarea 댓글 내용
 const content = ref("");
-
-//textarea 높이 에피소드 내용에 맞게 조절
-const contentRef = ref(null);
-function resizeTextarea() {
-    const textarea = contentRef.value;
-    textarea.style.height = "auto"; // 높이를 초기화
-    textarea.style.height = textarea.scrollHeight + "px"; // scrollHeight에 맞게 높이 조정
-}
-//content 값이 변경될 때마다 이벤트 발생
-watch(content, (value) => {
-    resizeTextarea();
-});
-//content 초기값 설정 시 텍스트 크기 조정
-onMounted(() => {
-    resizeTextarea();
-});
 </script>
 
 <style scoped lang="sass">
-article
-    position: relative
-    margin: 0
-    margin-bottom: 0.5rem
 
 .header
     display: inline-block
@@ -64,15 +44,14 @@ article
     margin-right: 10px
     margin-bottom: 0.5rem
 
-.content
-    font-size: 0.8rem
-    resize: none
-    overflow: hidden
 
 form
     height: fit-content
 
     textarea
+        font-size: 0.8rem
+        resize: none
+        overflow: hidden
         margin-bottom: 1px
         border-bottom-left-radius: 0
         border-bottom-right-radius: 0
@@ -80,4 +59,5 @@ form
     input
         border-top-left-radius: 0
         border-top-right-radius: 0
+        font-size: 0.8rem
 </style>

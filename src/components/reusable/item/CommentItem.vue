@@ -1,13 +1,29 @@
 <template>
     <article class="comment">
-        <div class="detail">
+        <section class="detail">
             <h5 class="user-info">
                 <p class="nickName">{{ comment.nickName }}</p>
                 <span class="timestamp">{{ updatedDate }}</span>
             </h5>
             <p class="content">{{ comment.content }}</p>
-        </div>
-        <div class="actions">
+        </section>
+        <section>
+            <slot></slot>
+        </section>
+        <section class="recomment-input">
+            <form v-if="isOpenForm" @submit.prevent="createRecomment" role="group">
+                <TextArea v-model="recommentContent"></TextArea>
+                <input type="submit" class="submit" value="댓글 작성" />
+            </form>
+        </section>
+        <section class="actions">
+            <button
+                v-if="featureRecomment"
+                class="action-button outline"
+                @click="toggleRecommentForm"
+            >
+                <MessageSquareMore :size="16" />대댓글
+            </button>
             <button class="action-button outline" @click="clickLike">
                 <ThumbsUp :size="13" /> {{ commentLikes }}
             </button>
@@ -15,22 +31,30 @@
                 <ThumbsDown :size="13" /> {{ commentDislikes }}
             </button> -->
             <button class="action-button outline">신고</button>
-        </div>
+        </section>
     </article>
 </template>
 
 <script setup>
-import { ThumbsUp, ThumbsDown } from "lucide-vue-next";
+import TextArea from "../TextArea.vue";
+import { ThumbsUp, ThumbsDown, MessageSquareMore } from "lucide-vue-next";
+
 import { formatUtil } from "@/hooks/format";
 import { commentApi } from "@/hooks/backendApi";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps({
     comment: {
         type: Object,
         required: true,
     },
+    featureRecomment: {
+        type: Boolean,
+        default: false,
+    },
 });
+
+const emits = defineEmits(["reload"]);
 
 //댓글 생성 날짜 포메팅
 const updatedDate = computed(() => {
@@ -80,6 +104,29 @@ async function clickLike() {
 //         console.log("-");
 //     }
 // }
+
+//대댓글 작성 textarea 열기
+const isOpenForm = ref(false);
+function toggleRecommentForm() {
+    isOpenForm.value = !isOpenForm.value;
+}
+
+//대댓글 작성 기능
+const recommentContent = ref("");
+
+async function createRecomment() {
+    try {
+        await commentApi.createRecomment({
+            content: recommentContent.value,
+            commentId: props.comment.commentId,
+        });
+        recommentContent.value = "";
+        isOpenForm.value = false; //대댓글 작성 form 닫기
+        emits("reload");
+    } catch (error) {
+        alert("대댓글 작성에 오류가 발생하였습니다. 다시 시도하여 주십시오.");
+    }
+}
 </script>
 
 <style scoped lang="sass">
@@ -101,15 +148,32 @@ async function clickLike() {
             font-size: 0.6em
             font-weight: normal
 
-    //     .avatar
-    //         width: 40px
-    //         height: 40px
-    //         border-radius: 50%
-    //         margin-right: 10px
-
     .content
         width: 90%
         font-size: 0.8rem
+
+
+section.recomment-input
+    margin: 0
+    margin-left: 2rem
+
+
+    form
+        position: relative
+        margin: 0
+
+        display: flex
+        align-items: stretch
+
+        textarea
+            font-size: 0.8rem
+
+        input
+            height: auto
+            padding: 0 1rem
+            font-size: 0.8rem
+            display: flex
+            align-items: center
 
 .actions
     position: absolute

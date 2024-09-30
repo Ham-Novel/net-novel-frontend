@@ -1,15 +1,17 @@
 <template>
     <dialog open>
         <article class="modal">
-            <CommentInput @reload="reload"></CommentInput>
-            <select class="sort-by" v-model="episodeStore.commentSortBy">
-                <option value="recent">최신순</option>
-                <option value="likes">추천순</option>
-            </select>
+            <article>
+                <CommentInput @reload="reload"></CommentInput>
+                <select class="sort-by" v-model="episodeStore.commentSortBy">
+                    <option value="recent">최신순</option>
+                    <option value="likes">추천순</option>
+                </select>
+            </article>
             <div class="comment-list">
                 <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
                     <template v-slot:default="{ item }">
-                        <CommentItem :comment="item"></CommentItem>
+                        <CommentBlock :comment="item" @reload="reload"></CommentBlock>
                     </template>
                 </InfiniteScroll>
             </div>
@@ -19,8 +21,8 @@
 
 <script setup>
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
-import CommentItem from "@/components/reusable/item/CommentItem.vue";
 import CommentInput from "./CommentInput.vue";
+import CommentBlock from "./CommentBlock.vue";
 
 import { ref, reactive, onMounted, onUnmounted, watch } from "vue";
 import { commentApi } from "@/hooks/backendApi";
@@ -69,6 +71,11 @@ onUnmounted(() => {
 </script>
 
 <style lang="sass" scoped>
+article
+    position: relative
+    margin: 0
+    margin-bottom: 0.5rem
+
 article.modal
     max-height: 90%
     min-height: 50%
@@ -80,4 +87,9 @@ article.modal
     display: flex
     flex-flow: column wrap
     gap: 10px
+
+select
+    margin: 0
+    font-size: 0.9rem
+    height: 3rem
 </style>
