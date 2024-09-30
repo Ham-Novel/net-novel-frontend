@@ -45,6 +45,8 @@ function handleAuth(mode) {
             const result = confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까");
             if (result) {
                 router.push({ name: 'login' })
+            } else {
+                router.push({ name: 'home' })
             }
             break;
     }
@@ -490,7 +492,7 @@ export const memberApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to load my page info")
-            handleError(error);
+            handleError(error, "LOGIN");
         }
     },
 
@@ -542,7 +544,7 @@ export const memberApi = {
             return response.data;
         } catch (error) {
             console.error("Failed to load my works list");
-            handleError(error)
+            handleError(error, "LOGIN")
         }
     },
 
