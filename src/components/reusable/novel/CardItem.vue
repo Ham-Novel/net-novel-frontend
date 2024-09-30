@@ -37,7 +37,7 @@ function goLinkPage() {
 
 <style scoped lang="sass">
 article
-    padding: 0.3em
+    padding: 0
 
 .item
     width: 200px
@@ -62,6 +62,8 @@ article
 .info
     flex: 1
     position: relative
+    padding: 0.2rem
+    padding-top: 0
     overflow: hidden
     white-space: nowrap
 

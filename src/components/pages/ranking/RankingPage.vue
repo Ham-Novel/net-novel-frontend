@@ -84,5 +84,5 @@ const reload = () => {
     position: relative
     display: flex
     flex-flow: row wrap
-    gap: 15px
+    gap: 25px
 </style>
