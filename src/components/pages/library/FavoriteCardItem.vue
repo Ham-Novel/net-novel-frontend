@@ -1,7 +1,7 @@
 <template>
     <CardItem v-bind="itemProps">
         <template #cover>
-            <p class="status">{{ novelStatus }}</p>
+            <p class="status">{{ novel.status }}</p>
         </template>
     </CardItem>
 </template>
@@ -18,12 +18,14 @@ const props = defineProps({
     },
 });
 
+console.log(props.novel);
+
 const itemProps = {
     brief: {
         title: props.novel.title,
         coverImg: props.novel.thumbnailUrl,
     },
-    link: { name: "novel", params: { id: props.novel.novelId } },
+    link: { name: "novel", params: { id: props.novel.id } },
 };
 
 const novelStatus = computed(() => {

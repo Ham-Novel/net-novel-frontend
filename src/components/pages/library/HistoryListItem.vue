@@ -2,7 +2,7 @@
     <ListItem
         class="browse-item"
         :cover-img="novel.thumbnailUrl"
-        :link="{ name: 'novel', params: { id: novel.novelId } }"
+        :link="{ name: 'novel', params: { id: novel.id } }"
     >
         <template #cover>
             <p class="type">{{ novelType }}</p>

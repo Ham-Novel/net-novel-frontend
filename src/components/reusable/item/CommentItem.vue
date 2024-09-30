@@ -76,32 +76,35 @@ const dislikeDelta = ref(0);
 
 //좋아요 버튼 클릭 이벤트
 async function clickLike() {
-    const data = await commentApi.toggleLike({
-        likeType: "LIKE",
-        commentId: props.comment.commentId,
-    });
-
-    if (data === "좋아요 등록 완료") {
-        likeDelta.value++;
-        console.log("+");
-    } else {
-        likeDelta.value--;
-        console.log("-");
+    try {
+        await likeToComment("LIKE", likeDelta);
+    } catch (error) {
+        if (error.response.status === 400) {
+            alert("이미 싫어요를 누른 상태입니다.");
+        }
     }
 }
 
 //싫어요 버튼 클릭 이벤트
 async function clickDislike() {
+    try {
+        await likeToComment("DISLIKE", dislikeDelta);
+    } catch (error) {
+        if (error.response.status === 400) {
+            alert("이미 좋아요를 누른 상태입니다.");
+        }
+    }
+}
+
+async function likeToComment(type, delta) {
     const data = await commentApi.toggleLike({
-        likeType: "DISLIKE",
+        likeType: type,
         commentId: props.comment.commentId,
     });
     if (data === "좋아요 등록 완료") {
-        dislikeDelta.value++;
-        console.log("+");
-    } else {
-        dislikeDelta.value--;
-        console.log("-");
+        delta.value++;
+    } else if (data === "좋아요 삭제 완료") {
+        delta.value--;
     }
 }
 
