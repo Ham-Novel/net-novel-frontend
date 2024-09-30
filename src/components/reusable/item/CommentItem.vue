@@ -23,7 +23,7 @@
 import { ThumbsUp, ThumbsDown } from "lucide-vue-next";
 import { formatUtil } from "@/hooks/format";
 import { commentApi } from "@/hooks/backendApi";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 const props = defineProps({
     comment: {

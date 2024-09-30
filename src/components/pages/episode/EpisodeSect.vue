@@ -54,6 +54,10 @@ import { onMounted, reactive, ref, watch, nextTick, markRaw, computed } from "vu
 import { episodeApi } from "@/hooks/backendApi";
 import { useObserver } from "@/hooks/observer";
 import { useRouter } from "vue-router";
+import { useEpisodePageStore } from "./episodePageStore";
+
+//에피소드 페이지 전역 변수
+const episodeStore = useEpisodePageStore();
 
 const router = useRouter();
 
@@ -233,6 +237,7 @@ const urlDetect = reactive({
     handler: (intersect) => {
         if (intersect.state) {
             urlDetect.updateURL(intersect.data.key);
+            episodeStore.episodeId = intersect.data.key;
         }
     },
     updateURL: (episodeId) => {
@@ -280,10 +285,10 @@ watch(urlDetect.observer.intersection, urlDetect.handler);
 
     .url-object
         position: absolute
-        width: 100%
+        width: 40vh
         height: 80vh
-        // z-index: -1
-        border: 5px solid blues
+        z-index: -1
+        // border: 5px solid blue
 
         &.front
             top: 0

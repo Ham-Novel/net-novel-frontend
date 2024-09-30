@@ -432,6 +432,7 @@ export const commentApi = {
         } catch (error) {
             console.error("Failed to create comment");
             handleError(error, "LOGIN")
+            throw error;
         }
     },
 

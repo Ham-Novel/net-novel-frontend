@@ -2,8 +2,8 @@
     <aside>
         <nav>
             <ul>
-                <li @click="toggleModal(CommentListModal)"><List size="30" /></li>
-                <li @click="toggleModal(EpisodeListModal)"><MessageSquareMore size="30" /></li>
+                <li @click="toggleModal(EpisodeListModal)"><List size="30" /></li>
+                <li @click="toggleModal(CommentListModal)"><MessageSquareMore size="30" /></li>
                 <li><Info size="30" /></li>
             </ul>
         </nav>
