@@ -8,7 +8,15 @@
                 "
                 @load-method="loadPrior"
             ></Loader>
-            <h3 v-else>최초 회차입니다.</h3>
+            <h5
+                v-else-if="
+                    priorLoader.state.value === loadState.payment ||
+                    mountLoader.state.value === loadState.payment
+                "
+            >
+                결제가 필요합니다.
+            </h5>
+            <h5 v-else>최초 회차입니다.</h5>
         </div>
         <div id="contents" :ref="(el) => (scrollSynchro.contentRef = el)">
             <template v-for="(item, index) in episodeList.list" :key="item.episodeId">
@@ -40,7 +48,15 @@
                 "
                 @load-method="loadNext"
             ></Loader>
-            <h3 v-else class="all-loaded">마지막 회차입니다.</h3>
+            <h5
+                v-else-if="
+                    nextLoader.state.value === loadState.payment ||
+                    mountLoader.state.value === loadState.payment
+                "
+            >
+                결제가 필요합니다.
+            </h5>
+            <h5 v-else class="all-loaded">마지막 회차입니다.</h5>
         </div>
     </section>
 </template>
@@ -274,10 +290,6 @@ watch(urlDetect.observer.intersection, urlDetect.handler);
     &.next
         position: absolute
         bottom: 0
-
-    .all-loaded
-        font-size: 30px
-
 
 #contents
     margin-top: 100px
