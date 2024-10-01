@@ -280,11 +280,13 @@ export const commentApi = {
         return response.data;
     },
 
-    async toggleLike(dto) {
+    async toggleLike(dto, error) {
+        console.log(error);
         const response = await fetchApi({
             method: 'post',
             url: `/comments/${dto.commentId}/comment-likes`,
-            data: dto
+            data: dto,
+            errorHandler: error
         })
         return response.data;
     },

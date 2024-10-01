@@ -39,6 +39,7 @@ api.interceptors.response.use(
       const config = error.config;
 
       console.error("Response error:", status, data);
+      console.log(config)
 
       // 개별 요청에 errorHandler가 정의되어 있는지 확인
       // 개별 에러 핸들러가 있으면 그 함수를 호출하여 전역 처리를 덮어씀

@@ -76,37 +76,30 @@ const dislikeDelta = ref(0);
 
 //좋아요 버튼 클릭 이벤트
 async function clickLike() {
-    try {
-        await likeToComment("LIKE", likeDelta);
-    } catch (error) {
-        if (error.response.status === 400) {
-            alert("이미 좋아요를 누른 상태입니다.");
-        }
-    }
+    await likeToComment("LIKE");
 }
 
 //싫어요 버튼 클릭 이벤트
 async function clickDislike() {
-    try {
-        await likeToComment("DISLIKE", dislikeDelta);
-    } catch (error) {
-        if (error.response.status === 400) {
-            alert("이미 싫어요를 누른 상태입니다.");
-        }
-    }
+    await likeToComment("DISLIKE");
 }
 
-async function likeToComment(type, delta) {
-    const data = await commentApi.toggleLike({
-        likeType: type,
-        commentId: props.comment.commentId,
-    });
-    if (data === "좋아요 등록 완료") {
-        delta.value++;
-    } else if (data === "좋아요 삭제 완료") {
-        delta.value--;
-    }
+async function likeToComment(type) {
+    const data = await commentApi.toggleLike(
+        {
+            likeType: type,
+            commentId: props.comment.commentId,
+        },
+        erorHandler
+    );
+    console.log(data);
 }
+
+const erorHandler = {
+    400: (error) => {
+        alert("이미 댓글에 반응하셨습니다.");
+    },
+};
 
 //대댓글 작성 textarea 열기
 const isOpenForm = ref(false);
