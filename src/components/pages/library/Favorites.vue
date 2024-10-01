@@ -13,13 +13,13 @@
 <script setup>
 import FavoriteCardItem from "./FavoriteCardItem.vue";
 import { onMounted, reactive, ref } from "vue";
-import { memberApi } from "@/hooks/backendApi";
+import { favoriteApi } from "@/hooks/backendApi";
 
 //선호작 데이터 저장 변수
 const favorites = reactive({
     list: [],
     loadMethod: async () => {
-        const novels = await memberApi.getFavoriteNovels();
+        const novels = await favoriteApi.getFavorites();
         favorites.list.push(...novels);
     },
 });

@@ -12,17 +12,30 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, toRaw, onMounted, useAttrs } from "vue";
+import { ref, reactive, watch, onMounted } from "vue";
 import { useObserver } from "@/hooks/observer";
 
-const props = defineProps(["loadMethod", "loadingMessage", "pageProps"]);
+const props = defineProps({
+    loadMethod: {
+        type: Function,
+        required: true,
+    },
+    pageProps: {
+        type: Object,
+        default: { number: 0, size: 10 },
+    },
+    mountLoad: {
+        type: Boolean,
+        default: true,
+    },
+});
 
 //아이템 저장 및 불러오기
 const itemList = ref([]);
 
 const itemLoader = reactive({
-    pageable: { ...props.pageProps } ?? { number: 0, size: 10 },
-    state: { isLoading: false, allLoaded: false },
+    pageable: { ...props.pageProps },
+    state: { isLoading: false, allLoaded: true },
     async putItems() {
         try {
             const loadItems = await props.loadMethod(this.pageable.number, this.pageable.size);
@@ -30,7 +43,7 @@ const itemLoader = reactive({
             this.pageable.number++;
             return loadItems;
         } catch (error) {
-            console.error("Cannot put items in list", error.message);
+            console.error("Cannot put items in scroll list: ", error.message);
             itemLoader.state.allLoaded = true;
         }
     },
@@ -66,7 +79,13 @@ const itemLoader = reactive({
 
 //첫번째 페이지 값 먼저 불러오기
 onMounted(() => {
-    itemLoader.mountLoad("first");
+    console.log(props.mountLoad);
+    if (props.mountLoad) {
+        itemLoader.state.allLoaded = false;
+        itemLoader.mountLoad("first");
+    } else {
+        itemLoader.state.allLoaded = true;
+    }
 });
 
 //페이지 최하단 도달시 이벤트 발생
@@ -87,6 +106,6 @@ defineExpose({ reset: itemLoader.reset, itemList });
 
 <style lang="sass" scoped>
 .loader-container
-    height: 50px
+    height: 10px
     // background-color: blue
 </style>

@@ -57,7 +57,7 @@ const sort = ref("latest");
 const scrollProps = reactive({
     pageProps: { number: 0, size: 5 },
     loadMethod: async (page, size) => {
-        const loadData = await novelApi.getBrowseNovels(sort.value, page, size, toRaw(tags.value));
+        const loadData = await novelApi.browseNovel(sort.value, page, size, toRaw(tags.value));
         return loadData;
     },
 });

@@ -31,18 +31,18 @@
                         required
                         @keydown.enter.prevent
                         :disabled="props.disabled"
+                        :aria-invalid="titleInvalid"
                     />
                 </div>
                 <TagInput v-model="formInput.tagNames" :disabled="props.disabled"></TagInput>
                 <div>
                     <p>작품 소개</p>
-                    <textarea
-                        name="description"
+
+                    <TextArea
                         v-model="formInput.description"
-                        @keydown.enter.prevent
-                        required
-                        :disabled="props.disabled"
-                    ></textarea>
+                        :disabled="disabled"
+                        :aria-invalid="discriptionInvalid"
+                    ></TextArea>
                 </div>
             </div>
             <input type="submit" value="확인" />
@@ -51,9 +51,11 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
 import CoverUpload from "./CoverUpload.vue";
 import TagInput from "./TagInput.vue";
+import TextArea from "@/components/reusable/TextArea.vue";
+
+import { onMounted, ref, watch } from "vue";
 
 import { useRouter } from "vue-router";
 
@@ -80,8 +82,32 @@ const formInput = defineModel({
     },
 });
 
+const titleInvalid = ref(undefined);
+const discriptionInvalid = ref(undefined);
+
+watch(
+    () => formInput.value.title,
+    (value) => {
+        if (value.length === 0) {
+            titleInvalid.value = undefined;
+            return;
+        }
+
+        if (value.length < 30) {
+            titleInvalid.value = false;
+            return;
+        }
+
+        titleInvalid.value = true;
+    }
+);
+
 //form 입력값 제출 메서드
 async function submitNovel() {
+    if (titleInvalid.value === true) {
+        alert("제목은 30자 이상은 불가능합니다.");
+        return;
+    }
     emits("submit-novel");
 }
 </script>

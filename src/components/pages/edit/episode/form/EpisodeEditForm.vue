@@ -1,6 +1,5 @@
 <template>
     <form @submit.prevent="submit" class="create-form">
-        <input type="submit" value="에피소드 제출" />
         <div class="novel-info">
             <section>
                 <h4>에피소드 제목</h4>
@@ -16,18 +15,17 @@
             </section>
             <section>
                 <h4>내용</h4>
-                <textarea
-                    name="content"
-                    v-model="content"
-                    :disabled="disabled"
-                    ref="contentRef"
-                ></textarea>
+                <TextArea v-model="content" :disabled="disabled"></TextArea>
             </section>
+        </div>
+        <div class="novel-nav">
+            <input type="submit" value="에피소드 제출" />
         </div>
     </form>
 </template>
 
 <script setup>
+import TextArea from "@/components/reusable/TextArea.vue";
 import { computed, onMounted, ref, watch, watchEffect } from "vue";
 
 const emits = defineEmits(["submit", "formInput"]);
@@ -61,24 +59,6 @@ watchEffect(() => {
     });
 });
 
-//textarea 높이 에피소드 내용에 맞게 조절
-const contentRef = ref(null);
-function resizeTextarea() {
-    const textarea = contentRef.value;
-    textarea.style.height = "auto"; // 높이를 초기화
-    textarea.style.height = textarea.scrollHeight + "px"; // scrollHeight에 맞게 높이 조정
-}
-
-//content 값이 변경될 때마다 이벤트 발생
-watch(content, (value) => {
-    resizeTextarea();
-});
-
-//content 초기값 설정 시 텍스트 크기 조정
-onMounted(() => {
-    resizeTextarea();
-});
-
 //가격 정책 불러오기 (나중에 가격 정책 가져오는 api 필요)
 const costPolicyList = ref([
     { id: 1, name: "무료" },
@@ -100,10 +80,13 @@ form
 textarea
     width: 100%
     min-height: 300px
-    height: fit-content
-    resize: none
-    overflow-y: hidden
 
 h4
     margin-bottom: 20px
+
+.novel-nav
+    position: fixed
+    bottom: 0
+    left: 0
+    width: 100%
 </style>

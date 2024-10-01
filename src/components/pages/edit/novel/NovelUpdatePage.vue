@@ -74,7 +74,7 @@ async function updateNovel() {
     //작품 썸네일이 변경되었으면 DB에 저장
     //새로 img를 업로드하지 않았으면 imgFile === undefined
     if (novelToUpdate.imgFile ?? false) {
-        await novelApi.setNovelThumbnail(props.novelId, novelToUpdate.imgFile);
+        await novelApi.uploadNovelThumbnail(props.novelId, novelToUpdate.imgFile);
     }
 
     //작품 관리 페이지로 이동

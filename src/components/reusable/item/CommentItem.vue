@@ -78,14 +78,22 @@ const dislikeDelta = ref(0);
 async function clickLike() {
     try {
         await likeToComment("LIKE", likeDelta);
-    } catch (error) {}
+    } catch (error) {
+        if (error.response.status === 400) {
+            alert("이미 좋아요를 누른 상태입니다.");
+        }
+    }
 }
 
 //싫어요 버튼 클릭 이벤트
 async function clickDislike() {
     try {
         await likeToComment("DISLIKE", dislikeDelta);
-    } catch (error) {}
+    } catch (error) {
+        if (error.response.status === 400) {
+            alert("이미 싫어요를 누른 상태입니다.");
+        }
+    }
 }
 
 async function likeToComment(type, delta) {

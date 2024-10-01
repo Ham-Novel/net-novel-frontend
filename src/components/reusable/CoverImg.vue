@@ -19,7 +19,6 @@ const cover = computed(() => {
 
     try {
         const s3Url = props.imgUrl.split("/").pop();
-        console.log(s3Url);
     } catch (error) {
         return "/cover/default.jpeg";
     }

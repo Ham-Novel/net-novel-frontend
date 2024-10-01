@@ -50,7 +50,7 @@ import CoverImg from "@/components/reusable/CoverImg.vue";
 
 import { ref, onMounted, computed } from "vue";
 import { Eye, Heart, MessageCircleHeart } from "lucide-vue-next";
-import { novelApi, memberApi } from "@/hooks/backendApi";
+import { novelApi, favoriteApi } from "@/hooks/backendApi";
 
 //novel id 값
 // url parameter 가져오기
@@ -90,7 +90,7 @@ function setFavoriteState(state) {
 //선호작 설정/해제 설정
 async function toggleFavorite() {
     try {
-        const afterState = await memberApi.toggleNovelFavorite(props.novelId);
+        const afterState = await favoriteApi.toggleFavorite(props.novelId);
         setFavoriteState(afterState);
     } catch (error) {
         console.error("Failed to toggle favorite state: ", error);
@@ -100,7 +100,7 @@ async function toggleFavorite() {
 //선호작 상태 가져오기
 async function checkFavorite() {
     try {
-        const checked = await memberApi.getCheckFavorite(props.novelId);
+        const checked = await favoriteApi.checkFavorite(props.novelId);
         isFavorite.value = checked;
     } catch (error) {
         console.error("Failed to confirm favorite state: ", error);

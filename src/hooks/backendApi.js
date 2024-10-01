@@ -1,632 +1,373 @@
-import router from "@/router";
-import axios from "axios";
+import api from "./globalApi";
 
-const BACKEND_URL = 'http://localhost:8081/api';
-
-async function fetchApi({ method, url, params, data } = {}) {
+async function fetchApi({ method, url, params, data, errorHandler } = {}) {
     const config = {
         method,
         url,
-        baseURL: BACKEND_URL,
-        withCredentials: true,
         data,
-        params
+        params,
+        errorHandler
     }
     console.debug('[BACKEND_API]', config)
-
-    return await axios(config);
-}
-
-function handleError(error, mode = 'ALERT') {
-    switch (error.response.status) {
-        case 400:
-            console.error('Bad Request: ', error.response.data);
-            handleBadRequest(error.response.data);
-            break;
-        case 401:
-            console.error('Authorized: ', error.response.data);
-            handleAuth(mode);
-            break;
-        case 500:
-            console.error('Server Error: ', error.response.data);
-            alert("서버에서 에러가 발생하였습니다. 잠시 후에 다시 실행하여 주시길 바랍니다. 현상이 지속된다면 고객센터로 문의 바랍니다.");
-            break;
-        default:
-            console.error('Other Error: ', error.response.data);
-    }
-}
-
-//400 예외 처리
-function handleBadRequest(data) {
-    if (!(data ?? false)) {
-        alert(
-            "오류가 발생하였습니다. 현상이 지속된다면 고객센터로 문의 바랍니다."
-        );
-        return;
-    }
-    const messages = data.split(",");
-    messages.forEach((msg) => {
-        alert(msg);
-    });
-}
-
-//401 예외 처리
-function handleAuth(mode) {
-    switch (mode) {
-        case 'INACTION':
-            break
-        case 'ALERT':
-            alert("로그인이 필요한 서비스입니다.");
-            break;
-        case 'LOGIN':
-            const result = confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까");
-            if (result) {
-                router.push({ name: 'login' })
-            } else {
-                router.push({ name: 'home' })
-            }
-            break;
-    }
+    return await api(config);
 }
 
 export const coinApi = {
-    async getChargeHistory(page, size) {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: '/members/me/coin-charge-history',
-                params: {
-                    pageNumber: page,
-                    pageSize: size
-                }
-            });
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load coin charge history");
-            handleError(error, "LOGIN")
-            throw error;
-        }
+    async getChargeHistory(pageNumber, pageSize) {
+        const response = await fetchApi({
+            method: 'get',
+            url: '/members/me/coin-charge-history',
+            params: {
+                pageNumber,
+                pageSize
+            }
+        });
+        return response.data;
     },
 
     async chargeCoins(createDto) {
-        try {
-            const response = await fetchApi({
-                method: 'post',
-                url: '/coin-charge-history',
-                data: createDto
-            });
-            return response.data;
-        } catch (error) {
-            console.error("Failed to execute charge coins");
-            handleError(error, "LOGIN")
-            throw error;
-        }
+        const response = await fetchApi({
+            method: 'post',
+            url: '/coin-charge-history',
+            data: createDto
+        });
+        return response.data;
     },
 
 }
 
 export const novelApi = {
     async getNovel(id) {
-        try {
-            const response = await fetchApi({ method: 'get', url: `/novels/${id}` });
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load novel info");
-            handleError(error, 'INACTION');
-            return error;
-        }
+        const response = await fetchApi({ method: 'get', url: `/novels/${id}` });
+        return response.data;
     },
 
     async createNovel(createDto) {
-        try {
-            const response = await fetchApi({ method: 'post', url: '/novels', data: createDto })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to create novel");
-            handleError(error, 'INACTION');
-            return error;
-        }
+        const response = await fetchApi({ method: 'post', url: '/novels', data: createDto })
+        return response.data;
     },
 
     async updateNovel(id, updateDto) {
-        try {
-            const response = await fetchApi({ method: 'put', url: `/novels/${id}`, data: updateDto })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to update novel");
-            handleError(error, 'INACTION');
-            return error;
-        }
+        const response = await fetchApi({ method: 'put', url: `/novels/${id}`, data: updateDto })
+        return response.data;
     },
 
     async deleteNovel(id, deleteDto) {
-        try {
-            const response = await fetchApi({ method: 'delete', url: `/novels/${id}`, data: deleteDto })
-        } catch (error) {
-            console.error("Failed to update novel");
-            handleError(error, 'INACTION');
-            return error;
-        }
+        await fetchApi({ method: 'delete', url: `/novels/${id}`, data: deleteDto })
     },
 
-    async setNovelThumbnail(id, imgFile) {
-        try {
-            const formData = new FormData();
-            formData.append('file', imgFile);
-            await fetchApi({ method: 'post', url: `/novels/${id}/thumbnail`, data: formData });
+    async uploadNovelThumbnail(id, imgFile) {
+        const formData = new FormData();
+        formData.append('file', imgFile);
+        await fetchApi({ method: 'post', url: `/novels/${id}/thumbnail`, data: formData });
 
-        } catch (error) {
-            console.error("Failed to upload thumbnail of novel")
-            handleError(error, 'INACTION');
-        }
     },
 
-    async getListNovels(page, size) {
-        try {
-            const reqUrl = `${API_URL}/novels?pageNumber=${page}&pageSize=${size}`
-            const resp = await fetch(reqUrl);
-            if (!resp.ok) {
-                throw new Error(BAD_REQUEST_MSG);
+    async getNovelList(page, size) {
+        const reqUrl = `${API_URL}/novels?pageNumber=${page}&pageSize=${size}`
+        const resp = await fetch(reqUrl);
+        if (!resp.ok) {
+            throw new Error(BAD_REQUEST_MSG);
+        }
+        return await resp.json();
+    },
+
+    async searchNovel(word, type, page, size, errorHandler = undefined) {
+        const response = await fetchApi({
+            method: 'get',
+            url: "/novels/search",
+            params: {
+                searchWord: word,
+                searchType: type,
+                pageNumber: page,
+                pageSize: size,
+            },
+            errorHandler
+        })
+        return response.data;
+
+    },
+
+    async browseNovel(view, page, size, tags) {
+        if (!(tags ?? false)) {
+            throw TypeError("tags param is invalid");
+        }
+        const tagIds = (tags.length !== 0) && tags.join(",");
+        const response = await fetchApi({
+            method: 'get',
+            url: "/novels/browse",
+            params: {
+                pageNumber: page,
+                pageSize: size,
+                sortBy: view,
+                tagIds
             }
-            return await resp.json();
-        } catch (error) {
-            console.error("Error fetching getBrowseNovels()", error);
-        }
-    },
-
-    async getSearchNovels(word, type, page, size) {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: "/novels/search",
-                params: {
-                    searchWord: word,
-                    searchType: type,
-                    pageNumber: page,
-                    pageSize: size,
-                }
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to search novels: ", error.message);
-        }
-    },
-
-    async getBrowseNovels(view, page, size, tags) {
-        try {
-            if (!(tags ?? false)) {
-                throw TypeError("tags param is invalid");
-            }
-            const tagIds = (tags.length !== 0) && { tagId: tags.join(",") };
-            const response = await fetchApi({
-                method: 'get',
-                url: "/novels/browse",
-                params: {
-                    pageNumber: page,
-                    pageSize: size,
-                    sortBy: view,
-                    ...tagIds
-                }
-            })
-            return response.data;
-        } catch (error) {
-            if (error instanceof TypeError) {
-                console.error("", error.message)
-                return;
-            }
-            console.error("Failed to browse novels: ", error.message);
-        }
+        })
+        return response.data;
     },
 
     async getRanking(page, size, period) {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/novels/ranking`,
-                params: {
-                    pageNumber: page,
-                    pageSize: size,
-                    period,
-                }
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load ranking novels: ", error.response.data);
-            handleError(error, 'INACTION')
-        }
+        const response = await fetchApi({
+            method: 'get',
+            url: `/novels/ranking`,
+            params: {
+                pageNumber: page,
+                pageSize: size,
+                period,
+            }
+        })
+        return response.data;
     }
 }
 
 export const tagApi = {
     async getTagsByNovel(id) {
-
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/novels/${id}/tags`,
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load tag by novel")
-            handleError(error, 'INACTION')
-        }
-
+        const response = await fetchApi({
+            method: 'get',
+            url: `/novels/${id}/tags`,
+        })
+        return response.data;
     },
+
     async getTagByName(name) {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/tags`,
-                params: {
-                    tagName: name
-                }
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load tag by name")
-            handleError(error, 'INACTION')
-        }
+        const response = await fetchApi({
+            method: 'get',
+            url: `/tags`,
+            params: {
+                tagName: name
+            }
+        })
+        return response.data;
     },
 
     async searchTag(searchWord) {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/tags`,
-                params: {
-                    searchWord
-                }
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load tag by name")
-            handleError(error, 'INACTION')
-            throw error;
-        }
+        const response = await fetchApi({
+            method: 'get',
+            url: `/tags`,
+            params: {
+                searchWord
+            }
+        })
+        return response.data;
     }
 }
 
 export const episodeApi = {
     async getEpisode(id) {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/episodes/${id}`,
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load episode content");
-            handleError(error, "LOGIN");
-            throw error;
-        }
+        const response = await fetchApi({
+            method: 'get',
+            url: `/episodes/${id}`,
+        })
+        return response.data;
     },
 
     async getEpisodeBeside(id, direction) {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/episodes/${id}/beside?direction=${direction}`,
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load next episode content");
-            handleError(error, 'INACTION');
-            throw error;
-        }
+        const response = await fetchApi({
+            method: 'get',
+            url: `/episodes/${id}/beside?direction=${direction}`,
+        })
+        return response.data;
     },
 
     async getEpisodesByNovel(id, sort, page, size) {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/novels/${id}/episodes`,
-                params: {
-                    sortBy: sort,
-                    pageNumber: page,
-                    pageSize: size
-                }
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load episodes in novel");
-            handleError(error, 'INACTION')
-        }
+        const response = await fetchApi({
+            method: 'get',
+            url: `/novels/${id}/episodes`,
+            params: {
+                sortBy: sort,
+                pageNumber: page,
+                pageSize: size
+            }
+        })
+        return response.data;
     },
     async getEpisodesInfoByNovel(id) {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/novels/${id}/episodes/info`
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load episode info");
-        }
+        const response = await fetchApi({
+            method: 'get',
+            url: `/novels/${id}/episodes/info`
+        })
+        return response.data;
     },
 
     async payForEpisode(paymentDto) {
-        try {
-            const response = await fetchApi({
-                method: 'post',
-                url: '/coin-use-histories',
-                data: paymentDto
-            })
-            return response.data;
-        } catch (error) {
-            console.error(`Failed to execute payment`);
-            handleError(error, "LOGIN")
-            throw error;
-        }
+        const response = await fetchApi({
+            method: 'post',
+            url: '/coin-use-histories',
+            data: paymentDto
+        })
+        return response.data;
     },
 
     async createEpisode(novelId, createDto) {
-        try {
-            const response = await fetchApi({
-                method: 'post',
-                url: `/novels/${novelId}/episodes`,
-                data: createDto
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to create episode of novel")
-            handleError(error, "LOGIN")
-            throw error;
-        }
+        const response = await fetchApi({
+            method: 'post',
+            url: `/novels/${novelId}/episodes`,
+            data: createDto
+        })
+        return response.data;
     },
 
     async updateEpisode(updateDto) {
-        try {
-            const response = await fetchApi({
-                method: 'post',
-                url: `/episodes/${updateDto.episodeId}`,
-                data: updateDto
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to update episode")
-            handleError(error, "LOGIN")
-            throw error;
-        }
+        const response = await fetchApi({
+            method: 'post',
+            url: `/episodes/${updateDto.episodeId}`,
+            data: updateDto
+        })
+        return response.data;
     },
 
     async deleteEpisode(episodeId) {
-        try {
-            const response = await fetchApi({
-                method: 'delete',
-                url: `/episodes/${episodeId}`,
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to delete episode")
-            handleError(error, "LOGIN")
-            throw error;
-        }
+        const response = await fetchApi({
+            method: 'delete',
+            url: `/episodes/${episodeId}`,
+        })
+        return response.data;
     },
 }
 
 export const commentApi = {
     async getCommentsByNovel(id, sort, page, size) {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/novels/${id}/comments`,
-                params: {
-                    sortBy: sort,
-                    pageNumber: page,
-                    pageSize: size
-                }
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to get comments in novel: ");
-            handleError(error, 'INACTION')
-        }
+        const response = await fetchApi({
+            method: 'get',
+            url: `/novels/${id}/comments`,
+            params: {
+                sortBy: sort,
+                pageNumber: page,
+                pageSize: size
+            }
+        })
+        return response.data;
     },
 
     async getCommentsByEpisode(id, sort, page, size) {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/episodes/${id}/comments`,
-                params: {
-                    sortBy: sort,
-                    pageNumber: page,
-                    pageSize: size
-                }
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to get comments in episode: ");
-            handleError(error, 'INACTION')
-        }
+        const response = await fetchApi({
+            method: 'get',
+            url: `/episodes/${id}/comments`,
+            params: {
+                sortBy: sort,
+                pageNumber: page,
+                pageSize: size
+            }
+        })
+        return response.data;
     },
 
     async createComment(createDto) {
-        try {
-            const response = await fetchApi({
-                method: 'post',
-                url: `/comments`,
-                data: createDto
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to create comment");
-            handleError(error, "LOGIN")
-            throw error;
-        }
+        const response = await fetchApi({
+            method: 'post',
+            url: `/comments`,
+            data: createDto
+        })
+        return response.data;
     },
 
 
     async updateComment(updateDto) {
-        try {
-            const response = await fetchApi({
-                method: 'patch',
-                url: `/comments/${updateDto.commentId}`,
-                data: updateDto
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to update comment");
-            handleError(error, "LOGIN")
-        }
+        const response = await fetchApi({
+            method: 'patch',
+            url: `/comments/${updateDto.commentId}`,
+            data: updateDto
+        })
+        return response.data;
     },
 
     async deleteComment(deleteDto) {
-        try {
-            const response = await fetchApi({
-                method: 'delete',
-                url: `/comments/${deleteDto.commentId}`,
-                data: deleteDto
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to delete comment");
-            handleError(error, "LOGIN")
-        }
+        const response = await fetchApi({
+            method: 'delete',
+            url: `/comments/${deleteDto.commentId}`,
+            data: deleteDto
+        })
+        return response.data;
     },
 
     async toggleLike(dto) {
-        try {
-            const response = await fetchApi({
-                method: 'post',
-                url: `/comments/${dto.commentId}/comment-likes`,
-                data: dto
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to toggle comment like");
-            handleError(error, "ALERT");
-            throw error;
-        }
+        const response = await fetchApi({
+            method: 'post',
+            url: `/comments/${dto.commentId}/comment-likes`,
+            data: dto
+        })
+        return response.data;
     },
 
 
     async createRecomment(createDto) {
-        try {
-            const response = await fetchApi({
-                method: 'post',
-                url: `/recomment`,
-                data: createDto
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to create recomment of the comment");
-            handleError(error, "ALERT")
-            throw error;
-        }
+        const response = await fetchApi({
+            method: 'post',
+            url: `/recomment`,
+            data: createDto
+        })
+        return response.data;
     },
 
 }
 
+//선호작 api
+export const favoriteApi = {
+    async checkFavorite(id) {
+        const response = await fetchApi({ method: 'get', url: `/members/me/favorites/check?novelId=${id}` })
+        return response.data;
+    },
+    async toggleFavorite(id) {
+        const response = await fetchApi({ method: 'post', url: `/members/me/favorites/${id}` })
+        return response.data;
+    },
+    async getFavorites() {
+        const response = await fetchApi({ method: 'get', url: `/members/me/favorites` })
+        return response.data;
+    },
+}
+
 export const memberApi = {
     async getMyPageData() {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/members/me/mypage`,
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load my page info")
-            handleError(error, "LOGIN");
-        }
+        const response = await fetchApi({
+            method: 'get',
+            url: `/members/me/mypage`,
+        })
+        return response.data;
     },
 
     async getWorksSettlement() {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/settlements`
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load coin use history in works")
-            handleError(error);
-        }
+        const response = await fetchApi({
+            method: 'get',
+            url: `/settlements`
+        })
+        return response.data;
     },
 
     async requestSettlement() {
-        try {
-            const response = await fetchApi({
-                method: 'post',
-                url: `/settlements`
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to request the settlement")
-            handleError(error, "LOGIN");
-        }
+        const response = await fetchApi({
+            method: 'post',
+            url: `/settlements`
+        })
+        return response.data;
     },
 
     async getSettlementResult() {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/settlements`
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to get settlement result")
-            handleError(error, "LOGIN");
-        }
+        const response = await fetchApi({
+            method: 'get',
+            url: `/settlements`
+        })
+        return response.data;
     },
 
     async getWorks() {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/members/me/novels`,
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load my works list");
-            handleError(error, "LOGIN")
-        }
+        const response = await fetchApi({
+            method: 'get',
+            url: `/members/me/novels`,
+        })
+        return response.data;
     },
 
     //읽은 기록 관련 api
     async getRecentReadNovels(page, size) {
-        try {
-            const response = await fetchApi({
-                method: 'get',
-                url: `/members/me/recent-read`,
-                params: {
-                    pageNumber: page,
-                    pageSize: size
-                }
-            })
-            return response.data;
-        } catch (error) {
-            console.error("Failed to load recent reads: ", error.message)
-            handleError(error, "LOGIN");
-        }
-    },
-
-    //선호작 관련 api
-    async getCheckFavorite(id) {
-        try {
-            const response = await fetchApi({ method: 'get', url: `/members/me/favorites/check?novelId=${id}` })
-            return response.data;
-        } catch (error) {
-            handleError(error, 'INACTION');
-            throw error;
-        }
-    },
-    async toggleNovelFavorite(id) {
-        try {
-            const response = await fetchApi({ method: 'post', url: `/members/me/favorites/${id}` })
-            return response.data;
-        } catch (error) {
-            handleError(error, "ALERT");
-            throw error;
-        }
-    },
-    async getFavoriteNovels() {
-        try {
-            const response = await fetchApi({ method: 'get', url: `/members/me/favorites` })
-            return response.data;
-        } catch (error) {
-            handleError(error, "LOGIN");
-        }
+        const response = await fetchApi({
+            method: 'get',
+            url: `/members/me/recent-read`,
+            params: {
+                pageNumber: page,
+                pageSize: size
+            }
+        })
+        return response.data;
     },
 }

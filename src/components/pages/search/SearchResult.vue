@@ -1,9 +1,8 @@
 <template>
-    <div>
+    <div class="search-novel-list">
         <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
             <template #default="{ item }">
                 <SearchNovelItem :novel="item"></SearchNovelItem>
-                <div class="line"></div>
             </template>
         </InfiniteScroll>
     </div>
@@ -22,9 +21,9 @@ const didSearch = ref(false);
 
 //스크롤 페이지 로드 설정
 const scrollProps = reactive({
-    pageProps: { number: 0, size: 10 },
+    pageProps: { number: 0, size: 5 },
     loadMethod: async (page, size) => {
-        const loadNovels = await novelApi.getSearchNovels(
+        const loadNovels = await novelApi.searchNovel(
             searchStore.getWord,
             searchStore.getType,
             page,
@@ -32,6 +31,7 @@ const scrollProps = reactive({
         );
         return loadNovels;
     },
+    mountLoad: false,
 });
 
 //스크롤 리부팅 메서드
@@ -48,35 +48,10 @@ searchStore.setSearchMethod(() => {
 </script>
 
 <style lang="sass" scoped>
-
-.browse-feature
-    position: relative
-
-.feature-divider
-    height: 200px
-    display: flex
-    flex-flow: row wrap
-    align-items: stretch
-
-    .filter-by
-        flex: 1
-        padding: 15px
-        margin: 15px
-
-    .sort-by
-        flex: 1
-        padding: 15px
-        margin: 15px
-
-
-.browse-novel-list
+.search-novel-list
     padding-top: 30px
     display: flex
     justify-content: flex-start
     flex-flow: row wrap
-
-.line
-    border-top: 2px solid var(--line-color)
-    width: 100%
-    margin: 10px 0px
+    gap: 15px
 </style>

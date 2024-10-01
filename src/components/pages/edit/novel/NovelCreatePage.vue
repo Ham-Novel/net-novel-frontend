@@ -1,7 +1,7 @@
 <template>
     <main>
         <article class="base-wrapper">
-            <NovelEditSect v-model="formInput" @submit-novel="createNovel"></NovelEditSect>
+            <NovelEditSect v-model="formInput" @submit-novel="submit"></NovelEditSect>
         </article>
     </main>
 </template>
@@ -29,6 +29,14 @@ function isEmpty(data) {
     return Object.keys(data).length === 0;
 }
 
+//submit 클릭 이벤트
+async function submit() {
+    try {
+        await createNovel();
+        router.push({ name: "work-manage" }); //작품 관리 페이지로 이동
+    } catch (error) {}
+}
+
 async function createNovel() {
     // 작품명과  row 생성 및 저장
     const createdId = await novelApi.createNovel({
@@ -39,11 +47,8 @@ async function createNovel() {
 
     //작품 썸네일을 업로드 했으면 DB에 저장
     if (novelToCreate.imgFile ?? false) {
-        await novelApi.setNovelThumbnail(createdId, novelToCreate.imgFile);
+        await novelApi.uploadNovelThumbnail(createdId, novelToCreate.imgFile);
     }
-
-    //작품 관리 페이지로 이동
-    router.push({ name: "work-manage" });
 }
 </script>
 
