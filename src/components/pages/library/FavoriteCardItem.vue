@@ -1,14 +1,13 @@
 <template>
     <CardItem v-bind="itemProps">
         <template #cover>
-            <p class="status">{{ novelStatus }}</p>
+            <p class="status">{{ novelType }}</p>
         </template>
     </CardItem>
 </template>
 
 <script setup>
 import CardItem from "@/components/reusable/novel/CardItem.vue";
-import Tag from "@/components/reusable/Tag.vue";
 import { computed, onMounted, ref } from "vue";
 
 const props = defineProps({
@@ -30,8 +29,8 @@ const itemProps = {
 
 const statusColor = ref("green");
 
-const novelStatus = computed(() => {
-    switch (props.novel.status) {
+const novelType = computed(() => {
+    switch (props.novel.novelType) {
         case "ONGOING":
             statusColor.value = "green";
             return "연재중";
