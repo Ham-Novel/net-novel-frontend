@@ -5,13 +5,25 @@
                 <p class="nickName">{{ comment.nickName }}</p>
                 <span class="timestamp">{{ updatedDate }}</span>
             </h5>
-            <p class="content">{{ comment.content }}</p>
+            <CommentForm
+                v-if="mode === editMode.edit"
+                v-model="contentToUpdate"
+                @submit="updateComment"
+                button-text="수정"
+            ></CommentForm>
+            <p v-else class="content">{{ content }}</p>
         </section>
         <section class="recomment-action">
+            <button class="outline edit" @click="toggleModeRecomment(editMode.edit)">
+                <MessageSquareText :size="16" />수정
+            </button>
+            <button class="outline delete" @click="deleteComment">
+                <MessageSquareX :size="16" />삭제
+            </button>
             <button
                 v-if="featureRecomment"
                 class="action-button outline"
-                @click="toggleRecommentForm"
+                @click="toggleModeRecomment(editMode.recomment)"
             >
                 <MessageSquareMore :size="16" />답글
             </button>
@@ -19,11 +31,12 @@
                 <ChevronDown :size="15" />대댓글
             </button>
         </section>
-        <section class="recomment-input" v-if="isOpenForm">
-            <form @submit.prevent="createRecomment" role="group">
-                <TextArea v-model="recommentContent"></TextArea>
-                <input type="submit" class="submit" value="댓글 작성" />
-            </form>
+        <section class="recomment-input" v-if="mode === editMode.recomment">
+            <CommentForm
+                v-model="recommentContent"
+                @submit="createRecomment"
+                button-text="대댓글"
+            ></CommentForm>
         </section>
         <section class="recomment-list" v-if="isOpenRecomment">
             <template v-for="recomment in comment.reCommentList" :key="recomment.reCommentId">
@@ -31,21 +44,29 @@
             </template>
         </section>
         <section class="actions">
-            <button class="action-button outline" @click="clickLike">
+            <button class="outline" @click="clickLike">
                 <ThumbsUp :size="13" /> {{ commentLikes }}
             </button>
-            <button class="action-button outline" @click="clickDislike">
+            <button class="outline" @click="clickDislike">
                 <ThumbsDown :size="13" /> {{ commentDislikes }}
             </button>
-            <button class="action-button outline">신고</button>
+            <button class="outline">신고</button>
         </section>
     </article>
 </template>
 
 <script setup>
+import CommentForm from "./CommentForm.vue";
 import RecommentItem from "./RecommentItem.vue";
 import TextArea from "../TextArea.vue";
-import { ThumbsUp, ThumbsDown, MessageSquareMore, ChevronDown } from "lucide-vue-next";
+import {
+    ThumbsUp,
+    ThumbsDown,
+    MessageSquareMore,
+    MessageSquareText,
+    MessageSquareX,
+    ChevronDown,
+} from "lucide-vue-next";
 
 import { formatUtil } from "@/hooks/format";
 import { commentApi } from "@/hooks/backendApi";
@@ -56,11 +77,18 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    episodeId: {
+        type: Number,
+        default: 0,
+    },
     featureRecomment: {
         type: Boolean,
         default: false,
     },
 });
+
+//댓글 수정 시, 댓글 내용이 변경될 수 있으므로 write 가능
+const content = ref(props.comment.content);
 
 const emits = defineEmits(["reload"]);
 
@@ -115,10 +143,20 @@ function toggleRecommentList() {
     isOpenRecomment.value = !isOpenRecomment.value;
 }
 
-//대댓글 작성 textarea 열기
-const isOpenForm = ref(false);
-function toggleRecommentForm() {
-    isOpenForm.value = !isOpenForm.value;
+//댓글 컴포넌트 조작 모드
+const editMode = Object.freeze({
+    none: "none",
+    recomment: "recomment",
+    edit: "edit",
+});
+
+const mode = ref(editMode.none);
+function toggleModeRecomment(targetMode) {
+    if (mode.value === targetMode) {
+        mode.value = editMode.none;
+    } else {
+        mode.value = targetMode;
+    }
 }
 
 //대댓글 작성 기능
@@ -126,16 +164,62 @@ const recommentContent = ref("");
 
 async function createRecomment() {
     try {
+        if (recommentContent.value.length > 300) {
+            throw Error("cannot post recomment content longer than 300 characters");
+        }
+
         await commentApi.createRecomment({
             content: recommentContent.value,
             commentId: props.comment.commentId,
         });
         recommentContent.value = "";
-        isOpenForm.value = false; //대댓글 작성 form 닫기
+        mode = editMode.none; //작성 form 닫기
         emits("reload");
     } catch (error) {
-        alert("대댓글 작성에 오류가 발생하였습니다. 다시 시도하여 주십시오.");
+        console.error("Failed to create recomment", error.message);
+        alert("대댓글은 300자로 이하로만 작성 가능합니다.");
     }
+}
+
+//작품 수정
+const contentToUpdate = ref(props.comment.content);
+async function updateComment() {
+    try {
+        if (contentToUpdate.value.length > 300) {
+            const error = Error("cannot post comment content longer than 300 characters");
+            error.code = "length";
+            throw error;
+        }
+
+        await commentApi.updateComment({
+            content: contentToUpdate.value,
+            commentId: props.comment.commentId,
+            episodeId: props.episodeId,
+        });
+        content.value = contentToUpdate.value; //변경된 댓글 내용 적용
+        mode.value = editMode.none; //작성 form 닫기
+    } catch (error) {
+        console.error("Failed to update comment", error.message);
+
+        if (error.code === "length") {
+            alert("댓글은 300자로 이하로만 작성 가능합니다.");
+        }
+    }
+}
+
+//작품 삭제
+async function deleteComment() {
+    const result = confirm("정말로 삭제하시겠습니까?");
+    if (!result) {
+        return;
+    }
+    try {
+        await commentApi.deleteComment({
+            commentId: props.comment.commentId,
+            episodeId: props.episodeId,
+        });
+        emits("reload");
+    } catch (error) {}
 }
 </script>
 
@@ -143,6 +227,7 @@ async function createRecomment() {
 .comment
     position: relative
     margin: 0
+    padding-bottom: 0.5rem
 
 .detail
     .user-info
@@ -161,6 +246,7 @@ async function createRecomment() {
     .content
         width: 90%
         font-size: 0.8rem
+        white-space: pre-wrap
 
 
 section.recomment-input
@@ -192,9 +278,8 @@ section.recomment-input
     top: 15px
     right: 15px
     display: flex
-    gap: 0.5rem
 
-    .action-button
+    button
         background: none
         border: none
         cursor: pointer
@@ -221,15 +306,20 @@ section.recomment-input
 
     display: flex
     justify-content: end
-    gap: 0.5rem
 
     button
         background: none
         border: none
         cursor: pointer
-        font-size: 0.8rem
+        font-size: 0.7rem
 
         display: flex
         align-items: center
         gap: 3px
+
+    button.edit
+        color: green
+
+    button.delete
+        color: red
 </style>

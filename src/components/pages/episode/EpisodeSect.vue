@@ -253,7 +253,7 @@ const urlDetect = reactive({
     handler: (intersect) => {
         if (intersect.state) {
             urlDetect.updateURL(intersect.data.key);
-            episodeStore.episodeId = intersect.data.key;
+            episodeStore.episodeId = Number(intersect.data.key);
         }
     },
     updateURL: (episodeId) => {

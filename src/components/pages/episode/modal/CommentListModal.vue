@@ -13,6 +13,7 @@
                     <template v-slot:default="{ item }">
                         <CommentItem
                             :comment="item"
+                            :episode-id="episodeStore.episodeId"
                             :feature-recomment="true"
                             @reload="reload"
                         ></CommentItem>

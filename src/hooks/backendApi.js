@@ -261,7 +261,6 @@ export const commentApi = {
         return response.data;
     },
 
-
     async updateComment(updateDto) {
         const response = await fetchApi({
             method: 'patch',

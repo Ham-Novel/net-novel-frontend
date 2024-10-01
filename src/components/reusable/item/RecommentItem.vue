@@ -7,20 +7,7 @@
             </h5>
             <p class="content">{{ recomment.content }}</p>
         </section>
-        <!-- <section class="recomment-input">
-            <form v-if="isOpenForm" @submit.prevent="createRecomment" role="group">
-                <TextArea v-model="recommentContent"></TextArea>
-                <input type="submit" class="submit" value="댓글 작성" />
-            </form>
-        </section> -->
         <section class="actions">
-            <!-- <button
-                v-if="featureRecomment"
-                class="action-button outline"
-                @click="toggleRecommentForm"
-            >
-                <MessageSquareMore :size="16" />대댓글
-            </button> -->
             <button class="action-button outline" @click="reclickLike">
                 <ThumbsUp :size="13" /> {{ recommentLikes }}
             </button>
@@ -45,10 +32,6 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    // featureRecomment: {
-    //     type: Boolean,
-    //     default: false,
-    // },
 });
 
 const emits = defineEmits(["reload"]);
@@ -90,35 +73,6 @@ async function likeToRecomment(type) {
         // erorHandler
     );
 }
-
-// const erorHandler = {
-//     400: (error) => {
-//         alert("이미 댓글에 반응하셨습니다.");
-//     },
-// };
-
-// //대댓글 작성 textarea 열기
-// const isOpenForm = ref(false);
-// function toggleRecommentForm() {
-//     isOpenForm.value = !isOpenForm.value;
-// }
-
-// //대댓글 작성 기능
-// const recommentContent = ref("");
-
-// async function createRecomment() {
-//     try {
-//         await commentApi.createRecomment({
-//             content: recommentContent.value,
-//             commentId: props.comment.commentId,
-//         });
-//         recommentContent.value = "";
-//         isOpenForm.value = false; //대댓글 작성 form 닫기
-//         emits("reload");
-//     } catch (error) {
-//         alert("대댓글 작성에 오류가 발생하였습니다. 다시 시도하여 주십시오.");
-//     }
-// }
 </script>
 
 <style scoped lang="sass">
