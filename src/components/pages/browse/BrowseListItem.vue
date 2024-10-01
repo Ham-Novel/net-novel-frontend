@@ -1,23 +1,25 @@
 <template>
     <ListItem
         class="browse-item"
-        :title="novel.title"
         :cover-img="novel.thumbnailUrl"
         :link="{ name: 'novel', params: { id: props.novel.id } }"
     >
-        <div class="detailed">
+        <div class="header">
+            <h5 class="title">{{ novel.title }}</h5>
             <p class="author">
                 <PencilLine size="17" stroke-width="2.3" />
                 {{ props.novel.authorName }}
             </p>
+        </div>
+        <div class="detailed">
             <p class="stats">
-                <span> <Eye size="15" /> {{ props.novel.totalView }} </span>
+                <span> <Eye size="16" /> {{ props.novel.totalView }} </span>
                 <span>
-                    <Heart size="15" />
+                    <Heart size="16" />
                     {{ props.novel.totalFavorites }}
                 </span>
                 <span>
-                    <Clock8 size="15" />
+                    <Clock8 size="16" />
                     {{ formatUtil.formatRealTime(props.novel.latestUpdateAt) }}
                 </span>
             </p>
@@ -60,20 +62,32 @@ const browseTag = (tagId) => {
 .browse-item
     height: 180px
 
+
+.header
+    display: flex
+    flex-flow: row wrap
+    align-items: flex-end
+    gap: 6px
+
+    .title
+        max-width: 40%
+        overflow: hidden
+        text-overflow: ellipsis
+
+    .author
+        font-size: 0.7rem
+        font-weight: 700
+        display: inline-flex
+        align-items: center
+        gap: 2px
+
 .detailed
     font-size: 14px
 
     margin-top: 10px
     display: flex
     flex-flow: column wrap
-    gap: 6px
-
-    .author
-        font-size: 13px
-        font-weight: 700
-        display: flex
-        align-items: center
-        gap: 2px
+    gap: 4px
 
 
     .stats
@@ -99,19 +113,18 @@ const browseTag = (tagId) => {
         gap: 8px
 
         button
-            font-size: 12px
+            padding: 0
 
 
     .desc
         max-width: 80%
         margin: 0
-        padding: 0.3em 0.6em
+        padding: 0.1em 0.5em
 
         white-space: normal
         word-wrap: break-word
         overflow-wrap: break-word
 
-        height: 70px
         overflow: hidden
         text-overflow: ellipsis
         display: -webkit-box

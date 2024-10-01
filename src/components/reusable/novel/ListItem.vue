@@ -5,9 +5,9 @@
             <slot name="cover"></slot>
         </div>
         <div class="info">
-            <h4 v-if="title.length !== 0" class="title" @click="goLinkPage">
+            <h5 v-if="title.length !== 0" class="title" @click="goLinkPage">
                 {{ title }}
-            </h4>
+            </h5>
             <div class="detail">
                 <slot></slot>
             </div>
@@ -58,9 +58,8 @@ article
     .info
         flex: 1
         position: relative
-        padding: 0.3rem
+        padding: 0.4rem
         padding-left: 0
-        overflow: hidden
         white-space: nowrap
 
         display: flex
