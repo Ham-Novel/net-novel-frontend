@@ -13,7 +13,7 @@
             ></CommentForm>
             <p v-else class="content">{{ content }}</p>
         </section>
-        <section class="recomment-action">
+        <section class="bottom-action">
             <button class="outline edit" @click="toggleModeRecomment(editMode.edit)">
                 <MessageSquareText :size="16" />수정
             </button>
@@ -38,12 +38,18 @@
                 button-text="대댓글"
             ></CommentForm>
         </section>
+
         <section class="recomment-list" v-if="isOpenRecomment">
-            <template v-for="recomment in comment.reCommentList" :key="recomment.reCommentId">
-                <RecommentItem :recomment="recomment"></RecommentItem>
+            <template v-for="recomment in comment.reCommentList">
+                <RecommentItem
+                    :recomment="recomment"
+                    :comment-id="comment.commentId"
+                    @reload="emits('reload')"
+                ></RecommentItem>
             </template>
         </section>
-        <section class="actions">
+
+        <section class="top-action">
             <button class="outline" @click="clickLike">
                 <ThumbsUp :size="13" /> {{ commentLikes }}
             </button>
@@ -58,7 +64,6 @@
 <script setup>
 import CommentForm from "./CommentForm.vue";
 import RecommentItem from "./RecommentItem.vue";
-import TextArea from "../TextArea.vue";
 import {
     ThumbsUp,
     ThumbsDown,
@@ -86,9 +91,6 @@ const props = defineProps({
         default: false,
     },
 });
-
-//댓글 수정 시, 댓글 내용이 변경될 수 있으므로 write 가능
-const content = ref(props.comment.content);
 
 const emits = defineEmits(["reload"]);
 
@@ -121,21 +123,20 @@ async function clickDislike() {
 }
 
 async function likeToComment(type) {
-    const data = await commentApi.toggleLike(
-        {
-            likeType: type,
-            commentId: props.comment.commentId,
-        },
-        erorHandler
-    );
-    console.log(data);
+    try {
+        const data = await commentApi.toggleLike(
+            {
+                likeType: type,
+                commentId: props.comment.commentId,
+            },
+            false
+        );
+    } catch (error) {
+        if (error.response.status === 400) {
+            alert("이미 댓글에 반응하셨습니다.");
+        }
+    }
 }
-
-const erorHandler = {
-    400: (error) => {
-        alert("이미 댓글에 반응하셨습니다.");
-    },
-};
 
 //대댓글 접기
 const isOpenRecomment = ref(false);
@@ -164,8 +165,11 @@ const recommentContent = ref("");
 
 async function createRecomment() {
     try {
+        console.log(recommentContent.value);
         if (recommentContent.value.length > 300) {
-            throw Error("cannot post recomment content longer than 300 characters");
+            const error = Error("cannot post recomment content longer than 300 characters");
+            error.code = "length";
+            throw error;
         }
 
         await commentApi.createRecomment({
@@ -173,13 +177,18 @@ async function createRecomment() {
             commentId: props.comment.commentId,
         });
         recommentContent.value = "";
-        mode = editMode.none; //작성 form 닫기
+        mode.value = editMode.none; //작성 form 닫기
         emits("reload");
     } catch (error) {
-        console.error("Failed to create recomment", error.message);
-        alert("대댓글은 300자로 이하로만 작성 가능합니다.");
+        console.error("Failed to create recomment: ", error.message);
+        if (error.code === "length") {
+            alert("대댓글은 300자로 이하로만 작성 가능합니다.");
+        }
     }
 }
+
+//댓글 수정 시, 댓글 내용이 변경될 수 있으므로 write 가능
+const content = ref(props.comment.content);
 
 //작품 수정
 const contentToUpdate = ref(props.comment.content);
@@ -199,7 +208,7 @@ async function updateComment() {
         content.value = contentToUpdate.value; //변경된 댓글 내용 적용
         mode.value = editMode.none; //작성 form 닫기
     } catch (error) {
-        console.error("Failed to update comment", error.message);
+        console.error("Failed to update comment: ", error.message);
 
         if (error.code === "length") {
             alert("댓글은 300자로 이하로만 작성 가능합니다.");
@@ -213,13 +222,16 @@ async function deleteComment() {
     if (!result) {
         return;
     }
+
     try {
         await commentApi.deleteComment({
             commentId: props.comment.commentId,
             episodeId: props.episodeId,
         });
         emits("reload");
-    } catch (error) {}
+    } catch (error) {
+        console.error("Failed to delete comment", error.message);
+    }
 }
 </script>
 
@@ -228,6 +240,8 @@ async function deleteComment() {
     position: relative
     margin: 0
     padding-bottom: 0.5rem
+    height: auto
+    max-height: max-content
 
 .detail
     .user-info
@@ -273,7 +287,20 @@ section.recomment-input
             display: flex
             align-items: center
 
-.actions
+
+
+.recomment-list
+    margin: 0
+    margin-left: 2rem
+    margin-top: 1rem
+
+    display: flex
+    flex-flow: column wrap
+    gap: 8px
+
+
+
+.top-action
     position: absolute
     top: 15px
     right: 15px
@@ -289,18 +316,7 @@ section.recomment-input
         align-items: center
         gap: 3px
 
-
-
-.recomment-list
-    margin: 0
-    margin-left: 2rem
-    margin-top: 1rem
-
-    display: flex
-    flex-flow: column wrap
-    gap: 8px
-
-.recomment-action
+.bottom-action
     position: relative
     margin: 0
 

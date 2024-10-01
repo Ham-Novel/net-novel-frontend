@@ -1,12 +1,12 @@
 import api from "./globalApi";
 
-async function fetchApi({ method, url, params, data, errorHandler } = {}) {
+async function fetchApi({ method, url, params, data, error } = {}) {
     const config = {
         method,
         url,
         data,
         params,
-        errorHandler
+        globalAdvice: error ?? true
     }
     console.debug('[BACKEND_API]', config)
     return await api(config);
@@ -63,16 +63,16 @@ export const novelApi = {
 
     },
 
-    async getNovelList(page, size) {
-        const reqUrl = `${API_URL}/novels?pageNumber=${page}&pageSize=${size}`
-        const resp = await fetch(reqUrl);
-        if (!resp.ok) {
-            throw new Error(BAD_REQUEST_MSG);
-        }
-        return await resp.json();
-    },
+    // async getNovelList(page, size) {
+    //     const reqUrl = `${API_URL}/novels?pageNumber=${page}&pageSize=${size}`
+    //     const resp = await fetch(reqUrl);
+    //     if (!resp.ok) {
+    //         throw new Error(BAD_REQUEST_MSG);
+    //     }
+    //     return await resp.json();
+    // },
 
-    async searchNovel(word, type, page, size, errorHandler = undefined) {
+    async searchNovel(word, type, page, size, error) {
         const response = await fetchApi({
             method: 'get',
             url: "/novels/search",
@@ -82,7 +82,7 @@ export const novelApi = {
                 pageNumber: page,
                 pageSize: size,
             },
-            errorHandler
+            error
         })
         return response.data;
 
@@ -280,23 +280,22 @@ export const commentApi = {
     },
 
     async toggleLike(dto, error) {
-        console.log(error);
         const response = await fetchApi({
             method: 'post',
             url: `/comments/${dto.commentId}/comment-likes`,
             data: dto,
-            errorHandler: error
+            error
         })
         return response.data;
     },
 
-    async toggleLikeRecomment(dto, error = undefined) {
+    async toggleLikeRecomment(dto, error) {
         console.log(error);
         const response = await fetchApi({
             method: 'post',
             url: `/re-comment-likes`,
             data: dto,
-            errorHandler: error
+            error
         })
         return response.data;
     },
@@ -310,7 +309,23 @@ export const commentApi = {
         })
         return response.data;
     },
+    async updateRecomment(updateDto) {
+        const response = await fetchApi({
+            method: 'patch',
+            url: `/recomment`,
+            data: updateDto
+        })
+        return response.data;
+    },
 
+    async deleteRecomment(deleteDto) {
+        const response = await fetchApi({
+            method: 'delete',
+            url: `/recomment`,
+            data: deleteDto
+        })
+        return response.data;
+    },
 }
 
 //선호작 api

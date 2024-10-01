@@ -3,11 +3,29 @@
         <article class="modal">
             <article>
                 <CommentInput @reload="reload"></CommentInput>
-                <select class="sort-by" v-model="episodeStore.commentSortBy">
-                    <option value="recent">최신순</option>
-                    <option value="likes">추천순</option>
-                </select>
             </article>
+            <div class="sort-select">
+                <label for="sort-recent">
+                    <input
+                        type="radio"
+                        name="sortBy"
+                        id="sort-recent"
+                        value="recent"
+                        v-model="episodeStore.commentSortBy"
+                    />
+                    최신순
+                </label>
+                <label for="sort-likes">
+                    <input
+                        type="radio"
+                        name="sortBy"
+                        id="sort-likes"
+                        value="likes"
+                        v-model="episodeStore.commentSortBy"
+                    />
+                    추천순
+                </label>
+            </div>
             <div class="comment-list">
                 <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
                     <template v-slot:default="{ item }">
@@ -16,6 +34,7 @@
                             :episode-id="episodeStore.episodeId"
                             :feature-recomment="true"
                             @reload="reload"
+                            v-memo="[item]"
                         ></CommentItem>
                     </template>
                 </InfiniteScroll>
@@ -79,6 +98,7 @@ article
     position: relative
     margin: 0
     margin-bottom: 0.5rem
+    max-height: fit-content
 
 article.modal
     max-height: 90%
@@ -92,8 +112,19 @@ article.modal
     flex-flow: column wrap
     gap: 10px
 
-select
-    margin: 0
-    font-size: 0.9rem
-    height: 3rem
+.sort-select
+    margin: 1rem
+    font-size: 0.8rem
+    font-weight: bold
+
+    display: flex
+    justify-content: end
+    gap: 10px
+
+    label
+        display: flex
+        gap: 3px
+
+    input
+        margin: 0
 </style>

@@ -39,6 +39,7 @@ form
     align-items: stretch
 
     textarea
+        height: auto
         font-size: 0.8rem
 
     input

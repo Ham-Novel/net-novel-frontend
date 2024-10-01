@@ -38,15 +38,9 @@ api.interceptors.response.use(
       const data = error.response.data;
       const config = error.config;
 
-      console.error("Response error:", status, data);
-
-      // 개별 요청에 errorHandler가 정의되어 있는지 확인
-      // 개별 에러 핸들러가 있으면 그 함수를 호출하여 전역 처리를 덮어씀
-      if (config.errorHandler && config.errorHandler[status]) {
-        config.errorHandler[status](error);
-      }
-      else {
-        // 개별 핸들러가 없으면 전역 에러 처리 수행
+      // 전역 처리 여부 확인
+      if (config.globalAdvice === true) {
+        // 전역 에러 처리 수행
         switch (status) {
           case 400:
             console.error('Global: Bad Request');

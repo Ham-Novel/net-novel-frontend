@@ -1,12 +1,18 @@
 <template>
-    <form class="form" @submit.prevent="submitComment">
+    <!-- <form class="form" @submit.prevent="submitComment">
         <TextArea v-model="content"></TextArea>
         <input type="submit" class="submit" value="댓글 작성" />
-    </form>
+    </form> -->
+    <CommentForm
+        class="form"
+        v-model="content"
+        @submit="submitComment"
+        button-text="댓글 작성"
+    ></CommentForm>
 </template>
 
 <script setup>
-import TextArea from "@/components/reusable/TextArea.vue";
+import CommentForm from "@/components/reusable/item/CommentForm.vue";
 
 import { onMounted, ref, watch } from "vue";
 import { commentApi } from "@/hooks/backendApi";
@@ -45,19 +51,6 @@ const content = ref("");
     margin-bottom: 0.5rem
 
 
-form
-    height: fit-content
-
-    textarea
-        font-size: 0.8rem
-        resize: none
-        overflow: hidden
-        margin-bottom: 1px
-        border-bottom-left-radius: 0
-        border-bottom-right-radius: 0
-
-    input
-        border-top-left-radius: 0
-        border-top-right-radius: 0
-        font-size: 0.8rem
+.form
+    min-height: 100px
 </style>
