@@ -1,6 +1,6 @@
 <template>
     <tr class="item">
-        <td class="col-date">{{ chargeDate }}</td>
+        <td scope="row" class="col-date">{{ chargeDate }}</td>
         <td class="col-coin">{{ props.coinAmount }}</td>
         <td class="col-payment">{{ props.payment }}</td>
     </tr>
@@ -31,20 +31,20 @@ const chargeDate = computed(() => {
 </script>
 
 <style scoped lang="sass">
-.item
-    height: 40px
-    border-bottom: 1px solid #eee
-    cursor: pointer
+// .item
+//     height: 40px
+//     border-bottom: 1px solid #eee
+//     cursor: pointer
 
-    &:hover
-        background-color: #f5f5f5
+//     &:hover
+//         background-color: #f5f5f5
 
-    td
-        border-right: 2px solid black
+//     td
+//         border-right: 2px solid black
 
-    .col-date
-        padding-left: 15px
+//     .col-date
+//         padding-left: 15px
 
-    .col-coin, .col-payment
-        padding-right: 15px
+//     .col-coin, .col-payment
+//         padding-right: 15px
 </style>

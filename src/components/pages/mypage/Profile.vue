@@ -1,16 +1,17 @@
 <template>
-    <section class="profile-header base-wrapper">
-        <div class="background"></div>
-        <img class="img" />
-        <!-- <button class="profile-edit-button">EDIT PROFILE</button>/ -->
-    </section>
-    <section class="profile-info base-wrapper">
-        <h1>{{ props.nickName }}</h1>
-        <p class="id">ID: 4319251275</p>
-        <p class="id">Email: {{ props.email }}</p>
-        <p class="id">Coins: {{ props.coins }}개</p>
-    </section>
-    <slot></slot>
+    <div>
+        <section class="profile-header base-wrapper">
+            <div class="background"></div>
+            <img class="img" />
+            <!-- <button class="profile-edit-button">EDIT PROFILE</button>/ -->
+        </section>
+        <section class="profile-info base-wrapper">
+            <h1>{{ props.nickName }}</h1>
+            <p class="id">ID: 4319251275</p>
+            <p class="id">Email: {{ props.email }}</p>
+            <p class="id">Coins: {{ props.coins }}개</p>
+        </section>
+    </div>
 </template>
 
 <script setup>
@@ -39,7 +40,7 @@ const props = defineProps({
 
     .background
         height: 85%
-        background-color: var(--primary-color)
+        background-color: var(--pico-primary)
 
     .img
         position: absolute

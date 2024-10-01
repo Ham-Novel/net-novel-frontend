@@ -1,16 +1,16 @@
 <template>
     <main>
-        <section class="profile base-distance">
+        <section class="profile">
             <Profile
                 v-if="userData ?? false"
                 :nick-name="userData.nickName"
                 :email="userData.email"
                 :coins="userData.coinCount"
             >
-                <TabRouter :tabs="tabs" class="mypage-menu base-wrapper"></TabRouter>
             </Profile>
         </section>
-        <section class="base-distance">
+        <section class="menu">
+            <h4><TabRouter :tabs="tabs" class="mypage-menu base-wrapper"></TabRouter></h4>
             <TabView></TabView>
         </section>
     </main>
@@ -50,9 +50,9 @@ onMounted(() => {
 
 .profile
     position: relative
-    background-color: var(--bg-sub)
+    background-color: var(--pico-code-background-color)
     padding-bottom: 20px
 
-.mypage-menu
-    margin-top: 30px
+section.menu
+    margin: 0
 </style>
