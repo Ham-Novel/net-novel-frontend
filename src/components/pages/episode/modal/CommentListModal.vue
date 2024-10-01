@@ -11,7 +11,11 @@
             <div class="comment-list">
                 <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
                     <template v-slot:default="{ item }">
-                        <CommentBlock :comment="item" @reload="reload"></CommentBlock>
+                        <CommentItem
+                            :comment="item"
+                            :feature-recomment="true"
+                            @reload="reload"
+                        ></CommentItem>
                     </template>
                 </InfiniteScroll>
             </div>
@@ -22,7 +26,7 @@
 <script setup>
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 import CommentInput from "./CommentInput.vue";
-import CommentBlock from "./CommentBlock.vue";
+import CommentItem from "@/components/reusable/item/CommentItem.vue";
 
 import { ref, reactive, onMounted, onUnmounted, watch } from "vue";
 import { commentApi } from "@/hooks/backendApi";

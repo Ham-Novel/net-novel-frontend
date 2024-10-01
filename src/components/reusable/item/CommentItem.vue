@@ -7,23 +7,30 @@
             </h5>
             <p class="content">{{ comment.content }}</p>
         </section>
-        <section>
-            <slot></slot>
-        </section>
-        <section class="recomment-input">
-            <form v-if="isOpenForm" @submit.prevent="createRecomment" role="group">
-                <TextArea v-model="recommentContent"></TextArea>
-                <input type="submit" class="submit" value="댓글 작성" />
-            </form>
-        </section>
-        <section class="actions">
+        <section class="recomment-action">
             <button
                 v-if="featureRecomment"
                 class="action-button outline"
                 @click="toggleRecommentForm"
             >
-                <MessageSquareMore :size="16" />대댓글
+                <MessageSquareMore :size="16" />답글
             </button>
+            <button class="outline" @click="toggleRecommentList">
+                <ChevronDown :size="15" />대댓글
+            </button>
+        </section>
+        <section class="recomment-input" v-if="isOpenForm">
+            <form @submit.prevent="createRecomment" role="group">
+                <TextArea v-model="recommentContent"></TextArea>
+                <input type="submit" class="submit" value="댓글 작성" />
+            </form>
+        </section>
+        <section class="recomment-list" v-if="isOpenRecomment">
+            <template v-for="recomment in comment.reCommentList" :key="recomment.reCommentId">
+                <RecommentItem :recomment="recomment"></RecommentItem>
+            </template>
+        </section>
+        <section class="actions">
             <button class="action-button outline" @click="clickLike">
                 <ThumbsUp :size="13" /> {{ commentLikes }}
             </button>
@@ -36,8 +43,9 @@
 </template>
 
 <script setup>
+import RecommentItem from "./RecommentItem.vue";
 import TextArea from "../TextArea.vue";
-import { ThumbsUp, ThumbsDown, MessageSquareMore } from "lucide-vue-next";
+import { ThumbsUp, ThumbsDown, MessageSquareMore, ChevronDown } from "lucide-vue-next";
 
 import { formatUtil } from "@/hooks/format";
 import { commentApi } from "@/hooks/backendApi";
@@ -101,6 +109,12 @@ const erorHandler = {
     },
 };
 
+//대댓글 접기
+const isOpenRecomment = ref(false);
+function toggleRecommentList() {
+    isOpenRecomment.value = !isOpenRecomment.value;
+}
+
 //대댓글 작성 textarea 열기
 const isOpenForm = ref(false);
 function toggleRecommentForm() {
@@ -152,6 +166,8 @@ async function createRecomment() {
 section.recomment-input
     margin: 0
     margin-left: 2rem
+    margin-bottom: 0.7rem
+    margin-top: 1rem
 
 
     form
@@ -179,6 +195,35 @@ section.recomment-input
     gap: 0.5rem
 
     .action-button
+        background: none
+        border: none
+        cursor: pointer
+        font-size: 0.8rem
+
+        display: flex
+        align-items: center
+        gap: 3px
+
+
+
+.recomment-list
+    margin: 0
+    margin-left: 2rem
+    margin-top: 1rem
+
+    display: flex
+    flex-flow: column wrap
+    gap: 8px
+
+.recomment-action
+    position: relative
+    margin: 0
+
+    display: flex
+    justify-content: end
+    gap: 0.5rem
+
+    button
         background: none
         border: none
         cursor: pointer

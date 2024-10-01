@@ -291,6 +291,17 @@ export const commentApi = {
         return response.data;
     },
 
+    async toggleLikeRecomment(dto, error = undefined) {
+        console.log(error);
+        const response = await fetchApi({
+            method: 'post',
+            url: `/re-comment-likes`,
+            data: dto,
+            errorHandler: error
+        })
+        return response.data;
+    },
+
 
     async createRecomment(createDto) {
         const response = await fetchApi({
