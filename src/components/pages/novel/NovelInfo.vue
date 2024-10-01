@@ -91,6 +91,7 @@ function setFavoriteState(state) {
 async function toggleFavorite() {
     try {
         const afterState = await favoriteApi.toggleFavorite(props.novelId);
+        
         setFavoriteState(afterState);
     } catch (error) {
         console.error("Failed to toggle favorite state: ", error);
@@ -101,6 +102,7 @@ async function toggleFavorite() {
 async function checkFavorite() {
     try {
         const checked = await favoriteApi.checkFavorite(props.novelId);
+        console.log(checked);
         isFavorite.value = checked;
     } catch (error) {
         console.error("Failed to confirm favorite state: ", error);

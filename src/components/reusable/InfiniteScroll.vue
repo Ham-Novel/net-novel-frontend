@@ -79,7 +79,6 @@ const itemLoader = reactive({
 
 //첫번째 페이지 값 먼저 불러오기
 onMounted(() => {
-    console.log(props.mountLoad);
     if (props.mountLoad) {
         itemLoader.state.allLoaded = false;
         itemLoader.mountLoad("first");

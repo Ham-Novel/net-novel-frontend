@@ -305,6 +305,9 @@ export const commentApi = {
 export const favoriteApi = {
     async checkFavorite(id) {
         const response = await fetchApi({ method: 'get', url: `/members/me/favorites/check?novelId=${id}` })
+        if (response.data === "로그인 정보 없음") {
+            throw Error(response.data);
+        }
         return response.data;
     },
     async toggleFavorite(id) {

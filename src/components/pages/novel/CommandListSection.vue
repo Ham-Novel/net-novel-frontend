@@ -58,7 +58,6 @@ const scrollProps = reactive({
         );
         return loadItems;
     },
-    loadingMessage: "Episode Loading...",
 });
 
 //댓글 리스트 초기화 메서드

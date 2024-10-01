@@ -37,7 +37,6 @@ const scrollProps = reactive({
         const loaditems = await episodeApi.getEpisodesByNovel(props.novelId, "initial", page, size);
         return loaditems;
     },
-    loadingMessage: "Episode Loading...",
 });
 
 //작품 에피소드의 메타 데이터 로드
