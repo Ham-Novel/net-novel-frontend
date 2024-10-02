@@ -1,6 +1,6 @@
 <template>
     <main class="episode-page">
-        <EpisodeSect :novelId="props.novelId" :episodeId="props.episodeId"></EpisodeSect>
+        <EpisodeSect :episodeId="props.episodeId"></EpisodeSect>
         <NavigationSect></NavigationSect>
         <component :is="episodeStore.currentMenu"></component>
     </main>
@@ -22,16 +22,13 @@ const navBarStore = useNavBarStore();
 
 //url에서 에피소드 id 데이터 가져오기
 const props = defineProps({
-    novelId: {
-        type: Number,
-        default: 0,
-    },
     episodeId: {
         type: Number,
         default: 0,
     },
 });
 
+episodeStore.novelId = props.novelId;
 episodeStore.episodeId = props.episodeId;
 
 //에피소드 페이지에서는 네비게이션 비활성화

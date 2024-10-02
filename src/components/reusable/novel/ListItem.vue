@@ -31,7 +31,7 @@
                 </blockquote>
                 <div class="desc" v-else></div>
             </div>
-            <slot v-if="custom"></slot>
+            <slot></slot>
         </div>
     </article>
 </template>
@@ -142,10 +142,10 @@ article
 
 .detail
     flex: 1
-    font-size: 0.9rem
+    font-size: 0.7rem
     display: flex
     flex-flow: column wrap
-    gap: 4px
+    gap: 6px
 
     .stats
         flex: 1
@@ -175,7 +175,7 @@ article
     .desc
         flex: 3
         margin: 0
-        padding: 0.1em 0.5em
+        padding: 0.2em 0.5em
 
         white-space: normal
         word-wrap: break-word

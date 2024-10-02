@@ -2,6 +2,7 @@
     <aside>
         <nav>
             <ul>
+                <li @click="backToNovelPage"><Undo2 size="30" /></li>
                 <li @click="toggleModal(EpisodeListModal)"><List size="30" /></li>
                 <li @click="toggleModal(CommentListModal)"><MessageSquareMore size="30" /></li>
                 <li><Info size="30" /></li>
@@ -14,26 +15,28 @@
 import CommentListModal from "./modal/CommentListModal.vue";
 import EpisodeListModal from "./modal/EpisodeListModal.vue";
 
-import { List, MessageSquareMore, Info } from "lucide-vue-next";
+import { List, MessageSquareMore, Info, Undo2 } from "lucide-vue-next";
 import { useEpisodePageStore } from "./episodePageStore";
 import { markRaw, ref, watch } from "vue";
+import { useRouter } from "vue-router";
 
 //에피소드 페이지 전역 변수
 const episodeStore = useEpisodePageStore();
 
-watch(
-    () => episodeStore.currentMenu,
-    (value) => {}
-);
-
-const checked = ref(0);
-
+//네비게이션 모달 열기
 function toggleModal(modal) {
     if (episodeStore.currentMenu === modal) {
         episodeStore.currentMenu = null;
         return;
     }
     episodeStore.currentMenu = markRaw(modal);
+}
+
+//소설 페이지로 이동하기
+const router = useRouter();
+function backToNovelPage() {
+    router.go(-1);
+    // router.push({ name: "novel", params: { id: episodeStore.novelId } });
 }
 </script>
 
