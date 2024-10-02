@@ -9,6 +9,7 @@ import LoginPage from './components/pages/login/LoginPage.vue';
 import MyPage from './components/pages/mypage/MyPage.vue';
 import MyInfoTab from './components/pages/mypage/MyInfoTab.vue';
 import MyPaymentTab from './components/pages/mypage/MyPaymentTab.vue';
+import MyCommentsTab from './components/pages/mypage/record/MyCommentsTab.vue'
 
 import LibraryPage from './components/pages/library/LibraryPage.vue';
 import Favorites from './components/pages/library/Favorites.vue';
@@ -50,7 +51,9 @@ const routes = [
         name: 'mypage', path: '/mypage', component: MyPage,
         children: [
             { name: 'my-info', path: 'info', component: MyInfoTab },
-            { name: 'my-payment', path: 'payment', component: MyPaymentTab },
+            { name: 'my-payment', path: 'payments', component: MyPaymentTab },
+            { name: 'my-comment', path: 'comments', component: MyCommentsTab },
+
         ]
     },
     {

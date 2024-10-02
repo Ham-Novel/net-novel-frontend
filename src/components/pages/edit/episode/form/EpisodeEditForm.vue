@@ -18,7 +18,7 @@
                 <TextArea v-model="content" :disabled="disabled"></TextArea>
             </section>
         </div>
-        <div class="novel-nav">
+        <div class=".episode-nav">
             <input type="submit" value="에피소드 제출" />
         </div>
     </form>
@@ -84,9 +84,16 @@ textarea
 h4
     margin-bottom: 20px
 
-.novel-nav
+.episode-nav
     position: fixed
     bottom: 0
     left: 0
+    padding: 30px
     width: 100%
+    background-color: var(--pico-background-color)
+    box-shadow: var(--pico-box-shadow)
+    border-top: 3px solid var(--pico-muted-border-color)
+
+    input
+        margin: 0
 </style>

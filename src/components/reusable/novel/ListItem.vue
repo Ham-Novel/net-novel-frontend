@@ -129,6 +129,7 @@ article
             overflow: hidden
             white-space: nowrap
             text-overflow: ellipsis
+            cursor: pointer
 
             &:hover
                 text-decoration: underline

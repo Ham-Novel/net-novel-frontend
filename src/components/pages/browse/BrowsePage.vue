@@ -75,14 +75,14 @@ const scrollProps = reactive({
     pageProps: { number: 0, size: 5 },
     loadMethod: async (page, size) => {
         const loadData = await novelApi.browseNovel(sort.value, page, size, toRaw(tags.value));
-        console.log(loadData[0]);
+        console.log(...loadData);
         return loadData;
     },
 });
 
 const scrollRef = ref(null);
 const reloadBrowseList = () => {
-    console.debug("[BROWSE] realod: ", tags.value);
+    console.debug("[BROWSE] reload: ", tags.value);
     scrollRef.value.reset();
 };
 </script>

@@ -31,7 +31,6 @@
                         required
                         @keydown.enter.prevent
                         :disabled="props.disabled"
-                        :aria-invalid="titleInvalid"
                     />
                 </div>
                 <TagInput v-model="formInput.tagNames" :disabled="props.disabled"></TagInput>
@@ -45,7 +44,9 @@
                     ></TextArea>
                 </div>
             </div>
-            <input type="submit" value="확인" />
+            <div class="novel-nav">
+                <input type="submit" value="작품 제출" />
+            </div>
         </section>
     </form>
 </template>
@@ -135,14 +136,6 @@ select
 input[type=text]
     height: 60px
 
-input[type=submit]
-    position: relative
-    float: right
-
-    width: fit-content
-    padding: 10px 20px
-    margin: 0
-
 textarea
     min-height: 300px
     height: fit-content
@@ -155,4 +148,17 @@ textarea
 
 .info-form
     flex-grow: 1
+
+.novel-nav
+    position: fixed
+    bottom: 0
+    left: 0
+    padding: 30px
+    width: 100%
+    background-color: var(--pico-background-color)
+    box-shadow: var(--pico-box-shadow)
+    border-top: 3px solid var(--pico-muted-border-color)
+
+    input
+        margin: 0
 </style>

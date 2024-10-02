@@ -129,10 +129,21 @@ export const tagApi = {
         return response.data;
     },
 
+    async getTagById(id) {
+        const response = await fetchApi({
+            method: 'get',
+            url: `/tags/info`,
+            params: {
+                tagId: id
+            }
+        })
+        return response.data;
+    },
+
     async getTagByName(name) {
         const response = await fetchApi({
             method: 'get',
-            url: `/tags`,
+            url: `/tags/info`,
             params: {
                 tagName: name
             }
@@ -393,6 +404,18 @@ export const memberApi = {
         const response = await fetchApi({
             method: 'get',
             url: `/members/me/recent-read`,
+            params: {
+                pageNumber: page,
+                pageSize: size
+            }
+        })
+        return response.data;
+    },
+
+    async getCommentsByMember(page, size) {
+        const response = await fetchApi({
+            method: 'get',
+            url: `/members/me/comments`,
             params: {
                 pageNumber: page,
                 pageSize: size

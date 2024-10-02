@@ -39,7 +39,7 @@
 
 <script setup>
 import { tagApi } from "@/hooks/backendApi";
-import { ref, watch } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
 
 const checkedTags = defineModel({ default: [] });
 const emits = defineEmits(["filter"]);
@@ -55,21 +55,30 @@ const tagMenuList = ref([
 
 const inputTag = ref("");
 
-watch(checkedTags, (v) => {
-    console.log(v);
-});
+// watch(
+//     checkedTags,
+//     (list) => {
+//         list.forEach((tagId) => {
+//             tagApi.getTagById(tagId).then((loadTag) => {
+//                 putTagInSearch(loadTag);
+//                 console.log(loadTag);
+//             });
+//         });
+//     },
+//     { immediate: true }
+// );
 
+//태그 검색 실행 메서드
 const browseTag = async () => {
     try {
         const targetTag = await loadInputTag();
-        checkFilterItem(targetTag);
+        putTagInSearch(targetTag);
     } catch (error) {
         console.error("Cannot Browse Tag", error.message);
-        alert("태그 검색 실패");
     }
 };
 
-//태그 검색
+//input에 입력한 이름으로 태그 데이터 반환
 const loadInputTag = async () => {
     //태그 검색 실패 시 예외 처리
     const browseName = inputTag.value;
@@ -80,7 +89,8 @@ const loadInputTag = async () => {
     return loadTag;
 };
 
-const checkFilterItem = (targetTag) => {
+//태그를 검색 리스트에 적용
+const putTagInSearch = (targetTag) => {
     //태그 메뉴에 없으면 추가
     if (!existInMenu(targetTag)) {
         tagMenuList.value.push(targetTag);

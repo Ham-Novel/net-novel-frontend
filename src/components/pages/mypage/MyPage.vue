@@ -27,6 +27,7 @@ import { memberApi } from "@/hooks/backendApi";
 const tabs = [
     { name: "유저정보", path: { name: "my-info" } },
     { name: "결제내역", path: { name: "my-payment" } },
+    { name: "댓글기록", path: { name: "my-comment" } },
     // { name: "설정관리", path: { name: "test" } },
     // { name: "친구관리", path: { name: "test" } },
 ];
