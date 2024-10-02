@@ -14,12 +14,14 @@
             <p v-else class="content">{{ content }}</p>
         </section>
         <section class="bottom-action">
-            <button class="outline edit" @click="toggleModeRecomment(editMode.edit)">
-                <MessageSquareText :size="16" />수정
-            </button>
-            <button class="outline delete" @click="deleteComment">
-                <MessageSquareX :size="16" />삭제
-            </button>
+            <template v-if="comment.editable">
+                <button class="outline edit" @click="toggleModeRecomment(editMode.edit)">
+                    <MessageSquareText :size="16" />수정
+                </button>
+                <button class="outline delete" @click="deleteComment">
+                    <MessageSquareX :size="16" />삭제
+                </button>
+            </template>
             <button
                 v-if="featureRecomment"
                 class="action-button outline"
@@ -91,6 +93,8 @@ const props = defineProps({
         default: false,
     },
 });
+
+console.log(props.comment);
 
 const emits = defineEmits(["reload"]);
 

@@ -16,17 +16,17 @@ import EpisodeListModal from "./modal/EpisodeListModal.vue";
 
 import { List, MessageSquareMore, Info } from "lucide-vue-next";
 import { useEpisodePageStore } from "./episodePageStore";
-import { markRaw, watch } from "vue";
+import { markRaw, ref, watch } from "vue";
 
 //에피소드 페이지 전역 변수
 const episodeStore = useEpisodePageStore();
 
 watch(
     () => episodeStore.currentMenu,
-    (value) => {
-        // event.target.classList.add("checked");
-    }
+    (value) => {}
 );
+
+const checked = ref(0);
 
 function toggleModal(modal) {
     if (episodeStore.currentMenu === modal) {

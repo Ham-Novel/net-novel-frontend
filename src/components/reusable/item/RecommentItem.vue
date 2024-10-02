@@ -14,12 +14,14 @@
             <p v-else class="content">{{ content }}</p>
         </section>
         <section class="bottom-action">
-            <button class="outline edit" @click="toggleModeRecomment(editMode.edit)">
-                <MessageSquareText :size="16" />수정
-            </button>
-            <button class="outline delete" @click="deleteComment">
-                <MessageSquareX :size="16" />삭제
-            </button>
+            <template v-if="recomment.editable">
+                <button class="outline edit" @click="toggleModeRecomment(editMode.edit)">
+                    <MessageSquareText :size="16" />수정
+                </button>
+                <button class="outline delete" @click="deleteComment">
+                    <MessageSquareX :size="16" />삭제
+                </button>
+            </template>
         </section>
         <section class="top-action">
             <button class="outline" @click="clickLike">

@@ -1,20 +1,10 @@
 <template>
-    <dialog open>
-        <article class="modal">
+    <dialog open @click="exitModal">
+        <article class="modal" @click.stop>
             <article>
                 <CommentInput @reload="reload"></CommentInput>
             </article>
             <div class="sort-select">
-                <label for="sort-recent">
-                    <input
-                        type="radio"
-                        name="sortBy"
-                        id="sort-recent"
-                        value="recent"
-                        v-model="episodeStore.commentSortBy"
-                    />
-                    최신순
-                </label>
                 <label for="sort-likes">
                     <input
                         type="radio"
@@ -24,6 +14,16 @@
                         v-model="episodeStore.commentSortBy"
                     />
                     추천순
+                </label>
+                <label for="sort-recent">
+                    <input
+                        type="radio"
+                        name="sortBy"
+                        id="sort-recent"
+                        value="recent"
+                        v-model="episodeStore.commentSortBy"
+                    />
+                    최신순
                 </label>
             </div>
             <div class="comment-list">
@@ -54,6 +54,11 @@ import { useEpisodePageStore } from "../episodePageStore";
 
 //에피소드 페이지 전역 변수
 const episodeStore = useEpisodePageStore();
+
+//modal 바깥을 클릭하면 끄기
+function exitModal() {
+    episodeStore.currentMenu = null;
+}
 
 //정렬 변경시 댓글 재렌더링
 watch(
