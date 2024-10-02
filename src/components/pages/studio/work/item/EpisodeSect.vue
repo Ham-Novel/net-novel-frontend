@@ -22,7 +22,7 @@ function goToEpisodeEditPage() {
 <style scoped lang="sass">
 
 h6
-    margin-bottom: 15px
+    margin-bottom: 5px
 
 .menu-list
     display: flex

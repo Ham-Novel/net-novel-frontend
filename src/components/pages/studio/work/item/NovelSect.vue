@@ -27,7 +27,7 @@ function goToDeleteNovelPage() {
 
 <style scoped lang="sass">
 h6
-    margin-bottom: 15px
+    margin-bottom: 5px
 
 .novel-sect
     display: flex

@@ -14,7 +14,22 @@
             <div class="browse-novel-list base-wrapper base-distance">
                 <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
                     <template #default="{ item }">
-                        <BrowseListItem :novel="item"></BrowseListItem>
+                        <ListItem
+                            :id="item.id"
+                            :title="item.title"
+                            :author="item.authorName"
+                            :cover-img="item.thumbnailUrl"
+                            :stats="[
+                                { icon: markRaw(Eye), value: item.totalView },
+                                { icon: markRaw(Heart), value: item.totalFavorites },
+                                {
+                                    icon: markRaw(Clock8),
+                                    value: formatUtil.formatRealTime(item.latestUpdateAt),
+                                },
+                            ]"
+                            :tags="item.tags"
+                            :description="item.description"
+                        ></ListItem>
                     </template>
                 </InfiniteScroll>
             </div>
@@ -23,13 +38,15 @@
 </template>
 
 <script setup>
-import BrowseListItem from "./BrowseListItem.vue";
+import ListItem from "@/components/reusable/novel/ListItem.vue";
 import BrowseFilter from "./BrowseFilter.vue";
 import BrowseSort from "./BrowseSort.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
+import { Eye, Heart, Clock8 } from "lucide-vue-next";
 
+import { formatUtil } from "@/hooks/format";
 import { novelApi } from "@/hooks/backendApi";
-import { computed, onMounted, reactive, ref, toRaw, watch } from "vue";
+import { computed, markRaw, onMounted, reactive, ref, toRaw, watch } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -58,6 +75,7 @@ const scrollProps = reactive({
     pageProps: { number: 0, size: 5 },
     loadMethod: async (page, size) => {
         const loadData = await novelApi.browseNovel(sort.value, page, size, toRaw(tags.value));
+        console.log(loadData[0]);
         return loadData;
     },
 });

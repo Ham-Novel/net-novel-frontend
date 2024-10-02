@@ -12,8 +12,17 @@
             </div>
             <div class="list">
                 <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
-                    <template #default="{ item, index }">
-                        <RankingCardItem :novel="item" :index="index + 1"></RankingCardItem>
+                    <template #default="{ item, index }" :key="item.id">
+                        <CardItem
+                            :id="item.id"
+                            :title="item.title"
+                            :cover-img="item.thumbnailUrl"
+                            :tags="item.tags"
+                        >
+                            <template #cover>
+                                <h1 class="rank">{{ index }}</h1>
+                            </template>
+                        </CardItem>
                     </template>
                 </InfiniteScroll>
             </div>
@@ -23,7 +32,7 @@
 
 <script setup>
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
-import RankingCardItem from "./RankingCardItem.vue";
+import CardItem from "@/components/reusable/novel/CardItem.vue";
 
 import { novelApi } from "@/hooks/backendApi";
 import { reactive, ref, watch } from "vue";
@@ -43,7 +52,6 @@ const scrollProps = reactive({
         console.log(loadItems);
         return loadItems;
     },
-    loadingMessage: "Ranking Loading...",
 });
 
 //스크롤 처음부터 다시 재로드하는 메서드
@@ -85,4 +93,23 @@ const reload = () => {
     display: flex
     flex-flow: row wrap
     gap: 25px
+
+
+.rank
+    position: absolute
+    top: 0
+    left: 0
+    z-index: 1
+
+    padding: 0.15rem 0.5rem
+    border-bottom-right-radius: 5px
+
+    background-color: var(--pico-primary)
+    color: white
+    font-size: 20px
+    text-align: center
+
+    display: flex
+    justify-content: center
+    align-items: center
 </style>

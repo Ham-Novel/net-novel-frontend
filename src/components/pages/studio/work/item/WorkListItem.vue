@@ -1,9 +1,6 @@
 <template>
-    <ListItem
-        :title="novel.title"
-        :cover-img="novel.thumbnailUrl"
-        :link="{ name: 'novel', params: { id: novel.id } }"
-    >
+    <ListItem :id="novel.id" :cover-img="novel.thumbnailUrl" :custom="true">
+        <h4>{{ novel.title }}</h4>
         <div class="composition">
             <StatSect class="zone"></StatSect>
             <NovelSect class="zone"></NovelSect>
@@ -43,8 +40,7 @@ const itemProps = {
 <style scoped lang="sass">
 
 .composition
-    margin-top: 20px
-    height: 70%
+    height: 50%
 
     display: flex
     flex-flow: row wrap

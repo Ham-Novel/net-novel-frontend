@@ -8,13 +8,16 @@
         </template>
         <template #default>
             <div class="ranking-grid">
-                <HomeCardItem
-                    v-if="rankingFirst ?? false"
-                    :novel="rankingFirst"
-                    :rank="1"
-                ></HomeCardItem>
+                <!-- <CardItem v-if="rankingFirst ?? false" :novel="rankingFirst" :rank="1"></CardItem> -->
                 <template v-for="(item, rank) in rankingList" :key="rank">
-                    <HomeCardItem class="item" :novel="item" :rank="rank + 2"></HomeCardItem>
+                    <CardItem
+                        class="item"
+                        :id="item.id"
+                        :title="item.title"
+                        :author="item.authorName"
+                        :cover-img="item.thumbnailUrl"
+                        :tags="item.tags"
+                    ></CardItem>
                 </template>
             </div>
         </template>
@@ -22,7 +25,7 @@
 </template>
 
 <script setup>
-import HomeCardItem from "./HomeCardItem.vue";
+import CardItem from "@/components/reusable/novel/CardItem.vue";
 import BaseHomeSection from "./BaseHomeSection.vue";
 
 import { TrendingUp } from "lucide-vue-next";
@@ -34,7 +37,7 @@ const rankingList = ref([]);
 
 const loadRanking = async () => {
     const loadNovels = await novelApi.getRanking(0, 9, "daily");
-    rankingFirst.value = loadNovels.shift();
+    // rankingFirst.value = loadNovels.shift();
     rankingList.value.push(...loadNovels);
 };
 
@@ -58,6 +61,7 @@ h2
     grid-template-columns: repeat(6, minmax(0, 1fr))
     gap: 20px 20px
     justify-items: center
+    align-items: flex-start
 
 .item
     margin-bottom: 0

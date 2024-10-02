@@ -2,19 +2,35 @@
     <div class="search-novel-list">
         <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
             <template #default="{ item }">
-                <SearchNovelItem :novel="item"></SearchNovelItem>
+                <ListItem
+                    :id="item.id"
+                    :title="item.title"
+                    :author="item.authorName"
+                    :cover-img="item.thumbnailUrl"
+                    :stats="[
+                        { icon: markRaw(Eye), value: item.totalView },
+                        { icon: markRaw(Heart), value: item.totalFavorites },
+                        {
+                            icon: markRaw(Clock8),
+                            value: formatUtil.formatRealTime(item.latestUpdateAt),
+                        },
+                    ]"
+                    :tags="item.tags"
+                ></ListItem>
             </template>
         </InfiniteScroll>
     </div>
 </template>
 
 <script setup>
-import SearchNovelItem from "./SearchNovelItem.vue";
+import ListItem from "@/components/reusable/novel/ListItem.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
+import { Eye, Heart, Clock8 } from "lucide-vue-next";
 
 import { novelApi } from "@/hooks/backendApi";
 import { useSearchStore } from "@/stores/searchStore";
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, markRaw } from "vue";
+import { formatUtil } from "@/hooks/format";
 
 const searchStore = useSearchStore();
 const didSearch = ref(false);

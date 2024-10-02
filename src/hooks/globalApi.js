@@ -18,6 +18,7 @@ api.interceptors.request.use(
   },
   // 요청이 서버로 전송되기 전에 발생하는 에러 처리
   function (error) {
+    alert("서버가 응답하지 않습니다. 잠시 후 다시 접속해주십시오.")
     console.error('Api Request Error: ', error.request);
     return Promise.reject(error);
   }

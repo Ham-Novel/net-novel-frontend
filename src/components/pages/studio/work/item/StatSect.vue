@@ -26,7 +26,7 @@ const novel = inject("novel");
 <style scoped lang="sass">
 
 h6
-    margin-bottom: 15px
+    margin-bottom: 5px
 
 span
     font-size: 15px
@@ -41,5 +41,5 @@ span
 
     display: flex
     flex-flow: column wrap
-    gap: 10px
+    gap: 5px
 </style>
