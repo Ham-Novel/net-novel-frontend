@@ -92,16 +92,21 @@ export const novelApi = {
         if (!(tags ?? false)) {
             throw TypeError("tags param is invalid");
         }
-        const tagIds = (tags.length !== 0) && tags.join(",");
+
+        const params = {
+            pageNumber: page,
+            pageSize: size,
+            sortBy: view,
+        }
+
+        if (tags.length !== 0) {
+            params.tagIds = tags.join(",");
+        }
+        console.log(params.tagIds)
         const response = await fetchApi({
             method: 'get',
             url: "/novels/browse",
-            params: {
-                pageNumber: page,
-                pageSize: size,
-                sortBy: view,
-                tagIds
-            }
+            params
         })
         return response.data;
     },
@@ -383,10 +388,14 @@ export const memberApi = {
         return response.data;
     },
 
-    async getSettlementResult() {
+    async getSettlementResult(page, size) {
         const response = await fetchApi({
             method: 'get',
-            url: `/settlements`
+            url: `/settlements/history`,
+            params: {
+                pageNumber: page,
+                pageSize: size
+            }
         })
         return response.data;
     },

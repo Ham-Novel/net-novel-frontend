@@ -18,7 +18,7 @@
                 <TextArea v-model="content" :disabled="disabled"></TextArea>
             </section>
         </div>
-        <div class=".episode-nav">
+        <div class="episode-nav">
             <input type="submit" value="에피소드 제출" />
         </div>
     </form>

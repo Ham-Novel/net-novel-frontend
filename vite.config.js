@@ -18,5 +18,9 @@ export default defineConfig({
         additionalData: `@use "@/assets/base.sass"`
       }
     }
+  },
+  server: {
+    host: '0.0.0.0',
+    port: 5173
   }
 })

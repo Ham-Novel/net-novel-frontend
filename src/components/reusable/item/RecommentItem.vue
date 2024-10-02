@@ -54,6 +54,8 @@ const props = defineProps({
     },
 });
 
+console.log(props.commentId);
+
 const emits = defineEmits(["reload"]);
 
 //댓글 생성 날짜 포메팅
@@ -133,7 +135,7 @@ async function updateComment() {
         await commentApi.updateRecomment({
             content: contentToUpdate.value,
             reCommentId: props.recomment.reCommentId,
-            commentid: props.commentId,
+            commentId: props.commentId,
         });
         content.value = contentToUpdate.value; //변경된 댓글 내용 적용
         mode.value = editMode.none; //작성 form 닫기
@@ -156,7 +158,7 @@ async function deleteComment() {
     try {
         await commentApi.deleteRecomment({
             reCommentId: props.recomment.reCommentId,
-            commentid: props.commentId,
+            commentId: props.commentId,
         });
         emits("reload");
     } catch (error) {

@@ -7,7 +7,7 @@ const BACKEND_URL = 'http://localhost:8081/api';
 const api = axios.create({
   baseURL: BACKEND_URL, //백엔드 서버 url
   withCredentials: true, //세션 인증 처리
-  timeout: 2000, //최대 응답 대기 시간 
+  timeout: 5000, //최대 응답 대기 시간 
 });
 
 // 요청 인터셉터 미들웨어

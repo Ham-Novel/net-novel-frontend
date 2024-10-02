@@ -30,41 +30,42 @@
         </section>
         <section class="settlement-result base-wrapper">
             <h5>정산 처리 내역</h5>
-            <table class="striped" v-if="settlementResultList !== 0">
+            <table class="striped">
                 <thead>
                     <tr>
                         <th scope="col">작품명</th>
+                        <th scope="col">정산 코인</th>
                         <th scope="col">정산 금액</th>
                         <th scope="col">시작 일자</th>
-                        <th scope="col">끝 일자</th>
                         <th scope="col">처리 일자</th>
                         <th scope="col">처리 상태</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-for="settlement in settlementResultList" :key="settlement.novelId">
-                        <tr>
-                            <th scope="row">{{ settlement.novelTitle }}</th>
-                            <td>{{ settlement.revenue }}</td>
-                            <td>{{ settlement.settlementStartDate }}</td>
-                            <td>{{ settlement.settlementEndDate }}</td>
-                            <td>{{ settlement.settlementExecuteDate }}</td>
-                            <td>{{ settlement.settlementStatus }}</td>
-                        </tr>
-                    </template>
+                    <InfiniteScroll v-bind="scrollProps">
+                        <template #default="{ item }">
+                            <tr>
+                                <th scope="row">{{ item.novelTitle }}</th>
+                                <td>{{ item.coinCount }}</td>
+                                <td>{{ item.revenue }}</td>
+                                <td>{{ item.createdAt }}</td>
+                                <td>{{ item.completionDate }}</td>
+                                <td class="result">{{ item.status }}</td>
+                            </tr>
+                        </template>
+                    </InfiniteScroll>
                 </tbody>
             </table>
         </section>
     </section>
 </template>
-
 <script setup>
-import { onMounted, ref } from "vue";
+import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
+import { onMounted, ref, reactive } from "vue";
 import { memberApi } from "@/hooks/backendApi";
 
 onMounted(() => {
     loadWorksRevenue();
-    loadSettlementResult();
 });
 
 const worksProfitList = ref([]);
@@ -78,12 +79,15 @@ function requestSettlement() {
     memberApi.requestSettlement();
 }
 
-const settlementResultList = ref([]);
-
-async function loadSettlementResult() {
-    const data = await memberApi.getSettlementResult();
-    settlementResultList.value.push(...data);
-}
+//스크롤 페이지 로드 설정
+const scrollProps = reactive({
+    pageProps: { number: 0, size: 10 },
+    loadMethod: async (page, size) => {
+        const loadData = await memberApi.getSettlementResult(page, size);
+        console.log(loadData);
+        return loadData;
+    },
+});
 
 function convertCoinToBill(coins) {
     return coins * 100;
