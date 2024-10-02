@@ -74,28 +74,30 @@ const dislikeDelta = ref(0);
 
 //좋아요 버튼 클릭 이벤트
 async function clickLike() {
-    await likeToRecomment("LIKE");
+    try {
+        const result = await likeToRecomment("LIKE");
+        likeDelta.value += result ? 1 : -1;
+    } catch (error) {
+        console.error("Failed to like to recomment");
+    }
 }
 
 //싫어요 버튼 클릭 이벤트
 async function clickDislike() {
-    await likeToRecomment("DISLIKE");
+    try {
+        const result = await likeToRecomment("DISLIKE");
+        dislikeDelta.value += result ? 1 : -1;
+    } catch (error) {
+        console.error("Failed to dislike to recomment");
+    }
 }
 
 async function likeToRecomment(type) {
-    try {
-        const data = await commentApi.toggleLikeRecomment(
-            {
-                likeType: type,
-                reCommentId: props.recomment.reCommentId,
-            },
-            false
-        );
-    } catch (error) {
-        if (error.response.status === 400) {
-            alert("이미 대댓글에 반응하셨습니다.");
-        }
-    }
+    const result = await commentApi.toggleLikeRecomment({
+        likeType: type,
+        reCommentId: props.recomment.reCommentId,
+    });
+    return result;
 }
 
 //대댓글 컴포넌트 조작 모드
