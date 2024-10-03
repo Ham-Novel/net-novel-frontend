@@ -163,7 +163,8 @@ const routes = [
     },
 
     { name: 'test', path: '/test', component: Test },
-    { path: '/:notFound(.*)', component: NotFoundPage }
+    { name: 'not-found', path: '/not-found', component: NotFoundPage },
+    { path: '/:notFound(.*)', component: NotFoundPage },
 ];
 
 //페이지 이동 시 스크롤 설정
