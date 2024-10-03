@@ -87,7 +87,7 @@ export const novelApi = {
                 pageNumber: page,
                 pageSize: size,
                 sortBy: view,
-                tagId: tags
+                tagIds: tags
             }
         })
         return response.data;
