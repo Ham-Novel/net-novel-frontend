@@ -2,12 +2,8 @@
     <main>
         <section class="browse-feature">
             <div class="feature-divider base-wrapper">
-                <BrowseFilter
-                    class="filter-by"
-                    v-model="tags"
-                    @filter="reloadBrowseList"
-                ></BrowseFilter>
-                <BrowseSort class="sort-by" v-model="sort" @sort="reloadBrowseList"></BrowseSort>
+                <BrowseFilter class="filter-by" @filter="rebrowse"></BrowseFilter>
+                <BrowseSort class="sort-by" @sort="rebrowse"></BrowseSort>
             </div>
         </section>
         <section class="browse-result">
@@ -48,6 +44,12 @@ import { formatUtil } from "@/hooks/format";
 import { novelApi } from "@/hooks/backendApi";
 import { computed, markRaw, onMounted, reactive, ref, toRaw, watch } from "vue";
 import { useRoute } from "vue-router";
+import { useBrowseTagStore } from "./browseTagStore";
+import { storeToRefs } from "pinia";
+
+const browseTagStore = useBrowseTagStore();
+
+const { searchTags } = storeToRefs(browseTagStore);
 
 const route = useRoute();
 
@@ -62,27 +64,33 @@ const queryTags = computed(() => {
     return [Number(route.query.tags)];
 });
 
-watch(queryTags, (newValue) => {
-    tags.value = newValue;
-    scrollRef.value.reset();
+//새로고침 시 query string 태그 변화를 감지
+//검색 태그에 반영하고 검색 실시
+watch(queryTags, (value) => {
+    browseTagStore.searchTags = value;
+    rebrowse();
 });
+browseTagStore.searchTags = queryTags.value;
 
-const tags = ref(queryTags.value);
 const sort = ref("latest");
 
 //스크롤 페이지 로드 설정
 const scrollProps = reactive({
     pageProps: { number: 0, size: 5 },
     loadMethod: async (page, size) => {
-        const loadData = await novelApi.browseNovel(sort.value, page, size, toRaw(tags.value));
-        console.log(...loadData);
+        const loadData = await novelApi.browseNovel(
+            browseTagStore.searchSort,
+            page,
+            size,
+            browseTagStore.getTagQuery()
+        );
         return loadData;
     },
 });
 
 const scrollRef = ref(null);
-const reloadBrowseList = () => {
-    console.debug("[BROWSE] reload: ", tags.value);
+const rebrowse = () => {
+    console.debug("[BROWSE] reload: ", browseTagStore.searchTags);
     scrollRef.value.reset();
 };
 </script>
@@ -98,7 +106,7 @@ const reloadBrowseList = () => {
     align-items: stretch
 
     .filter-by
-        flex: 1
+        flex: 2
         padding: 15px
         margin: 15px
 

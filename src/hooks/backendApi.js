@@ -63,15 +63,6 @@ export const novelApi = {
 
     },
 
-    // async getNovelList(page, size) {
-    //     const reqUrl = `${API_URL}/novels?pageNumber=${page}&pageSize=${size}`
-    //     const resp = await fetch(reqUrl);
-    //     if (!resp.ok) {
-    //         throw new Error(BAD_REQUEST_MSG);
-    //     }
-    //     return await resp.json();
-    // },
-
     async searchNovel(word, type, page, size, error) {
         const response = await fetchApi({
             method: 'get',
@@ -89,24 +80,15 @@ export const novelApi = {
     },
 
     async browseNovel(view, page, size, tags) {
-        if (!(tags ?? false)) {
-            throw TypeError("tags param is invalid");
-        }
-
-        const params = {
-            pageNumber: page,
-            pageSize: size,
-            sortBy: view,
-        }
-
-        if (tags.length !== 0) {
-            params.tagIds = tags.join(",");
-        }
-        console.log(params.tagIds)
         const response = await fetchApi({
             method: 'get',
             url: "/novels/browse",
-            params
+            params: {
+                pageNumber: page,
+                pageSize: size,
+                sortBy: view,
+                tagId: tags
+            }
         })
         return response.data;
     },

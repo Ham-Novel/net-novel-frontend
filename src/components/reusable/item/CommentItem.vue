@@ -94,8 +94,6 @@ const props = defineProps({
     },
 });
 
-console.log(props.comment);
-
 const emits = defineEmits(["reload"]);
 
 //댓글 생성 날짜 포메팅
@@ -171,7 +169,6 @@ const recommentContent = ref("");
 
 async function createRecomment() {
     try {
-        console.log(recommentContent.value);
         if (recommentContent.value.length > 300) {
             const error = Error("cannot post recomment content longer than 300 characters");
             error.code = "length";

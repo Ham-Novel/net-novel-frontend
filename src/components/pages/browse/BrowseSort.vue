@@ -12,7 +12,7 @@
                     <input
                         type="radio"
                         :id="`sort-${sort.value}`"
-                        v-model="selected"
+                        v-model="searchSort"
                         :value="sort.value"
                     />
                     <span>{{ sort.name }}</span>
@@ -24,9 +24,13 @@
 
 <script setup>
 import { ref } from "vue";
+import { useBrowseTagStore } from "./browseTagStore";
+import { storeToRefs } from "pinia";
+
+const browseTagStore = useBrowseTagStore();
+const { searchSort } = storeToRefs(browseTagStore);
 
 const emits = defineEmits(["sort"]);
-const selected = defineModel({ default: "latest" });
 
 const sortList = ref([
     { name: "최신순", value: "latest" },

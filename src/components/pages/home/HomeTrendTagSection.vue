@@ -29,12 +29,10 @@ const tagList = ref([
     { id: 3, name: "태그3" },
     { id: 4, name: "태그4" },
     { id: 5, name: "태그5" },
-    { id: 5, name: "태그5" },
-    { id: 5, name: "태그5asdfaf" },
-    { id: 5, name: "태그5" },
-    { id: 5, name: "태그5" },
-    { id: 5, name: "태그5" },
-    { id: 5, name: "태그5" },
+    { id: 6, name: "태그6" },
+    { id: 7, name: "태그7" },
+    { id: 8, name: "태그8" },
+    { id: 9, name: "태그9" },
     { id: 10, name: "태그10" },
 ]);
 

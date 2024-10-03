@@ -8,15 +8,21 @@
         </template>
         <template #default>
             <div class="ranking-grid">
-                <!-- <CardItem v-if="rankingFirst ?? false" :novel="rankingFirst" :rank="1"></CardItem> -->
-                <template v-for="(item, rank) in rankingList" :key="rank">
+                <CardItem
+                    v-if="rankingFirst ?? false"
+                    :id="rankingFirst.id"
+                    :title="rankingFirst.title"
+                    :author="rankingFirst.authorName"
+                    :cover-img="rankingFirst.thumbnailUrl"
+                    :tags="rankingFirst.tags"
+                ></CardItem>
+                <template v-for="(item, rank) in rankingList" :key="rank + 2">
                     <CardItem
                         class="item"
                         :id="item.id"
                         :title="item.title"
                         :author="item.authorName"
                         :cover-img="item.thumbnailUrl"
-                        :tags="item.tags"
                     ></CardItem>
                 </template>
             </div>
@@ -37,7 +43,7 @@ const rankingList = ref([]);
 
 const loadRanking = async () => {
     const loadNovels = await novelApi.getRanking(0, 9, "daily");
-    // rankingFirst.value = loadNovels.shift();
+    rankingFirst.value = loadNovels.shift();
     rankingList.value.push(...loadNovels);
 };
 

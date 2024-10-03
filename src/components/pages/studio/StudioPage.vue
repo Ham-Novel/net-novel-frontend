@@ -17,12 +17,12 @@ import { ref } from "vue";
 
 const tabs = ref([
     { name: "작품 관리", path: { name: "work-manage" } },
-    { name: "후원 관리", path: { name: "tip-manage" } },
-    { name: "작품 통계", path: { name: "work-stat" } },
+    // { name: "후원 관리", path: { name: "tip-manage" } },
+    // { name: "작품 통계", path: { name: "work-stat" } },
     { name: "정산", path: { name: "settlement" } },
 ]);
 </script>
-
+ 
 <style scoped lang="sass">
 .studio-header
     background-color: var(--bg-sub)

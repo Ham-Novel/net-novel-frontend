@@ -5,15 +5,15 @@
             <div class="line"></div>
         </section>
         <section class="filter-item-list">
-            <template v-for="tagMenu in tagMenuList">
-                <label class="filter-item" :for="`filter-${tagMenu.id}`" @change="emits('filter')">
+            <template v-for="menu in menuTags">
+                <label class="filter-item" :for="`filter-${menu.id}`">
                     <input
                         type="checkbox"
-                        :id="`filter-${tagMenu.id}`"
-                        v-model="checkedTags"
-                        :value="tagMenu.id"
+                        :id="`filter-${menu.id}`"
+                        v-model="browseTagStore.searchTags"
+                        :value="menu.id"
                     />
-                    <span>{{ tagMenu.name }}</span>
+                    <span>{{ menu.name }}</span>
                 </label>
             </template>
         </section>
@@ -34,53 +34,96 @@
                 </li>
             </ul>
         </section>
+        <button @click="emits('filter')">태그 검색</button>
+        <button class="reset-button" @click="resetTag"><RotateCcw size="18" /></button>
     </article>
 </template>
 
 <script setup>
 import { tagApi } from "@/hooks/backendApi";
-import { onMounted, ref, watch, watchEffect } from "vue";
+import { RotateCcw } from "lucide-vue-next";
 
-const checkedTags = defineModel({ default: [] });
+import { useBrowseTagStore } from "./browseTagStore";
+import { onMounted, ref, watch, watchEffect } from "vue";
+import { storeToRefs } from "pinia";
+
 const emits = defineEmits(["filter"]);
 
-//todo: 내가 선택한 태그들을 불러오는 api
-const tagMenuList = ref([
-    { id: 1, name: "태그1" },
-    { id: 2, name: "태그2" },
-    { id: 3, name: "태그3" },
-    { id: 4, name: "태그4" },
-    { id: 5, name: "태그5" },
+const browseTagStore = useBrowseTagStore();
+const { searchTags } = storeToRefs(browseTagStore);
+
+/**
+ * 태그 검색 초기화
+ */
+const resetTag = () => {
+    browseTagStore.searchTags = [];
+    menuTags.value.splice(5);
+    emits("filter");
+};
+
+/**
+ * 태그 checkbox 컴포넌트 기능
+ */
+const menuTags = ref([
+    { id: 1, name: "판타지" },
+    { id: 2, name: "무협" },
+    { id: 3, name: "아카데미" },
+    { id: 4, name: "헌터" },
+    { id: 5, name: "아포칼립스" },
 ]);
 
+//브라우즈 페이지에 진입 시
+onMounted(() => {
+    searchTags.value.forEach((tagId) => {
+        if (checkInMenu(tagId)) return;
+        addTagMenu(tagId);
+    });
+});
+
+//태그 메뉴 선택 상태를 추적하여 메뉴 UI에 반영
+watch(searchTags, (newList, oldList) => {
+    const arr = newList.filter((tag) => !oldList.includes(tag));
+    // console.log("search", browseTagStore.searchTags);
+    // console.log("new", newList);
+    // console.log("old", oldList);
+    // console.log("changed", arr);
+
+    arr.forEach((tagId) => {
+        if (checkInMenu(tagId)) return;
+        addTagMenu(tagId);
+    });
+});
+
+//태그를 UI에 추가
+const addTagMenu = async (tagId) => {
+    try {
+        const tag = await tagApi.getTagById(tagId);
+        menuTags.value.push(tag);
+    } catch (error) {
+        console.error("Faild to add tag menu of search tag");
+    }
+};
+
+//tag 메뉴가 있는지 확인
+const checkInMenu = (tagId) => menuTags.value.some((menu) => menu.id === tagId);
+
+/**
+ * form에 입력해서 DB에 있는 태그를 checkbox에 추가하고 검색하는 메서드
+ */
 const inputTag = ref("");
 
-// watch(
-//     checkedTags,
-//     (list) => {
-//         list.forEach((tagId) => {
-//             tagApi.getTagById(tagId).then((loadTag) => {
-//                 putTagInSearch(loadTag);
-//                 console.log(loadTag);
-//             });
-//         });
-//     },
-//     { immediate: true }
-// );
-
-//태그 검색 실행 메서드
+//태그 추가 이벤트 실행
 const browseTag = async () => {
     try {
-        const targetTag = await loadInputTag();
-        putTagInSearch(targetTag);
+        const tag = await loadInputTag();
+        addSearchTag(tag);
     } catch (error) {
         console.error("Cannot Browse Tag", error.message);
     }
 };
 
-//input에 입력한 이름으로 태그 데이터 반환
+//input 입력 text로 태그 id 검색
 const loadInputTag = async () => {
-    //태그 검색 실패 시 예외 처리
     const browseName = inputTag.value;
     inputTag.value = "";
 
@@ -89,31 +132,21 @@ const loadInputTag = async () => {
     return loadTag;
 };
 
-//태그를 검색 리스트에 적용
-const putTagInSearch = (targetTag) => {
-    //태그 메뉴에 없으면 추가
-    if (!existInMenu(targetTag)) {
-        tagMenuList.value.push(targetTag);
-        checkedTags.value.push(targetTag.id);
-        emits("filter");
-        return;
+//검색할 태그로 설정
+function addSearchTag(tag) {
+    if (checkInSearch(tag)) {
+        throw Error("Already included in search tags");
     }
+    // searchTags.value.push(tag.id);
+    searchTags.value = [...searchTags.value, tag.id];
+}
 
-    //태그 메뉴에 있지만 체크 상태가 아니면 체크
-    if (!existInChecked(targetTag)) {
-        checkedTags.value.push(targetTag.id);
-        emits("filter");
-        return;
-    }
+//tag가 검색 목록에 포함되어 있는지 확인
+const checkInSearch = (tag) => browseTagStore.searchTags.some((checkId) => checkId === tag.id);
 
-    //이미 태그 메뉴가 있고 체크까지 되어 있으면 아무것도 안함
-};
-
-const existInMenu = (tag) => tagMenuList.value.some((menu) => menu.id === tag.id);
-
-const existInChecked = (tag) => checkedTags.value.some((checkedId) => checkedId === tag.id);
-
-//태그 검색바 자동완성 기능
+/**
+ * 태그 검색바 자동완성 기능
+ */
 const suggestions = ref([]);
 
 const suggestTags = async () => {
@@ -132,6 +165,9 @@ const selectSuggestion = (suggestion) => {
 </script>
 
 <style scoped lang="sass">
+
+article
+    position: relative
 
 section
     position: relative
@@ -172,6 +208,15 @@ section
         &:has(input:checked)
             background-color: var(--pico-contrast-focus)
 
+.reset-button
+    position: absolute
+    top: 10px
+    right: 10px
+    padding: 5px
+
+    display: flex
+    justify-content: center
+    align-items: center
 
 
 .filter-input
