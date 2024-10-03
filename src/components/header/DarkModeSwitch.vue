@@ -9,7 +9,6 @@
 </template>
 
 <script setup>
-import { Sun, Moon } from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
 import { useDarkModeStore } from "@/stores/darkModeStore";
 

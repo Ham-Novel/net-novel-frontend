@@ -1,14 +1,35 @@
 <template>
     <nav v-if="navBarStore.isDisplayed">
-        <MenuGroup class="menu-group" :menu-list="publicList"></MenuGroup>
-        <DarkModeSwitch></DarkModeSwitch>
-        <MenuGroup class="menu-group" :menu-list="privateList"></MenuGroup>
+        <div class="nav-sort base-wrapper">
+            <ul>
+                <template v-for="(item, index) in postMenus" :key="item.name">
+                    <Menu
+                        :name="item.name"
+                        :icon="item.icon"
+                        :link="item.link"
+                        :modal="item.modal"
+                        :open-modal="item.state"
+                    ></Menu>
+                </template>
+            </ul>
+            <ul>
+                <template v-for="(item, index) in userMenus" :key="item.name">
+                    <Menu
+                        :name="item.name"
+                        :icon="item.icon"
+                        :link="item.link"
+                        :modal="item.modal"
+                        :open-modal="item.state"
+                    ></Menu>
+                </template>
+            </ul>
+        </div>
     </nav>
 </template>
 
 <script setup>
-import DarkModeSwitch from "./DarkModeSwitch.vue";
-import MenuGroup from "./MenuGroup.vue";
+import Menu from "./Menu.vue";
+import UserInfoModal from "./UserInfoModal.vue";
 import {
     Search,
     SquareLibrary,
@@ -20,56 +41,70 @@ import {
     Waypoints,
 } from "lucide-vue-next";
 
-import { ref, toRaw } from "vue";
+import { reactive, ref, markRaw } from "vue";
 import { useNavBarStore } from "@/stores/navBarStore";
+import { useRouter } from "vue-router";
 
 const navBarStore = useNavBarStore();
 
-const publicList = ref([
+const router = useRouter();
+
+const postMenus = ref([
     {
-        name: "home",
-        icon: toRaw(Waypoints),
+        name: "Home",
+        icon: markRaw(Waypoints),
         link: { name: "home" },
     },
     {
-        name: "browse",
-        icon: toRaw(Compass),
+        name: "Browse",
+        icon: markRaw(Compass),
         link: { name: "browse" },
     },
     {
-        name: "ranking",
-        icon: toRaw(BarChart),
+        name: "Ranking",
+        icon: markRaw(BarChart),
         link: { name: "ranking" },
     },
     {
-        name: "search",
-        icon: toRaw(Search),
+        name: "Search",
+        icon: markRaw(Search),
         link: { name: "search" },
     },
 ]);
 
-const privateList = ref([
+const userMenus = ref([
     {
-        name: "alram",
-        icon: toRaw(Bell),
-        link: { name: "test" },
+        name: "",
+        icon: markRaw(Bell),
+        link: { name: "home" },
     },
     {
-        name: "studio",
-        icon: toRaw(SquarePen),
+        name: "Studio",
+        icon: markRaw(SquarePen),
         link: { name: "work-manage" },
     },
     {
-        name: "library",
-        icon: toRaw(SquareLibrary),
+        name: "Library",
+        icon: markRaw(SquareLibrary),
         link: { name: "library" },
     },
     {
-        name: "mypage",
-        icon: toRaw(User),
-        link: { name: "mypage" },
+        name: "",
+        icon: markRaw(User),
+        modal: markRaw(UserInfoModal),
+        open: false,
     },
 ]);
+
+const mypage = reactive({
+    name: "MyPage",
+    icon: markRaw(User),
+    modal: markRaw(UserInfoModal),
+    state: false,
+    event() {
+        this.state = !this.state;
+    },
+});
 </script>
 
 <style scoped lang="sass">
@@ -82,13 +117,38 @@ nav
 
     width: 100%
     height: 70px
-    padding: 0 20px
+    padding: 0
 
     background-color: var(--pico-background-color)
     border-bottom: 1px solid var(--pico-muted-border-color)
     box-shadow: var(--pico-box-shadow)
 
+.nav-sort
     display: flex
     justify-content: space-between
     align-items: center
+
+
+ul
+    display: inline-flex
+    justify-content: center
+    list-style-type: none
+    gap: 10px
+
+    li
+        position: relative
+        padding: 0
+
+    button
+        padding: 0.3rem
+        border: none
+        font-size: 0.9rem
+        color: var(--pico-text-color)
+
+        display: flex
+        align-items: center
+        gap: 3px
+
+        &:hover
+            color: var(--pico-primary)
 </style>
