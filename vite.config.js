@@ -20,7 +20,10 @@ export default defineConfig({
     }
   },
   server: {
-    host: '0.0.0.0',
-    port: 5173
+    host: '0.0.0.0',  // 외부 접근 허용
+    port: 5173        // 포트를 5173으로 고정
+  },
+  preview: {
+    port: 5173        // 'npm run preview'의 포트도 5173으로 설정
   }
 })
