@@ -6,7 +6,14 @@ async function fetchApi({ method, url, params, data, error } = {}) {
         url,
         data,
         params,
-        globalAdvice: error ?? true
+        globalAdvice: error ?? true,
+        //캐싱 설정
+        cache: {
+            methods: ['get'],    // GET 요청에 대해서만 캐시
+            ttl: 1000 * 60 * 5, // TTL 5분 설정
+            staleIfError: true,  // 에러 발생 시 캐시된 데이터 반환
+            forceCache: true, //강제 캐시
+        },
     }
     console.debug('[BACKEND_API]', config)
     return await api(config);
@@ -75,6 +82,7 @@ export const novelApi = {
             },
             error
         })
+        console.log(response.cached)
         return response.data;
 
     },
@@ -90,6 +98,7 @@ export const novelApi = {
                 tagIds: tags
             }
         })
+        console.log(response.cached)
         return response.data;
     },
 

@@ -1,14 +1,21 @@
 import axios from 'axios';
+import { setupCache } from 'axios-cache-interceptor';
 import router from "@/router";
+
 
 const BACKEND_URL = 'http://localhost:8081/api';
 
 // Axios 인스턴스 생성
-const api = axios.create({
+const instance = axios.create({
   baseURL: BACKEND_URL, //백엔드 서버 url
   withCredentials: true, //세션 인증 처리
   timeout: 5000, //최대 응답 대기 시간 
 });
+
+const api = setupCache(instance, {
+  ttl: 1000 * 60 * 5 // 5분 동안 캐시 유지
+});
+
 
 // 요청 인터셉터 미들웨어
 api.interceptors.request.use(
