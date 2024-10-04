@@ -24,16 +24,11 @@ import { BookmarkCheck } from "lucide-vue-next";
 import { useRouter } from "vue-router";
 
 const tagList = ref([
-    { id: 1, name: "태그1" },
-    { id: 2, name: "태그2" },
-    { id: 3, name: "태그3" },
-    { id: 4, name: "태그4" },
-    { id: 5, name: "태그5" },
-    { id: 6, name: "태그6" },
-    { id: 7, name: "태그7" },
-    { id: 8, name: "태그8" },
-    { id: 9, name: "태그9" },
-    { id: 10, name: "태그10" },
+    { id: 1, name: "판타지" },
+    { id: 2, name: "무협" },
+    { id: 3, name: "아카데미" },
+    { id: 4, name: "헌터" },
+    { id: 5, name: "아포칼립스" },
 ]);
 
 //태그 클릭 시 태그 검색

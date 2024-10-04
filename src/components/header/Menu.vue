@@ -27,10 +27,6 @@ const props = defineProps({
     modal: {
         default: undefined,
     },
-    openModal: {
-        type: Boolean,
-        default: false,
-    },
 });
 
 const router = useRouter();
@@ -47,7 +43,7 @@ function goLink() {
     router.push(props.link);
 }
 
-const isOpenModal = ref(props.openModal);
+const isOpenModal = ref(false);
 function toggleModal() {
     isOpenModal.value = !isOpenModal.value;
 }

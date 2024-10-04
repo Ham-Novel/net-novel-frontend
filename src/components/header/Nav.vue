@@ -8,7 +8,6 @@
                         :icon="item.icon"
                         :link="item.link"
                         :modal="item.modal"
-                        :open-modal="item.state"
                     ></Menu>
                 </template>
             </ul>
@@ -19,7 +18,6 @@
                         :icon="item.icon"
                         :link="item.link"
                         :modal="item.modal"
-                        :open-modal="item.state"
                     ></Menu>
                 </template>
             </ul>
@@ -30,6 +28,7 @@
 <script setup>
 import Menu from "./Menu.vue";
 import UserInfoModal from "./UserInfoModal.vue";
+import AlramModal from "./AlramModal.vue";
 import {
     Search,
     SquareLibrary,
@@ -86,13 +85,12 @@ const userMenus = ref([
     {
         name: "",
         icon: markRaw(Bell),
-        link: { name: "home" },
+        modal: markRaw(AlramModal),
     },
     {
         name: "",
         icon: markRaw(User),
         modal: markRaw(UserInfoModal),
-        open: false,
     },
 ]);
 

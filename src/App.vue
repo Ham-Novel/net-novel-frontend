@@ -8,7 +8,10 @@
 import Nav from "./components/header/Nav.vue";
 import Footer from "./components/footer/Footer.vue";
 import { useDarkMode } from "./hooks/darkMode";
+import { useAlram } from "./hooks/alram";
 
+const alram = useAlram();
+alram.connectSSE();
 useDarkMode(); //다크 모드 자동화 전역 설정
 </script>
 
