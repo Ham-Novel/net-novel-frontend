@@ -161,6 +161,7 @@ const resetSuggest = () => {
 const selectSuggestion = (suggestion) => {
     inputTag.value = suggestion;
     resetSuggest();
+    browseTag();
 };
 </script>
 
