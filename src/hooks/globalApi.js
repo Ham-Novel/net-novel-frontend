@@ -13,7 +13,9 @@ const instance = axios.create({
 });
 
 const api = setupCache(instance, {
-  ttl: 1000 * 60 * 5 // 5분 동안 캐시 유지
+  methods: ['get'],    // GET 요청에 대해서만 캐시
+  ttl: 1000 * 60 * 10, // 5분 동안 캐시 유지
+  staleIfError: true,  // 에러 발생 시 캐시된 데이터 반환
 });
 
 

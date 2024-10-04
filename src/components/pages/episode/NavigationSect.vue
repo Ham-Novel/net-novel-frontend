@@ -25,6 +25,7 @@ const episodeStore = useEpisodePageStore();
 
 //네비게이션 모달 열기
 function toggleModal(modal) {
+    
     if (episodeStore.currentMenu === modal) {
         episodeStore.currentMenu = null;
         return;

@@ -1,6 +1,6 @@
 <template>
     <dialog open @click="exitModal">
-        <article class="modal" @click.stop>
+        <article class="modal hide-scrollbar" @click.stop>
             <article>
                 <CommentInput @reload="reload"></CommentInput>
             </article>
@@ -132,4 +132,8 @@ article.modal
 
     input
         margin: 0
+
+
+.hide-scrollbar::-webkit-scrollbar
+    display: none
 </style>

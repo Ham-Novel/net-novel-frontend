@@ -1,6 +1,6 @@
 <template>
     <main class="episode-page">
-        <EpisodeSect :episodeId="props.episodeId"></EpisodeSect>
+        <EpisodeSect :episodeId="props.episodeId" :key="props.episodeId"></EpisodeSect>
         <NavigationSect></NavigationSect>
         <component :is="episodeStore.currentMenu"></component>
     </main>

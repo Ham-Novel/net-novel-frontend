@@ -1,19 +1,14 @@
 import api from "./globalApi";
 
-async function fetchApi({ method, url, params, data, error } = {}) {
+async function fetchApi({ method, url, params, data, error = true, cache = false } = {}) {
+
     const config = {
         method,
         url,
         data,
         params,
-        globalAdvice: error ?? true,
-        //캐싱 설정
-        cache: {
-            methods: ['get'],    // GET 요청에 대해서만 캐시
-            ttl: 1000 * 60 * 5, // TTL 5분 설정
-            staleIfError: true,  // 에러 발생 시 캐시된 데이터 반환
-            forceCache: true, //강제 캐시
-        },
+        globalAdvice: error,
+        cache
     }
     console.debug('[BACKEND_API]', config)
     return await api(config);
@@ -45,7 +40,7 @@ export const coinApi = {
 
 export const novelApi = {
     async getNovel(id) {
-        const response = await fetchApi({ method: 'get', url: `/novels/${id}` });
+        const response = await fetchApi({ method: 'get', url: `/novels/${id}`, cache: true });
         return response.data;
     },
 
@@ -80,7 +75,8 @@ export const novelApi = {
                 pageNumber: page,
                 pageSize: size,
             },
-            error
+            error,
+            cache: true
         })
         console.log(response.cached)
         return response.data;
@@ -95,8 +91,9 @@ export const novelApi = {
                 pageNumber: page,
                 pageSize: size,
                 sortBy: view,
-                tagIds: tags
-            }
+                tagId: tags
+            },
+            cache: true
         })
         console.log(response.cached)
         return response.data;
@@ -110,7 +107,8 @@ export const novelApi = {
                 pageNumber: page,
                 pageSize: size,
                 period,
-            }
+            },
+            cache: true
         })
         return response.data;
     }
@@ -131,7 +129,8 @@ export const tagApi = {
             url: `/tags/info`,
             params: {
                 tagId: id
-            }
+            },
+            cache: true
         })
         return response.data;
     },
@@ -142,7 +141,8 @@ export const tagApi = {
             url: `/tags/info`,
             params: {
                 tagName: name
-            }
+            },
+            cache: true
         })
         return response.data;
     },
@@ -153,7 +153,8 @@ export const tagApi = {
             url: `/tags`,
             params: {
                 searchWord
-            }
+            },
+            cache: true
         })
         return response.data;
     }
@@ -164,6 +165,7 @@ export const episodeApi = {
         const response = await fetchApi({
             method: 'get',
             url: `/episodes/${id}`,
+            cache: true
         })
         return response.data;
     },
@@ -172,6 +174,7 @@ export const episodeApi = {
         const response = await fetchApi({
             method: 'get',
             url: `/episodes/${id}/beside?direction=${direction}`,
+            cache: true
         })
         return response.data;
     },
@@ -241,7 +244,8 @@ export const commentApi = {
                 sortBy: sort,
                 pageNumber: page,
                 pageSize: size
-            }
+            },
+            cache: true
         })
         return response.data;
     },
@@ -359,7 +363,8 @@ export const memberApi = {
         const response = await fetchApi({
             method: 'get',
             url: `/members/me/mypage`,
-            error
+            error,
+            cache: true
         })
         return response.data;
     },
@@ -420,7 +425,8 @@ export const memberApi = {
             params: {
                 pageNumber: page,
                 pageSize: size
-            }
+            },
+            cache: true
         })
         return response.data;
     },
