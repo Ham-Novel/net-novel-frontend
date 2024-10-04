@@ -20,7 +20,7 @@
                             :tags="item.tags"
                         >
                             <template #cover>
-                                <h1 class="rank">{{ index }}</h1>
+                                <h1 class="rank">{{ index + 1 }}</h1>
                             </template>
                         </CardItem>
                     </template>
