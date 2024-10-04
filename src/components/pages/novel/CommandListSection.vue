@@ -78,9 +78,9 @@ const sortSelected = ref("recent");
 <style lang="sass" scoped>
 
 .comment-list-section
+    width: 700px
 
     .list-info
-        width: 700px
         padding: 10px
         border-bottom: 2px solid
         display: flex
@@ -106,7 +106,6 @@ const sortSelected = ref("recent");
                     color: var(--primary-color)
 
 .list-view
-    width: 700px
     display: flex
     flex-flow: column wrap
     gap: 15px
