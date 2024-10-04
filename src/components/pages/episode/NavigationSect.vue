@@ -36,8 +36,8 @@ function toggleModal(modal) {
 //소설 페이지로 이동하기
 const router = useRouter();
 function backToNovelPage() {
-    router.go(-1);
-    // router.push({ name: "novel", params: { id: episodeStore.novelId } });
+    // router.go(-1);
+    router.push({ name: "novel", params: { id: episodeStore.novelId } });
 }
 </script>
 

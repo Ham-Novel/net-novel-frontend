@@ -50,7 +50,12 @@ onUnmounted(() => {
 const scrollProps = reactive({
     pageProps: { number: 0, size: 20 },
     loadMethod: async (page, size) => {
-        const loaditems = await episodeApi.getEpisodesByNovel(1, "initial", page, size);
+        const loaditems = await episodeApi.getEpisodesByNovel(
+            episodeStore.novelId,
+            "initial",
+            page,
+            size
+        );
         return loaditems;
     },
 });

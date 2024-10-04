@@ -22,6 +22,10 @@ const navBarStore = useNavBarStore();
 
 //url에서 에피소드 id 데이터 가져오기
 const props = defineProps({
+    novelId: {
+        type: Number,
+        default: 0,
+    },
     episodeId: {
         type: Number,
         default: 0,

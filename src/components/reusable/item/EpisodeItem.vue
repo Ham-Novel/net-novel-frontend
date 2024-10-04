@@ -35,6 +35,10 @@ import { useRoute, useRouter } from "vue-router";
 
 //애피소드 정보 episode 변수로 받아오기
 const props = defineProps({
+    novelId: {
+        type: Number,
+        required: true,
+    },
     episode: {
         type: Object,
         required: true,
@@ -58,7 +62,7 @@ const route = useRoute();
 function openEpisode() {
     router.push({
         name: "episode",
-        params: { episodeId: episode.episodeId },
+        params: { novelId: props.novelId, episodeId: episode.episodeId },
     });
 }
 </script>

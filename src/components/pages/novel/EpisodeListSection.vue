@@ -19,7 +19,7 @@
                 <tbody>
                     <InfiniteScroll v-bind="scrollProps">
                         <template v-slot:default="{ item }">
-                            <EpiListElement :episode="item"></EpiListElement>
+                            <EpiListElement :episode="item" :novel-id="novelId"></EpiListElement>
                         </template>
                     </InfiniteScroll>
                 </tbody>
@@ -61,7 +61,6 @@ const episodesInfo = reactive({
     },
     async load() {
         const resp = await episodeApi.getEpisodesInfoByNovel(props.novelId);
-        // console.log(resp);
         this.data.chapterCount = resp.chapterCount;
         this.data.lastUpdatedAt = formatUtil.formatDate(resp.lastUpdatedAt);
     },

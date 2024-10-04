@@ -87,8 +87,9 @@ const routes = [
     },
     {
         name: 'episode',
-        path: '/episodes/:episodeId',
+        path: '/novels/:novelId/episodes/:episodeId',
         props: (route) => ({
+            novelId: Number(route.params.novelId),
             episodeId: Number(route.params.episodeId)
         }),
         component: EpisodePage,

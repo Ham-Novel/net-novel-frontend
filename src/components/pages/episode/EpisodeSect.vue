@@ -257,7 +257,11 @@ const urlDetect = reactive({
         }
     },
     updateURL: (episodeId) => {
-        window.history.replaceState(null, "", `/episodes/${episodeId}`);
+        window.history.replaceState(
+            null,
+            "",
+            `/novels/${episodeStore.novelId}/episodes/${episodeId}`
+        );
     },
 });
 watch(urlDetect.observer.intersection, urlDetect.handler);

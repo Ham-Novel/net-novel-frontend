@@ -13,6 +13,9 @@
             ></CommentForm>
             <p v-else class="content">{{ content }}</p>
         </section>
+
+        <slot></slot>
+
         <section class="bottom-action">
             <template v-if="comment.editable">
                 <button class="outline edit" @click="toggleModeRecomment(editMode.edit)">
@@ -22,17 +25,19 @@
                     <MessageSquareX :size="16" />삭제
                 </button>
             </template>
-            <button
-                v-if="featureRecomment"
-                class="action-button outline"
-                @click="toggleModeRecomment(editMode.recomment)"
-            >
-                <MessageSquareMore :size="16" />답글
-            </button>
-            <button class="outline" @click="toggleRecommentList">
-                <ChevronDown :size="15" />대댓글
-            </button>
+            <template v-if="featureRecomment">
+                <button
+                    class="action-button outline"
+                    @click="toggleModeRecomment(editMode.recomment)"
+                >
+                    <MessageSquareMore :size="16" />답글
+                </button>
+                <button class="outline" @click="toggleRecommentList">
+                    <ChevronDown :size="15" />대댓글
+                </button>
+            </template>
         </section>
+
         <section class="recomment-input" v-if="mode === editMode.recomment">
             <CommentForm
                 v-model="recommentContent"

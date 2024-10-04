@@ -19,7 +19,10 @@
                                     {{ formatUtil.formatRealTime(item.updatedAt) }}
                                 </p>
                                 <div class="feature">
-                                    <button class="secondary" @click="goToRead(item.episodeId)">
+                                    <button
+                                        class="secondary"
+                                        @click="goToRead(item.id, item.episodeId)"
+                                    >
                                         이어 읽기 >> {{ item.episodeTitle }}
                                     </button>
                                 </div>
@@ -79,8 +82,8 @@ const displayType = (type) => {
 };
 
 const router = useRouter();
-function goToRead(episodeId) {
-    router.push({ name: "episode", params: { episodeId } });
+function goToRead(novelId, episodeId) {
+    router.push({ name: "episode", params: { novelId, episodeId } });
 }
 </script>
 

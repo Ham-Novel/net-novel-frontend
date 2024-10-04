@@ -5,7 +5,13 @@
     <div class="comment-list base-wrapper">
         <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
             <template v-slot:default="{ item }">
-                <CommentItem :comment="item"></CommentItem>
+                <CommentItem :comment="item">
+                    <section class="action-bar">
+                        <button class="secondary" @click="goToMyComment(item.episodeId)">
+                            [{{ item.novelTitle }}] {{ item.episodeTitle }}
+                        </button>
+                    </section>
+                </CommentItem>
             </template>
         </InfiniteScroll>
     </div>
@@ -17,6 +23,7 @@ import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { reactive, ref } from "vue";
 import { memberApi } from "@/hooks/backendApi";
+import { useRouter } from "vue-router";
 
 //InfiniteScroll props 설정
 const scrollProps = reactive({
@@ -31,6 +38,12 @@ const scrollRef = ref(null);
 const reloadScroll = () => {
     scrollRef.value.reset();
 };
+
+//댓글 작성한 에피소드로 이동
+const router = useRouter();
+function goToMyComment(episodeId) {
+    router.push({ name: "episode", params: { episodeId } });
+}
 </script>
 
 <style lang="sass" scoped>
@@ -40,4 +53,15 @@ const reloadScroll = () => {
     display: flex
     flex-flow: column wrap
     gap: 10px
+
+.action-bar
+    position: absolute
+    bottom: 0
+    right: 1rem
+    display: flex
+    flex-flow: row wrap
+    gap: 30px
+
+    button
+        font-size: 0.8rem
 </style>
