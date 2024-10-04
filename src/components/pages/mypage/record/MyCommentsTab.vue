@@ -49,6 +49,7 @@ function goToMyComment(episodeId) {
 <style lang="sass" scoped>
 
 .comment-list
+    width: 700px
     margin-top: 30px
     display: flex
     flex-flow: column wrap
