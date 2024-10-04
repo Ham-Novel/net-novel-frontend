@@ -1,27 +1,30 @@
 <template>
-    <article class="item" @click="openEpisode">
-        <div class="chapter">EP.{{ episode.chapter }}</div>
-        <div class="title">{{ episode.title }}</div>
-        <div class="stats">
-            <div>
-                <FileText :size="15" />
-                <span class="word-count">{{ episode.letterCount }}</span>
-            </div>
-            <div>
-                <Eye :size="15" />
-                <span class="view-count">{{ episode.views }}</span>
-            </div>
-            <div>
-                <MessageCircleMore :size="15" />
-                <span class="comment-count">{{ episode.commentCount }}</span>
-            </div>
-            <div>
-                <Coins :size="15" />
-                <span class="comment-count">{{ episode.coinCost }}</span>
-            </div>
-            <div class="upload-date">{{ uploadDateFommatted }}</div>
-        </div>
-    </article>
+    <tr @click="openEpisode">
+        <td scope="row" class="chapter">Ep.</td>
+        <td scope="row" class="chapter">{{ episode.chapter }}</td>
+        <td class="title">
+            <div>{{ episode.title }}</div>
+        </td>
+        <td class="stat">
+            <span class="word-count"
+                ><FileText :size="15" />{{ formatUtil.formatStat(episode.letterCount) }}</span
+            >
+        </td>
+        <td class="stat">
+            <span class="view-count"
+                ><Eye :size="15" />{{ formatUtil.formatStat(episode.views) }}</span
+            >
+        </td>
+        <td class="stat">
+            <span class="comment-count">
+                <MessageCircleMore :size="15" />{{ episode.commentCount }}
+            </span>
+        </td>
+        <td class="stat">
+            <span class="comment-count"><Coins :size="15" />{{ episode.coinCost }}</span>
+        </td>
+        <td class="upload-date">{{ uploadDateFommatted }}</td>
+    </tr>
 </template>
 
 <script setup>
@@ -43,7 +46,6 @@ const router = useRouter();
 
 //요소 클릭 시 해당 에피소드 페이지로 이동
 function openEpisode() {
-    console.log(episode.episodeId);
     router.push({
         name: "episode",
         params: { episodeId: episode.episodeId },
@@ -52,47 +54,40 @@ function openEpisode() {
 </script>
 
 <style scoped lang="sass">
-.item
-    display: flex
-    align-items: center
-    padding: 20px
-    border-bottom: 4px solid var(--bg-sub)
+tr
     cursor: pointer
 
-    &:hover
-        background-color: var(--bg-sub)
 
+td
+    padding: 10px
 
 .chapter
-    width: 50px
-    font-weight: 800
+    padding: 0
+    font-size: 1rem
+    font-weight: bold
 
 
 .title
-    flex-grow: 1
-    margin-right: 20px
-    font-size: 16px
-    font-weight: 700
-
-
-.stats
-    display: flex
-    align-items: center
-    justify-content: space-between
-    gap: 20px
-
+    font-size: 0.8rem
+    font-weight: bold
 
     div
+        width: 300px
+        height: 30px
+        overflow: hidden
+        white-space: nowrap
+        word-wrap: break-word
+        text-overflow: ellipsis
+
+.stat
+    span
+        font-size: 0.7rem
         display: flex
         align-items: center
         gap: 2px
 
 
-    span
-        vertical-align: middle
-        line-height: 15px
-
-
 .upload-date
     text-align: right
+    font-size: 0.8rem
 </style>

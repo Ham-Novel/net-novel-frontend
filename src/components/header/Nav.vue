@@ -74,11 +74,6 @@ const postMenus = ref([
 
 const userMenus = ref([
     {
-        name: "",
-        icon: markRaw(Bell),
-        link: { name: "home" },
-    },
-    {
         name: "Studio",
         icon: markRaw(SquarePen),
         link: { name: "work-manage" },
@@ -87,6 +82,11 @@ const userMenus = ref([
         name: "Library",
         icon: markRaw(SquareLibrary),
         link: { name: "library" },
+    },
+    {
+        name: "",
+        icon: markRaw(Bell),
+        link: { name: "home" },
     },
     {
         name: "",

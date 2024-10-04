@@ -51,6 +51,9 @@ tr
     font-size: 0.9rem
     cursor: pointer
 
+    td
+        padding: 10px
+
 span
     display: flex
     align-items: center

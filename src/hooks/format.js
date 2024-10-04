@@ -1,4 +1,15 @@
 
+//상세 수치 포메팅
+const formatStat = (value) => {
+    if (value >= 1_000_000) {
+        return (value / 1_000_000).toFixed(1) + 'm'; // 백만 단위
+    } else if (value >= 1_000) {
+        return (value / 1_000).toFixed(1) + 'k'; // 천 단위
+    } else {
+        return value.toString(); // 천 미만의 숫자 그대로 표시
+    }
+}
+
 
 //날짜 포메팅 변환
 const formatDate = (dateString) => {
@@ -34,5 +45,6 @@ function isInOneDay(std_date, sbj_date) {
 
 export const formatUtil = {
     formatDate,
-    formatRealTime
+    formatRealTime,
+    formatStat
 }

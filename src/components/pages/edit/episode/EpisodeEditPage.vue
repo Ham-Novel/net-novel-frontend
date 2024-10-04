@@ -4,8 +4,9 @@
             <h3 v-once>작품 에피소드 편집</h3>
             <ListItem
                 v-if="novelInfo ?? false"
+                :id="novelInfo.id"
                 :cover-img="novelInfo.thumbnailUrl"
-                :link="{ name: 'novel', params: { id: novelInfo.id } }"
+                :custom="true"
             >
                 <div class="stats">
                     <h3>{{ novelInfo.title }}</h3>
@@ -18,8 +19,16 @@
         </section>
         <section class="episode-list base-wrapper">
             <table class="hover striped">
-                <thead v-once>
-                    <tr>
+                <colgroup>
+                    <col style="width: 80px" />
+                    <col style="width: 360px" />
+                    <col style="width: 120px" />
+                    <col style="width: 80px" />
+                    <col style="width: 80px" />
+                    <col style="width: 80px" />
+                </colgroup>
+                <thead>
+                    <tr class="header">
                         <th scope="col">회차</th>
                         <th scope="col">에피소드 제목</th>
                         <th scope="col">게시 일자</th>
@@ -79,7 +88,6 @@ const scrollProps = reactive({
         const loaditems = await episodeApi.getEpisodesByNovel(props.novelId, "recent", page, size);
         return loaditems;
     },
-    loadingMessage: "Episode Loading...",
 });
 
 //스크롤 메서드, 변수 가져오기
@@ -129,4 +137,8 @@ function goToDelete() {
 .button
     width: 100%
     height: 100%
+
+.episode-list
+    th, td
+        padding: 10px
 </style>

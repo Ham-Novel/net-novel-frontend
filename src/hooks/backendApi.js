@@ -355,10 +355,11 @@ export const favoriteApi = {
 }
 
 export const memberApi = {
-    async getMyPageData() {
+    async getMyPageData(error) {
         const response = await fetchApi({
             method: 'get',
             url: `/members/me/mypage`,
+            error
         })
         return response.data;
     },

@@ -1,15 +1,29 @@
 <template>
     <section class="episode-list-section base-wrapper base-distance">
         <div class="list-info">
-            <span>화수: {{ episodesInfo.data.chapterCount }}화</span>
+            <span>총 {{ episodesInfo.data.chapterCount }}화</span>
             <span>최신 업데이트 날짜: {{ episodesInfo.data.lastUpdatedAt }}</span>
         </div>
         <div class="list-view">
-            <InfiniteScroll v-bind="scrollProps">
-                <template v-slot:default="{ item }">
-                    <EpiListElement :episode="item"></EpiListElement>
-                </template>
-            </InfiniteScroll>
+            <table>
+                <colgroup>
+                    <col style="width: 30px" />
+                    <col style="width: 60px" />
+                    <col style="width: 320px" />
+                    <col style="width: 80px" />
+                    <col style="width: 80px" />
+                    <col style="width: 80px" />
+                    <col style="width: 40px" />
+                    <col style="width: 120px" />
+                </colgroup>
+                <tbody>
+                    <InfiniteScroll v-bind="scrollProps">
+                        <template v-slot:default="{ item }">
+                            <EpiListElement :episode="item"></EpiListElement>
+                        </template>
+                    </InfiniteScroll>
+                </tbody>
+            </table>
         </div>
     </section>
 </template>
@@ -60,17 +74,21 @@ onMounted(() => {
 
 <style lang="sass" scoped>
 
-.episode-list-section
+// .episode-list-section
 
-    .list-info
-        padding: 10px
-        border-bottom: 2px solid var(--bg-dark)
-        display: flex
-        flex-direction: row
-        justify-content: space-between
+.list-info
+    padding: 10px
+    border-bottom: 2px solid var(--bg-dark)
+    display: flex
+    flex-direction: row
+    justify-content: space-between
 
-    .list-view
-        display: flex
-        flex-direction: column
-        margin-bottom: 10px
+.list-view
+    display: flex
+    flex-direction: column
+    margin-bottom: 10px
+
+
+th, td
+    padding: 10px
 </style>
