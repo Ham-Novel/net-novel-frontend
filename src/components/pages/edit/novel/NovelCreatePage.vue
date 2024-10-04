@@ -16,7 +16,7 @@ import { novelApi } from "@/hooks/backendApi";
 const router = useRouter();
 
 //유저가 입력한 작품 정보 데이터
-const novelToCreate = reactive({ setupImg: "" });
+let novelToCreate = reactive({ setupImg: "" });
 
 //form에 입력한 값을 novelToUpdate와 연동하는 변수
 const formInput = computed({
