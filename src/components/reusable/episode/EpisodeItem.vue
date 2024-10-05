@@ -21,7 +21,7 @@
             </span>
         </td>
         <td class="stat" v-if="stats">
-            <span class="comment-count"><Coins :size="15" />{{ episode.coinCost }}</span>
+            <span class="coin-count"><Coins :size="15" />{{ episode.coinCost }}</span>
         </td>
         <td class="upload-date">{{ uploadDateFommatted }}</td>
     </tr>
@@ -71,9 +71,8 @@ function openEpisode() {
 tr
     cursor: pointer
 
-
-td
-    padding: 10px
+    td
+        padding: 10px
 
 .chapter
     padding: 0

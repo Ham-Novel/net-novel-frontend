@@ -1,32 +1,13 @@
 <template>
     <dialog open class="list-view" @click="exitModal">
-        <article class="hide-scrollbar">
-            <table>
-                <colgroup>
-                    <col style="width: 30px" />
-                    <col style="width: 60px" />
-                    <col style="width: 320px" />
-                    <col style="width: 80px" />
-                    <col style="width: 80px" />
-                    <col style="width: 80px" />
-                    <col style="width: 40px" />
-                    <col style="width: 120px" />
-                </colgroup>
-                <tbody>
-                    <InfiniteScroll v-bind="scrollProps">
-                        <template v-slot:default="{ item }">
-                            <EpisodeItem :episode="item" :stats="false"></EpisodeItem>
-                        </template>
-                    </InfiniteScroll>
-                </tbody>
-            </table>
+        <article class="hide-scrollbar" @click.stop>
+            <EpisodeList :novel-id="episodeStore.novelId"></EpisodeList>
         </article>
     </dialog>
 </template>
 
 <script setup>
-import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
-import EpisodeItem from "@/components/reusable/item/EpisodeItem.vue";
+import EpisodeList from "@/components/reusable/episode/EpisodeList.vue";
 import { ref, reactive, onMounted, onUnmounted } from "vue";
 import { episodeApi } from "@/hooks/backendApi";
 import { useEpisodePageStore } from "../episodePageStore";
