@@ -32,9 +32,13 @@
                         <CommentItem
                             :comment="item"
                             :episode-id="episodeStore.episodeId"
-                            :feature-recomment="true"
+                            :options="{
+                                like: true,
+                                edit: true,
+                                recomment: true,
+                                type: false,
+                            }"
                             @reload="reload"
-                            v-memo="[item]"
                         ></CommentItem>
                     </template>
                 </InfiniteScroll>
@@ -46,7 +50,7 @@
 <script setup>
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 import CommentInput from "./CommentInput.vue";
-import CommentItem from "@/components/reusable/item/CommentItem.vue";
+import CommentItem from "@/components/reusable/comment/CommentItemV2.vue";
 
 import { ref, reactive, onMounted, onUnmounted, watch } from "vue";
 import { commentApi } from "@/hooks/backendApi";
@@ -78,7 +82,6 @@ const scrollProps = reactive({
             page,
             size
         );
-        console.log(loadItems);
         return loadItems;
     },
 });
@@ -96,6 +99,8 @@ onMounted(() => {
 onUnmounted(() => {
     document.body.style.overflow = "";
 });
+
+//모달 바깥을 클릭했을 때
 </script>
 
 <style lang="sass" scoped>

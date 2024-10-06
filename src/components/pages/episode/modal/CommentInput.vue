@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import CommentForm from "@/components/reusable/item/CommentForm.vue";
+import CommentForm from "@/components/reusable/comment/CommentForm.vue";
 
 import { onMounted, ref, watch } from "vue";
 import { commentApi } from "@/hooks/backendApi";
