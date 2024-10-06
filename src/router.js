@@ -7,9 +7,9 @@ import SearchPage from './components/pages/search/SearchPage.vue';
 import LoginPage from './components/pages/login/LoginPage.vue';
 
 import MyPage from './components/pages/mypage/MyPage.vue';
-import MyInfoTab from './components/pages/mypage/MyInfoTab.vue';
-import MyPaymentTab from './components/pages/mypage/MyPaymentTab.vue';
-import MyCommentsTab from './components/pages/mypage/record/MyCommentsTab.vue'
+import MyInfoTab from './components/pages/mypage/tab/MyInfoTab.vue';
+import MyPaymentTab from './components/pages/mypage/tab/MyPaymentTab.vue';
+import MyCommentsTab from './components/pages/mypage/tab/MyCommentsTab.vue'
 
 import LibraryPage from './components/pages/library/LibraryPage.vue';
 import Favorites from './components/pages/library/Favorites.vue';

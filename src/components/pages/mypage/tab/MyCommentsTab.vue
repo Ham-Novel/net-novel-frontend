@@ -5,10 +5,25 @@
     <div class="comment-list base-wrapper">
         <InfiniteScroll v-bind="scrollProps" ref="scrollRef">
             <template v-slot:default="{ item }">
-                <CommentItem :comment="item">
+                <CommentItem
+                    :comment="item"
+                    :comment-id="item.commentId"
+                    :episode-id="item.episodeId"
+                    :options="{
+                        like: false,
+                        report: false,
+                        edit: true,
+                        recomment: false,
+                        type: true,
+                    }"
+                    @reload="reload"
+                >
                     <section class="action-bar">
-                        <button class="secondary" @click="goToMyComment(item.episodeId)">
-                            [{{ item.novelTitle }}] {{ item.episodeTitle }}
+                        <button
+                            class="secondary"
+                            @click="goToMyComment(item.novelId, item.episodeId)"
+                        >
+                            >> [{{ item.novelTitle }}] {{ item.episodeTitle }}
                         </button>
                     </section>
                 </CommentItem>
@@ -18,7 +33,7 @@
 </template>
 
 <script setup>
-import CommentItem from "@/components/reusable/item/CommentItem.vue";
+import CommentItem from "@/components/reusable/comment/CommentItemV2.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
 
 import { reactive, ref } from "vue";
@@ -35,14 +50,14 @@ const scrollProps = reactive({
 });
 
 const scrollRef = ref(null);
-const reloadScroll = () => {
+const reload = () => {
     scrollRef.value.reset();
 };
 
 //댓글 작성한 에피소드로 이동
 const router = useRouter();
-function goToMyComment(episodeId) {
-    router.push({ name: "episode", params: { episodeId } });
+function goToMyComment(novelId, episodeId) {
+    router.push({ name: "episode", params: { novelId, episodeId } });
 }
 </script>
 
@@ -50,19 +65,20 @@ function goToMyComment(episodeId) {
 
 .comment-list
     width: 700px
-    margin-top: 30px
+    // margin-top: 30px
     display: flex
-    flex-flow: column wrap
+    flex-flow: column
     gap: 10px
 
 .action-bar
+    z-index: 1
     position: absolute
-    bottom: 0
-    right: 1rem
+    bottom: -8px
     display: flex
-    flex-flow: row wrap
+    flex-flow: row
     gap: 30px
 
     button
-        font-size: 0.8rem
+        padding: 1px 5px
+        font-size: 0.7rem
 </style>

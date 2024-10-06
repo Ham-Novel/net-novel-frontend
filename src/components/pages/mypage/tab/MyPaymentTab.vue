@@ -23,9 +23,9 @@
 </template>
 
 <script setup>
-import ChargeHistoryItem from "./ChargeHistoryItem.vue";
+import ChargeHistoryItem from "../ChargeHistoryItem.vue";
 import InfiniteScroll from "@/components/reusable/InfiniteScroll.vue";
-import CoinChargedialog from "./CoinChargedialog.vue";
+import CoinChargedialog from "../CoinChargedialog.vue";
 
 import { reactive, ref } from "vue";
 import { coinApi } from "@/hooks/backendApi";
