@@ -1,5 +1,5 @@
 <template>
-    <article class="modal">
+    <article class="modal" ref="modalRef">
         <section v-if="userData" class="profile">
             <div class="img"><User size="40" color="white" /></div>
             <div class="info">
@@ -31,6 +31,7 @@ import { User, Moon, BadgeCent } from "lucide-vue-next";
 import { memberApi } from "@/hooks/backendApi";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import { onClickOutside } from "@/hooks/onClickOutside";
 
 const emits = defineEmits(["close"]);
 
@@ -59,6 +60,13 @@ async function loadUserInfo() {
 onMounted(() => {
     loadUserInfo();
 });
+
+//모달 바깥 클릭시 모달 닫기
+const modalRef = ref(null);
+const closeModal = () => {
+    emits("close");
+};
+onClickOutside(modalRef, closeModal);
 </script>
 
 <style scoped lang="sass">

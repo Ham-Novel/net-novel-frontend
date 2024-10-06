@@ -63,7 +63,7 @@ const props = defineProps({
     },
     coverImg: {
         type: String,
-        default: "",
+        default: undefined,
     },
     stats: {
         type: Array,
