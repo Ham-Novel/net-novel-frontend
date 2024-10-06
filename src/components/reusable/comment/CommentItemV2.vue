@@ -1,23 +1,22 @@
 <template>
     <article class="comment">
         <section class="detail">
-            <h5 class="user-info">
-                <p class="nickName">{{ comment.nickName }}</p>
-                <span class="timestamp">{{ updatedDate }}</span>
-            </h5>
+            <h5 class="nickName" v-if="comment.nickName">{{ comment.nickName }}</h5>
+            <h5 v-if="options.type" class="type">{{ commentType }}</h5>
+            <p class="timestamp">{{ updatedDate }}</p>
+            <p v-if="mode !== editMode.edit" class="content">{{ content }}</p>
             <CommentForm
-                v-if="mode === editMode.edit"
+                v-else
                 v-model="contentToUpdate"
                 @submit="updateComment"
                 button-text="수정"
             ></CommentForm>
-            <p v-else class="content">{{ content }}</p>
         </section>
 
         <slot></slot>
 
         <section class="bottom-action">
-            <template v-if="comment.editable">
+            <template v-if="options.edit && comment.editable">
                 <button class="outline edit" @click="toggleModeRecomment(editMode.edit)">
                     <MessageSquareText :size="16" />수정
                 </button>
@@ -25,7 +24,7 @@
                     <MessageSquareX :size="16" />삭제
                 </button>
             </template>
-            <template v-if="comment.type === 'RECOMMENT'">
+            <template v-if="options.recomment">
                 <button
                     class="action-button outline"
                     @click="toggleModeRecomment(editMode.recomment)"
@@ -48,22 +47,31 @@
 
         <section class="recomment-list" v-if="isOpenRecomment">
             <template v-for="recomment in comment.reCommentList">
-                <RecommentItem
-                    :recomment="recomment"
-                    :comment-id="comment.commentId"
+                <CommentItemV2
+                    :comment="recomment"
+                    :comment-id="comment.id"
+                    :episode-id="episodeId"
+                    :options="{
+                        like: true,
+                        edit: true,
+                        recomment: false,
+                        type: false,
+                    }"
                     @reload="emits('reload')"
-                ></RecommentItem>
+                ></CommentItemV2>
             </template>
         </section>
 
         <section class="top-action">
-            <button class="outline" @click="clickLike">
-                <ThumbsUp :size="13" /> {{ commentLikes }}
-            </button>
-            <button class="outline" @click="clickDislike">
-                <ThumbsDown :size="13" /> {{ commentDislikes }}
-            </button>
-            <button class="outline">신고</button>
+            <template v-if="options.like">
+                <button class="outline" @click="clickLike">
+                    <ThumbsUp :size="13" /> {{ commentLikes }}
+                </button>
+                <button class="outline" @click="clickDislike">
+                    <ThumbsDown :size="13" /> {{ commentDislikes }}
+                </button>
+            </template>
+            <button class="outline" v-if="!comment.editable">신고</button>
         </section>
     </article>
 </template>
@@ -89,19 +97,118 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    commentId: {
+        type: Number,
+        default: undefined,
+    },
     episodeId: {
         type: Number,
         default: 0,
     },
+    options: {
+        type: Object,
+        default: {
+            type: false,
+            like: true,
+            edit: true,
+            recomment: true,
+        },
+    },
 });
+
+console.log(props.comment);
 
 //댓글 리스트 재생성 메서드
 const emits = defineEmits(["reload"]);
 
-//댓글 생성 날짜 포메팅
+//댓글 작성 날짜 포메팅
 const updatedDate = computed(() => {
     return formatUtil.formatRealTime(props.comment?.createdAt);
 });
+
+//댓글 유형 포메팅
+const commentType = computed(() => {
+    switch (props.comment.type) {
+        case "COMMENT":
+            return "댓글";
+        case "RECOMMENT":
+            return "대댓글";
+        default:
+            return "불명";
+    }
+});
+
+/**
+ * 댓글 수정, 삭제 편집 기능
+ */
+
+//화면에 표시될 댓글 내용
+//댓글 내용은 변경될 수 있으므로 초깃값만 할당하고 변경 가능하게 설정.
+//굳이 reload 안해도 변경값만 변수에 넣으면 됨
+const content = ref(props.comment.content);
+
+//댓글 수정
+const contentToUpdate = ref(props.comment.content);
+async function updateComment() {
+    try {
+        if (contentToUpdate.value.length > 300) {
+            const error = Error("cannot post comment content longer than 300 characters");
+            error.code = "length";
+            throw error;
+        }
+
+        if (props.commentId) {
+            await commentApi.updateRecomment({
+                content: contentToUpdate.value,
+                reCommentId: props.comment.id,
+                commentId: props.commentId,
+            });
+        } else {
+            await commentApi.updateComment({
+                content: contentToUpdate.value,
+                commentId: props.comment.id,
+                episodeId: props.episodeId,
+            });
+        }
+
+        content.value = contentToUpdate.value; //변경된 댓글 내용 적용
+        mode.value = editMode.none; //작성 form 닫기
+    } catch (error) {
+        console.error("Failed to update comment: ", error.message);
+        if (error.code === "length") {
+            alert("댓글은 300자로 이하로만 작성 가능합니다.");
+        }
+    }
+}
+
+//댓글 삭제
+async function deleteComment() {
+    const result = confirm("정말로 삭제하시겠습니까?");
+    if (!result) {
+        return;
+    }
+    console.log({
+        reCommentId: props.comment.id,
+        commentId: props.comment.commentId,
+    });
+
+    try {
+        if (props.commentId) {
+            await commentApi.deleteRecomment({
+                reCommentId: props.comment.id,
+                commentId: props.commentId,
+            });
+        } else {
+            await commentApi.deleteComment({
+                commentId: props.comment.id,
+                episodeId: props.episodeId,
+            });
+        }
+        emits("reload");
+    } catch (error) {
+        console.error("Failed to delete comment", error.message);
+    }
+}
 
 /**
  * 좋아요, 싫어요 기능
@@ -139,9 +246,21 @@ async function clickDislike() {
 }
 
 async function likeToComment(type) {
+    console.log(props.commentId);
+
+    //대댓글 id의 commentId가 있으면 대댓글 좋아요 작업
+    if (props.commentId) {
+        const result = await commentApi.toggleLikeRecomment({
+            likeType: type,
+            reCommentId: props.comment.id,
+        });
+        return result;
+    }
+
+    //댓글 좋아요 작업
     const result = await commentApi.toggleLike({
         likeType: type,
-        id: props.comment.id,
+        commentId: props.comment.id,
     });
     return result;
 }
@@ -190,7 +309,7 @@ async function createRecomment() {
 
         await commentApi.createRecomment({
             content: recommentContent.value,
-            commentId: props.comment.commentId,
+            commentId: props.commentId,
         });
         recommentContent.value = "";
         mode.value = editMode.none; //작성 form 닫기
@@ -202,101 +321,35 @@ async function createRecomment() {
         }
     }
 }
-
-/**
- * 댓글 수정, 삭제 편집 기능
- */
-
-//화면에 표시될 댓글 내용
-//댓글 내용은 변경될 수 있으므로 초깃값만 할당하고 변경 가능하게 설정.
-//굳이 reload 안해도 변경값만 변수에 넣으면 됨
-const content = ref(props.comment.content);
-
-//댓글 수정
-const contentToUpdate = ref(props.comment.content);
-async function updateComment() {
-    try {
-        if (contentToUpdate.value.length > 300) {
-            const error = Error("cannot post comment content longer than 300 characters");
-            error.code = "length";
-            throw error;
-        }
-
-        if (props.comment.type === "COMMENT") {
-            await commentApi.updateComment({
-                content: contentToUpdate.value,
-                commentId: props.comment.id,
-                episodeId: props.episodeId,
-            });
-        } else if (props.comment.type === "RECOMMENT") {
-            await commentApi.updateRecomment({
-                content: contentToUpdate.value,
-                reCommentId: props.comment.id,
-                commentId: props.commentId,
-            });
-        } else {
-            throw Error("Invalid comment type");
-        }
-
-        content.value = contentToUpdate.value; //변경된 댓글 내용 적용
-        mode.value = editMode.none; //작성 form 닫기
-    } catch (error) {
-        console.error("Failed to update comment: ", error.message);
-        if (error.code === "length") {
-            alert("댓글은 300자로 이하로만 작성 가능합니다.");
-        }
-    }
-}
-
-//댓글 삭제
-async function deleteComment() {
-    const result = confirm("정말로 삭제하시겠습니까?");
-    if (!result) {
-        return;
-    }
-
-    try {
-        if (props.comment.type === "COMMENT") {
-            await commentApi.deleteComment({
-                commentId: props.comment.id,
-                episodeId: props.episodeId,
-            });
-        } else if (props.comment.type === "RECOMMENT") {
-            await commentApi.deleteRecomment({
-                reCommentId: props.recomment.id,
-                commentId: props.commentId,
-            });
-        } else {
-            throw Error("Invalid comment type");
-        }
-        emits("reload");
-    } catch (error) {
-        console.error("Failed to delete comment", error.message);
-    }
-}
 </script>
 
 <style scoped lang="sass">
 .comment
     position: relative
     margin: 0
-    padding-bottom: 0.5rem
-    height: auto
-    max-height: max-content
+    padding: 10px
 
 .detail
-    .user-info
+    margin-bottom: 0.8rem
+
+    .nickName
+        display: inline-block
+        font-size: 0.8em
+        font-weight: bold
+        margin-right: 0.5rem
         margin-bottom: 0.5rem
 
-        .nickName
-            display: inline-block
-            font-size: 0.8em
-            font-weight: bold
-            margin-right: 10px
+    .type
+        display: inline
+        font-size: 0.8rem
+        margin-right: 0.5rem
+        margin-bottom: 0.5rem
 
-        .timestamp
-            font-size: 0.6em
-            font-weight: normal
+    .timestamp
+        display: inline
+        font-size: 0.6rem
+        font-weight: normal
+        margin-bottom: 0.5rem
 
     .content
         width: 90%

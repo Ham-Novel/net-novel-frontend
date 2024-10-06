@@ -1,10 +1,8 @@
 <template>
     <article class="comment">
         <section class="detail">
-            <h5 class="user-info">
-                <p class="nickName">{{ comment.nickName }}</p>
-                <span class="timestamp">{{ updatedDate }}</span>
-            </h5>
+            <h5 class="nickName" v-if="comment.nickName">{{ comment.nickName }}</h5>
+            <p class="timestamp">{{ updatedDate }}</p>
             <CommentForm
                 v-if="mode === editMode.edit"
                 v-model="contentToUpdate"
@@ -36,6 +34,7 @@
                     <ChevronDown :size="15" />대댓글
                 </button>
             </template>
+            <slot name="bottom-actions"></slot>
         </section>
 
         <section class="recomment-input" v-if="mode === editMode.recomment">
@@ -64,6 +63,7 @@
                 <ThumbsDown :size="13" /> {{ commentDislikes }}
             </button>
             <button class="outline">신고</button>
+            <slot name="top-actions"></slot>
         </section>
     </article>
 </template>
@@ -179,10 +179,13 @@ async function createRecomment() {
             error.code = "length";
             throw error;
         }
-
+        console.log({
+            content: recommentContent.value,
+            commentId: props.comment.id,
+        });
         await commentApi.createRecomment({
             content: recommentContent.value,
-            commentId: props.comment.commentId,
+            commentId: props.comment.id,
         });
         recommentContent.value = "";
         mode.value = editMode.none; //작성 form 닫기
@@ -247,23 +250,20 @@ async function deleteComment() {
 .comment
     position: relative
     margin: 0
-    padding-bottom: 0.5rem
-    height: auto
-    max-height: max-content
+    padding: 0.5rem
 
 .detail
-    .user-info
+    .nickName
+        display: inline-block
+        font-size: 0.8em
+        font-weight: bold
+        margin-right: 10px
         margin-bottom: 0.5rem
 
-        .nickName
-            display: inline-block
-            font-size: 0.8em
-            font-weight: bold
-            margin-right: 10px
-
-        .timestamp
-            font-size: 0.6em
-            font-weight: normal
+    .timestamp
+        display: inline-block
+        font-size: 0.6em
+        font-weight: normal
 
     .content
         width: 90%
