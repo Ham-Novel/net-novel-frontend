@@ -4,7 +4,7 @@
             <component :is="icon" size="28" stroke-width="2.5"></component>
             {{ name }}
         </button>
-        <component v-if="isOpenModal" :is="modal" @close="toggleModal"></component>
+        <component v-if="isOpenModal" :is="modal" @close="closeModal"></component>
     </li>
 </template>
 
@@ -33,7 +33,7 @@ const router = useRouter();
 
 function clickMenu() {
     if (props.modal) {
-        toggleModal();
+        openModal();
         return;
     }
     goLink();
@@ -44,8 +44,14 @@ function goLink() {
 }
 
 const isOpenModal = ref(false);
-function toggleModal() {
-    isOpenModal.value = !isOpenModal.value;
+async function openModal() {
+    //모달이 열리는 동시에 해당 클릭이 외부 클릭 이벤트로 감지하지 못하게 설정
+    await new Promise((r) => setTimeout(r, 1));
+    isOpenModal.value = true;
+}
+
+function closeModal() {
+    isOpenModal.value = false;
 }
 </script>
 
