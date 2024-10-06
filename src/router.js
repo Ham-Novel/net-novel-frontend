@@ -16,8 +16,8 @@ import Favorites from './components/pages/library/Favorites.vue';
 import Histories from './components/pages/library/Histories.vue';
 
 import NovelPage from './components/pages/novel/NovelPage.vue';
-import EpisodeListSection from './components/pages/novel/EpisodeListSection.vue';
-import CommandListSection from './components/pages/novel/CommandListSection.vue';
+import EpisodeListSection from './components/reusable/episode/EpisodeList.vue';
+import CommandListSection from './components/pages/novel/CommandList.vue';
 
 import EpisodePage from './components/pages/episode/EpisodePage.vue';
 
