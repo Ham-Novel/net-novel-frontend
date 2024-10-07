@@ -309,7 +309,7 @@ async function createRecomment() {
 
         await commentApi.createRecomment({
             content: recommentContent.value,
-            commentId: props.commentId,
+            commentId: props.comment.id,
         });
         recommentContent.value = "";
         mode.value = editMode.none; //작성 form 닫기
